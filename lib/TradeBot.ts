@@ -19,15 +19,16 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient<any, any, an
     public readonly logger: BotLogger
     public readonly auth: BotAuth
 
-    constructor({exchangeClient, botToken, algorithms}: {
+    constructor({exchangeClient, botToken, initAlgorithmsCallback}: {
         exchangeClient: ExchangeClient,
         botToken?: string,
-        algorithms?: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
+        initAlgorithmsCallback?:
+            (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
     }) {
         this.logger = new BotLogger(this)
         this.logger.log('TradeBot Initialization...')
         this.exchangeClient = exchangeClient
-        this.analyzer = new ExchangeAnalyzer(this, algorithms)
+        this.analyzer = new ExchangeAnalyzer(this, initAlgorithmsCallback)
         this.trader = new ExchangeTrader(this)
         this.watcher = new ExchangeWatcher(this)
         this.api = new BotApi(this)

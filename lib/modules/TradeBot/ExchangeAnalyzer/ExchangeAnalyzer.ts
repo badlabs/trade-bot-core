@@ -26,9 +26,12 @@ export class ExchangeAnalyzer<
     readonly tradeAlgos: TradeAlgorithmsEngine<ExchangeClient>
 
     constructor(tradebot: TradeBot<ExchangeClient>,
-                algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[] = []) {
+                initAlgorithmsCallback:
+                    (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
+                    = () => []
+    ) {
         this.tradebot = tradebot
-        this.tradeAlgos = new TradeAlgorithmsEngine<ExchangeClient>(this, algorithms)
+        this.tradeAlgos = new TradeAlgorithmsEngine<ExchangeClient>(this, initAlgorithmsCallback)
         this.saveAlgorithms()
         this.initUpdaters()
     }

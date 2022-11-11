@@ -13,9 +13,11 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
     protected readonly algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
 
     constructor(analyzer: ExchangeAnalyzer<ExchangeClient>,
-                algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[] = []) {
+                initAlgorithmsCallback:
+                    (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
+    ) {
         this.analyzer = analyzer
-        this.algorithms = algorithms
+        this.algorithms = initAlgorithmsCallback(analyzer)
         this.continueAlgorithms()
     }
 
