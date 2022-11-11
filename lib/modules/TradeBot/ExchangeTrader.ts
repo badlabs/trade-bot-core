@@ -3,8 +3,8 @@ import {OrderDetails, OrderStatus} from "lib/utils/orderDetails";
 import {TradeBot} from "../../TradeBot";
 import {Job} from "node-schedule";
 import { BotLogger } from "./BotLogger";
-import {Order} from "../../../src/exchangeClientTypes";
 import {AbstractExchangeClient} from "../../AbstractExchangeClient";
+import {extractOrderType} from "../../utils/extractTypes";
 const schedule = require('node-schedule');
 
 export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
@@ -30,31 +30,25 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, a
     async sendOrder({ ticker, lots, price, operation }: OrderDetails, run_id: number | null = null): Promise<OrderStatus> {
         const { watcher } = this
         this.logger.log(`${run_id ? `[algo:${run_id}] `: ''}Sending order: ${JSON.stringify({operation, ticker, lots, price})}`)
-        let order: Order
+        let order: extractOrderType<ExchangeClient>
         switch (operation){
             case 'limit_buy':
                 order = await this.exchangeClient.tradeModule.buy({ ticker, lots, price, operation })
-                order.operation = "Buy"
                 break
             case 'buy_or_cancel':
                 order = await this.exchangeClient.tradeModule.buyOrCancel()
-                order.operation = "BuyOrCancel"
                 break
             case 'limit_sell':
                 order = await this.exchangeClient.tradeModule.sell({ ticker, lots, price, operation })
-                order.operation = "Sell"
                 break
             case 'sell_or_cancel':
                 order = await this.exchangeClient.tradeModule.sellOrCancel()
-                order.operation = "SellOrCancel"
                 break
             case "market_buy":
                 order = await this.exchangeClient.tradeModule.marketBuy({ ticker, lots, price, operation })
-                order.operation = "MarketBuy"
                 break
             case "market_sell":
                 order = await this.exchangeClient.tradeModule.marketSell({ ticker, lots, price, operation })
-                order.operation = "MarketSell"
                 break
         }
         return watcher.onOrderSent(order, operation, run_id)

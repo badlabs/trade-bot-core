@@ -4,7 +4,7 @@ import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 
-export function createWebSocketServer({expressApp, tradeBot}: { expressApp: Express, tradeBot: TradeBot }) {
+export function createWebSocketServer({expressApp, tradeBot}: { expressApp: Express, tradeBot: TradeBot<any> }) {
   const httpServer = http.createServer(expressApp)
   const io = new Server(httpServer, {
     cors: { origin: "*" }

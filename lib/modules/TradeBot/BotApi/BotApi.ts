@@ -7,12 +7,12 @@ import http from 'http'
 import { Server } from 'socket.io'
 
 export class BotApi {
-  private readonly _tradeBot: TradeBot
+  private readonly _tradeBot: TradeBot<any>
   private _restServer: Express
   private _webSocketServer: Server
   private _httpServer: http.Server
 
-  constructor(tradeBot: TradeBot){
+  constructor(tradeBot: TradeBot<any>){
     this._tradeBot = tradeBot
     this.configureServers()
   }
