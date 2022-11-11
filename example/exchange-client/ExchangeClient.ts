@@ -10,6 +10,7 @@ import {Order} from '../types/Order';
 import { TradeModule } from './TradeModule';
 import { InfoModule } from './InfoModule';
 import {AbstractExchangeClient} from "../../lib/AbstractExchangeClient";
+import {Translator} from "./Translator";
 
 export class ExchangeClient extends AbstractExchangeClient<
   OpenAPI,
@@ -19,6 +20,7 @@ export class ExchangeClient extends AbstractExchangeClient<
   public readonly api
   public readonly tradeModule
   public readonly infoModule
+  public readonly translator
 
   constructor(token: string){
     super()
@@ -29,6 +31,7 @@ export class ExchangeClient extends AbstractExchangeClient<
     })
     this.infoModule = new InfoModule(this)
     this.tradeModule = new TradeModule(this)
+    this.translator = new Translator(this)
     this.initAccount()
   }
 
