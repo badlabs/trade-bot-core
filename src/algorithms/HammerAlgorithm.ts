@@ -3,6 +3,7 @@ import { ExchangeAnalyzer } from "../../lib/modules";
 import { AbstractTradeAlgorithm } from "../../lib/modules/TradeBot/ExchangeAnalyzer/TradeAlgorithms";
 import { addSecondsToDate, OrderDetails } from '../../lib/utils'
 import {Job} from "node-schedule";
+import {ExchangeClient} from "../ExchangeClient";
 
 type HammerInput = {
   order: OrderDetails,
@@ -16,7 +17,7 @@ type HammerStopData = {
   job: Job
 }
 
-export class HammerAlgorithm extends AbstractTradeAlgorithm<HammerInput, HammerState, HammerStopData> {
+export class HammerAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, HammerInput, HammerState, HammerStopData> {
   get name(): string { return 'hammer' }
   get description(): string { return 'hammer' }
   get inputs(): any {
@@ -27,7 +28,7 @@ export class HammerAlgorithm extends AbstractTradeAlgorithm<HammerInput, HammerS
     }
   }
 
-  constructor(analyzer: ExchangeAnalyzer){
+  constructor(analyzer: ExchangeAnalyzer<ExchangeClient>){
     super(analyzer)
   }
 

@@ -1,10 +1,13 @@
 import { D_AlgorithmRun, D_Algorithm } from "@prisma/client";
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from "lib/modules/TradeBot/index";
+import {AbstractExchangeClient} from "../../../../AbstractExchangeClient";
 
-export abstract class AbstractTradeAlgorithm<InputsType, StateType, StopDataType>{
-  protected readonly analyzer: ExchangeAnalyzer
-  protected get watcher(): ExchangeWatcher { return this.analyzer.watcher }
-  protected get trader(): ExchangeTrader { return this.analyzer.trader }
+export abstract class AbstractTradeAlgorithm<
+  ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>,
+  InputsType, StateType, StopDataType>{
+  protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
+  protected get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
+  protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
   protected stopData: Map<number, StopDataType> = new Map<number, StopDataType>()
   private get logger(): BotLogger { return this.analyzer.tradebot.logger }
   get details(): D_Algorithm {
@@ -15,7 +18,7 @@ export abstract class AbstractTradeAlgorithm<InputsType, StateType, StopDataType
     }
   }
 
-  protected constructor(analyzer: ExchangeAnalyzer){
+  protected constructor(analyzer: ExchangeAnalyzer<ExchangeClient>){
     this.analyzer = analyzer
   }
 

@@ -3,6 +3,7 @@ import { ExchangeAnalyzer } from "../../lib/modules";
 import { AbstractTradeAlgorithm } from "../../lib/modules/TradeBot/ExchangeAnalyzer/TradeAlgorithms";
 import { addSecondsToDate, OrderDetails } from '../../lib/utils'
 import {Job, scheduledJobs, scheduleJob} from "node-schedule";
+import {ExchangeClient} from "../ExchangeClient";
 
 type AggressiveTraderInput = {
   security_ticker: string
@@ -19,7 +20,7 @@ type AggressiveTraderStopData = {
 }
 
 export class AggressiveTradingAlgorithm
-    extends AbstractTradeAlgorithm<AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData> {
+    extends AbstractTradeAlgorithm<ExchangeClient, AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData> {
   get name(): string { return 'aggressive-trading' }
   get description(): string { return 'aggressive-trading' }
   get inputs(): any {
@@ -28,7 +29,7 @@ export class AggressiveTradingAlgorithm
     }
   }
 
-  constructor(analyzer: ExchangeAnalyzer){
+  constructor(analyzer: ExchangeAnalyzer<ExchangeClient>){
     super(analyzer)
   }
 

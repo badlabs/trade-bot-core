@@ -1,4 +1,6 @@
 import {AbstractExchangeClient} from "../../AbstractExchangeClient";
+import {ITranslatorsCD} from "../../utils";
+import {initTranslators} from "../../../src/cdTranslators";
 
 export abstract class AbstractInfoModule<
   ExchangeApiType,
@@ -18,6 +20,12 @@ export abstract class AbstractInfoModule<
     PortfolioType, OperationType>){
     this.exchangeClient = exchangeClient
   }
+
+  abstract readonly translators: ITranslatorsCD<AbstractExchangeClient<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>>
 
   abstract getCurrencies(): Promise<CurrencyType[]>
 

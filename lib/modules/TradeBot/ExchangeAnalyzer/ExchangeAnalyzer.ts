@@ -14,16 +14,17 @@ import {
     D_Order, D_CurrencyBalance
 } from "@prisma/client";
 import {scheduleJob} from "node-schedule";
+import {AbstractExchangeClient} from "../../../AbstractExchangeClient";
 
 const db = new PrismaClient()
 
-export class ExchangeAnalyzer {
-    readonly tradebot: TradeBot
-    get trader(): ExchangeTrader { return this.tradebot.trader }
-    get watcher(): ExchangeWatcher { return this.tradebot.watcher }
+export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+    readonly tradebot: TradeBot<ExchangeClient>
+    get trader(): ExchangeTrader<ExchangeClient> { return this.tradebot.trader }
+    get watcher(): ExchangeWatcher<ExchangeClient> { return this.tradebot.watcher }
     readonly tradeAlgos: TradeAlgorithms
 
-    constructor(tradebot: TradeBot) {
+    constructor(tradebot: TradeBot<ExchangeClient>) {
         this.tradebot = tradebot
         this.tradeAlgos = new TradeAlgorithms(this)
         this.saveAlgorithms()

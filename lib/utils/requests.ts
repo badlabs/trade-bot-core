@@ -2,6 +2,7 @@ import { IncomingHttpHeaders } from "http";
 import { Application } from "express";
 import { TradeBot } from "lib/TradeBot";
 import {OperationType} from "./database";
+import {AbstractExchangeClient} from "../AbstractExchangeClient";
 
 export interface IHttpHeadersCarrier {
     headers: IncomingHttpHeaders
@@ -11,7 +12,7 @@ interface IExpressAppCarrier {
     app: Application
 }
 
-export function getTradeBotFromExpress(expressAppCarrier: IExpressAppCarrier): TradeBot {
+export function getTradeBotFromExpress(expressAppCarrier: IExpressAppCarrier): TradeBot<AbstractExchangeClient<any, any, any, any, any, any, any>> {
     return expressAppCarrier.app.get('tradeBot')
 }
 

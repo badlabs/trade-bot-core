@@ -2,19 +2,18 @@ import {ExchangeWatcher} from "./index";
 import {OrderDetails, OrderStatus} from "lib/utils/orderDetails";
 import {TradeBot} from "../../TradeBot";
 import {Job} from "node-schedule";
-import { ExchangeClient } from "src/ExchangeClient/ExchangeClient";
 import { BotLogger } from "./BotLogger";
 import {Order} from "../../../src/exchangeClientTypes";
-import {D_Order} from "@prisma/client";
+import {AbstractExchangeClient} from "../../AbstractExchangeClient";
 const schedule = require('node-schedule');
 
-export class ExchangeTrader {
-    private readonly tradebot: TradeBot
-    private get watcher(): ExchangeWatcher { return this.tradebot.watcher }
+export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+    private readonly tradebot: TradeBot<ExchangeClient>
+    private get watcher(): ExchangeWatcher<ExchangeClient> { return this.tradebot.watcher }
     private get logger(): BotLogger { return this.tradebot.logger }
     private get exchangeClient(): ExchangeClient { return this.tradebot.exchangeClient }
 
-    constructor(tradebot: TradeBot) {
+    constructor(tradebot: TradeBot<ExchangeClient>) {
         this.tradebot = tradebot
     }
 

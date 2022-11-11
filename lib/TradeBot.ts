@@ -1,25 +1,23 @@
 import { config } from "../config";
-import { ExchangeClient } from "../src/ExchangeClient";
 import {BotApi, BotAuth, BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from "./modules";
+import {AbstractExchangeClient} from "./AbstractExchangeClient";
 
-type TradeBotConstructorParams = {
-    exchangeToken?: string,
-    botToken?: string
-  }
-
-export class TradeBot {
+export class TradeBot<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
     public readonly exchangeClient: ExchangeClient
-    public readonly analyzer: ExchangeAnalyzer
-    public readonly trader: ExchangeTrader
-    public readonly watcher: ExchangeWatcher
+    public readonly analyzer: ExchangeAnalyzer<ExchangeClient>
+    public readonly trader: ExchangeTrader<ExchangeClient>
+    public readonly watcher: ExchangeWatcher<ExchangeClient>
     public readonly api: BotApi
     public readonly logger: BotLogger
     public readonly auth: BotAuth
 
-    constructor({exchangeToken, botToken}: TradeBotConstructorParams = {}) {
+    constructor({exchangeClient, botToken}: {
+        exchangeClient: ExchangeClient,
+        botToken?: string
+    }) {
         this.logger = new BotLogger(this)
         this.logger.log('TradeBot Initialization...')
-        this.exchangeClient = new ExchangeClient(exchangeToken || config.exchange.exchangeToken)
+        this.exchangeClient = exchangeClient
         this.analyzer = new ExchangeAnalyzer(this)
         this.trader = new ExchangeTrader(this)
         this.watcher = new ExchangeWatcher(this)
@@ -27,12 +25,5 @@ export class TradeBot {
         this.auth = new BotAuth(botToken || config.auth.token)
         this.logger.log('All modules are initialized...')
         this.analyzer.updateCurrencies()
-    }
-
-    public static createBotByEnv() {
-        return new TradeBot({
-            exchangeToken: process.env.TINKOFF_SANDBOX_API_KEY || '',
-            botToken: process.env.BOT_TOKEN || ''
-        })
     }
 }

@@ -3,6 +3,7 @@ import { ExchangeAnalyzer } from "../../lib/modules";
 import { AbstractTradeAlgorithm } from "../../lib/modules/TradeBot/ExchangeAnalyzer/TradeAlgorithms";
 import {addMinutesToDate, addSecondsToDate, awaitTime, OrderDetails} from '../../lib/utils'
 import {Job} from "node-schedule";
+import {ExchangeClient} from "../ExchangeClient";
 
 type SlicingInput = {
   order: OrderDetails,
@@ -19,7 +20,7 @@ type SlicingStopData = {
 
 
 
-export class SlicingAlgorithm extends AbstractTradeAlgorithm<SlicingInput, SlicingState, SlicingStopData> {
+export class SlicingAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, SlicingInput, SlicingState, SlicingStopData> {
   get name(): string { return 'slicing' }
   get description(): string { return 'slicing' }
   get inputs(): any {
@@ -30,7 +31,7 @@ export class SlicingAlgorithm extends AbstractTradeAlgorithm<SlicingInput, Slici
     }
   }
 
-  constructor(analyzer: ExchangeAnalyzer){
+  constructor(analyzer: ExchangeAnalyzer<ExchangeClient>){
     super(analyzer)
   }
 

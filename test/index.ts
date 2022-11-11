@@ -1,9 +1,13 @@
 import {TradeBot} from "../lib/TradeBot";
+import {ExchangeClient} from "../src/ExchangeClient";
 import { OperationType, awaitTime } from "../lib/utils";
 
 (async () => {
 
-  const tradeBot = new TradeBot()
+  const tradeBot = new TradeBot({
+    exchangeClient: new ExchangeClient(process.env.TINKOFF_SANDBOX_API_KEY || ''),
+    botToken: process.env.BOT_TOKEN || ''
+  })
 
   console.info(`${new Date()} Waiting initialization...`)
 

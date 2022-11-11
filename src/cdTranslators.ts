@@ -4,7 +4,7 @@ import {ExchangeClient} from "./ExchangeClient/ExchangeClient";
 import {ITranslatorsCD, OperationType, OrderStatus} from "../lib/utils";
 
 
-export function initTranslators(watcher: ExchangeWatcher, exchangeClient: ExchangeClient): ITranslatorsCD<ExchangeClient> {
+export function initTranslators(exchangeClient: ExchangeClient): ITranslatorsCD<ExchangeClient> {
     return {
         async currency(currency): Promise<D_Currency> {
             return { name: currency, ticker: currency }
@@ -26,7 +26,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
             return {
                 currency_ticker: security.currency,
                 name: security.name,
-                price: await watcher.getSecurityLastPrice(security.ticker),
+                price: await exchangeClient.infoModule.getSecurityLastPrice(security.ticker),
                 ticker: security.ticker
             }
         },
