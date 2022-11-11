@@ -1,7 +1,7 @@
 {
-  "name": "trade-bot--tinkoff",
-  "version": "0.6.1",
-  "description": "",
+  "name": "trade-bot-core",
+  "version": "0.0.1",
+  "description": "Core library for trade bots",
   "main": "server.ts",
   "scripts": {
     "start": "ts-node server.ts",
