@@ -1,2 +1,2 @@
 export * from './AbstractTradeAlgorithm'
-export * from './TradeAlgorithms'
+export * from './TradeAlgorithmsEngine'

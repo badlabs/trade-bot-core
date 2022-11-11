@@ -1,6 +1,6 @@
 import {addDaysToDate, GetOperationsOptions, GetOrdersOptions, OperationId, OperationType} from "../../../utils";
-import {ExchangeTrader, ExchangeWatcher} from "../index";
-import {TradeAlgorithms} from "./TradeAlgorithms";
+import {AbstractTradeAlgorithm, ExchangeTrader, ExchangeWatcher} from "../index";
+import {TradeAlgorithmsEngine} from "./TradeAlgorithms";
 import {TradeBot} from "lib/TradeBot";
 import {
     D_Currency,
@@ -18,15 +18,17 @@ import {AbstractExchangeClient} from "../../../AbstractExchangeClient";
 
 const db = new PrismaClient()
 
-export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+export class ExchangeAnalyzer<
+    ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
     readonly tradebot: TradeBot<ExchangeClient>
     get trader(): ExchangeTrader<ExchangeClient> { return this.tradebot.trader }
     get watcher(): ExchangeWatcher<ExchangeClient> { return this.tradebot.watcher }
-    readonly tradeAlgos: TradeAlgorithms
+    readonly tradeAlgos: TradeAlgorithmsEngine<ExchangeClient>
 
-    constructor(tradebot: TradeBot<ExchangeClient>) {
+    constructor(tradebot: TradeBot<ExchangeClient>,
+                algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[] = []) {
         this.tradebot = tradebot
-        this.tradeAlgos = new TradeAlgorithms(this)
+        this.tradeAlgos = new TradeAlgorithmsEngine<ExchangeClient>(this, algorithms)
         this.saveAlgorithms()
         this.initUpdaters()
     }

@@ -1,6 +1,5 @@
 import {AbstractExchangeClient} from "../../AbstractExchangeClient";
 import {ITranslatorsCD} from "../../utils";
-import {initTranslators} from "../../../src/cdTranslators";
 
 export abstract class AbstractInfoModule<
   ExchangeApiType,

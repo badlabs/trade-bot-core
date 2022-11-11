@@ -2,21 +2,20 @@ import { TradeBot } from "lib/TradeBot";
 import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from "lib/modules/TradeBot/index";
 import { AbstractTradeAlgorithm } from "./AbstractTradeAlgorithm";
 import { D_Algorithm, D_AlgorithmRun } from "@prisma/client";
-import { initAlgorithms } from "../../../../../src/algorithms";
-import {ExchangeClient} from "../../../../../src/ExchangeClient";
+import {AbstractExchangeClient} from "../../../../AbstractExchangeClient";
 
-// TODO: implement abstract TradeAlgorithms
-export class TradeAlgorithms{
-    private readonly analyzer: ExchangeAnalyzer<ExchangeClient>
-    private get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
-    private get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
-    private get tradebot(): TradeBot<ExchangeClient> { return this.analyzer.tradebot }
+export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+    protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
+    protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
+    protected get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
+    protected get tradebot(): TradeBot<ExchangeClient> { return this.analyzer.tradebot }
 
-    private readonly algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
+    protected readonly algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
 
-    constructor(analyzer: ExchangeAnalyzer<ExchangeClient>) {
+    constructor(analyzer: ExchangeAnalyzer<ExchangeClient>,
+                algorithms: AbstractTradeAlgorithm<ExchangeClient, any, any, any>[] = []) {
         this.analyzer = analyzer
-        this.algorithms = initAlgorithms(analyzer)
+        this.algorithms = algorithms
         this.continueAlgorithms()
     }
 
