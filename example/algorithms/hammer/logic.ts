@@ -1,21 +1,12 @@
 import { D_AlgorithmRun } from "@prisma/client";
-import { ExchangeAnalyzer } from "../../lib/modules";
-import { AbstractTradeAlgorithm } from "../../lib/modules/TradeBot/ExchangeAnalyzer/TradeAlgorithms";
-import { addSecondsToDate, OrderDetails } from '../../lib/utils'
+import { ExchangeAnalyzer } from "../../../lib/modules";
+import { AbstractTradeAlgorithm } from "../../../lib/modules/TradeBot/ExchangeAnalyzer/TradeAlgorithms";
+import { addSecondsToDate, OrderDetails } from '../../../lib/utils'
 import {Job} from "node-schedule";
-import {ExchangeClient} from "../ExchangeClient";
+import {ExchangeClient} from "../../exchange-client";
+import {HammerInput, HammerState, HammerStopData} from "./types";
 
-type HammerInput = {
-  order: OrderDetails,
-  date: Date,
-  seconds_before: number
-}
-type HammerState = {
-  send_date: Date
-}
-type HammerStopData = {
-  job: Job
-}
+
 
 export class HammerAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, HammerInput, HammerState, HammerStopData> {
   get name(): string { return 'hammer' }

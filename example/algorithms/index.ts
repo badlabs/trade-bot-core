@@ -1,11 +1,11 @@
 import {
     AbstractTradeAlgorithm
 } from "lib/modules/TradeBot";
-import {SlicingAlgorithm} from "./SlicingAlgorithm";
+import {SlicingAlgorithm} from "./slicing/SlicingAlgorithm";
 import {ExchangeAnalyzer} from "lib/modules/TradeBot";
-import {HammerAlgorithm} from "./HammerAlgorithm";
-import {AggressiveTradingAlgorithm} from "./AggressiveTradingAlgorithm";
-import {ExchangeClient} from "../ExchangeClient";
+import {HammerAlgorithm} from "./hammer/HammerAlgorithm";
+import {AggressiveTradingAlgorithm} from "./aggressive-trading/AggressiveTradingAlgorithm";
+import {ExchangeClient} from "../exchange-client";
 
 export function initAlgorithms(analyzer: ExchangeAnalyzer<ExchangeClient>): AbstractTradeAlgorithm<ExchangeClient, any, any, any>[] {
     return [

@@ -1,5 +1,5 @@
 import {TradeBot} from "../lib/TradeBot";
-import {ExchangeClient} from "../src/ExchangeClient";
+import {ExchangeClient} from "../example/exchange-client";
 import { OperationType, awaitTime } from "../lib/utils";
 
 (async () => {

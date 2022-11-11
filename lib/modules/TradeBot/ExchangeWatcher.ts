@@ -1,7 +1,7 @@
 import {ExchangeAnalyzer, ExchangeTrader} from "./index";
 import {TradeBot} from "../../TradeBot";
 import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_Order, D_CurrencyBalance} from "@prisma/client";
-import {Order} from "../../../src/exchangeClientTypes";
+import {Order} from "../../../example/types/Order";
 import {ITranslatorsCD, OperationType, OrderStatus} from "../../utils";
 import {AbstractExchangeClient} from "../../AbstractExchangeClient";
 import {extractOrderType} from "../../utils/extractTypes";

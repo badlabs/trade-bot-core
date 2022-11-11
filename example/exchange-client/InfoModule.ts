@@ -7,7 +7,7 @@ import OpenAPI, {
   Operation,
   Portfolio
 } from "@tinkoff/invest-openapi-js-sdk";
-import {Order} from "../exchangeClientTypes";
+import {Order} from "../types/Order";
 import {ITranslatorsCD, OperationType, OrderStatus} from "../../lib/utils";
 import {D_Currency, D_CurrencyBalance, D_Operation, D_Order, D_PortfolioPosition, D_Security} from "@prisma/client";
 
@@ -146,6 +146,7 @@ export class InfoModule extends AbstractInfoModule<
         case "PendingReplace": return 'pending_replace'
         case 'PendingCancel': return 'pending_cancel'
       }
+      return "rejected"
     },
     orderOperation(order): OperationType {
       switch (order.operation) {
@@ -156,6 +157,7 @@ export class InfoModule extends AbstractInfoModule<
         case "Sell": return 'limit_sell'
         case "SellOrCancel": return 'sell_or_cancel'
       }
+      return "limit_buy"
     }
   }
 }

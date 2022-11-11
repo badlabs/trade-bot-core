@@ -5,7 +5,7 @@ import OpenAPI, {
   Operation,
   Portfolio
 } from '@tinkoff/invest-openapi-js-sdk';
-import {Order} from '../exchangeClientTypes';
+import {Order} from '../types/Order';
 
 import { TradeModule } from './TradeModule';
 import { InfoModule } from './InfoModule';

@@ -1,6 +1,6 @@
 import { ExchangeClient } from "./ExchangeClient";
 import { OrderDetails } from "../../lib/utils";
-import { Order } from "../exchangeClientTypes";
+import { Order } from "../types/Order";
 import {AbstractTradeModule} from "../../lib/modules";
 import OpenAPI, {
   Currency,
