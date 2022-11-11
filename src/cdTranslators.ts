@@ -1,19 +1,18 @@
 import {ExchangeWatcher} from "../lib/modules";
-import {C_Currency, C_Security, C_Operation, C_Order, C_Portfolio, C_CurrencyBalance} from "./exchangeClientTypes";
 import {D_Currency, D_Security, D_Operation, D_Order, D_PortfolioPosition, D_CurrencyBalance} from "@prisma/client";
 import {ExchangeClient} from "./ExchangeClient/ExchangeClient";
 import {ITranslatorsCD, OperationType, OrderStatus} from "../lib/utils";
 
 
-export function initTranslators(watcher: ExchangeWatcher, exchangeClient: ExchangeClient): ITranslatorsCD {
+export function initTranslators(watcher: ExchangeWatcher, exchangeClient: ExchangeClient): ITranslatorsCD<ExchangeClient> {
     return {
-        async currency(currency: C_Currency): Promise<D_Currency> {
+        async currency(currency): Promise<D_Currency> {
             return { name: currency, ticker: currency }
         },
-        async currencyBalance(currency: C_CurrencyBalance): Promise<D_CurrencyBalance> {
+        async currencyBalance(currency): Promise<D_CurrencyBalance> {
             return { currency_ticker: currency.currency, balance: currency.balance }
         },
-        async portfolio(portfolio: C_Portfolio): Promise<D_PortfolioPosition[]> {
+        async portfolio(portfolio): Promise<D_PortfolioPosition[]> {
             return portfolio.positions
                 .map(position => {
                     return {
@@ -22,7 +21,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
                     }
                 })
         },
-        async security(security: C_Security): Promise<D_Security> {
+        async security(security): Promise<D_Security> {
             if (!security.currency) throw new Error(`Security with ticker "${security.ticker}" have no currency`)
             return {
                 currency_ticker: security.currency,
@@ -31,7 +30,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
                 ticker: security.ticker
             }
         },
-        async operation(operation: C_Operation): Promise<D_Operation> {
+        async operation(operation): Promise<D_Operation> {
             const security = operation?.figi ?
                 await exchangeClient.infoModule.getSecurityByExchangeId(operation?.figi) :
                 null
@@ -47,7 +46,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
                 updated_at: new Date(),
             }
         },
-        async operations(operations: C_Operation[]): Promise<D_Operation[]> {
+        async operations(operations): Promise<D_Operation[]> {
             const securityIds = Array.from(new Set(operations.map(op => op.figi)))
             await Promise.all(securityIds.map(async (id) => {
                 if (id)
@@ -55,7 +54,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
             }))
             return await Promise.all(operations.map(op => this.operation(op)))
         },
-        async order(order: C_Order): Promise<D_Order> {
+        async order(order): Promise<D_Order> {
             const security = await exchangeClient.infoModule.getSecurityByExchangeId(order.figi)
             return {
                 operation_type: this.orderOperation(order),
@@ -68,7 +67,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
                 security_ticker: security?.ticker || 'undefined'
             }
         },
-        orderStatus(order: C_Order): OrderStatus {
+        orderStatus(order): OrderStatus {
             switch (order.status) {
                 case "New": return 'new'
                 case "Cancelled": return 'cancelled'
@@ -81,7 +80,7 @@ export function initTranslators(watcher: ExchangeWatcher, exchangeClient: Exchan
                 case 'PendingCancel': return 'pending_cancel'
             }
         },
-        orderOperation(order: C_Order): OperationType {
+        orderOperation(order): OperationType {
             switch (order.operation) {
                 case "Buy": return "limit_buy"
                 case "BuyOrCancel": return "buy_or_cancel"

@@ -4,7 +4,7 @@ import {TradeBot} from "../../TradeBot";
 import {Job} from "node-schedule";
 import { ExchangeClient } from "src/ExchangeClient/ExchangeClient";
 import { BotLogger } from "./BotLogger";
-import {C_Order} from "../../../src/exchangeClientTypes";
+import {Order} from "../../../src/exchangeClientTypes";
 import {D_Order} from "@prisma/client";
 const schedule = require('node-schedule');
 
@@ -31,7 +31,7 @@ export class ExchangeTrader {
     async sendOrder({ ticker, lots, price, operation }: OrderDetails, run_id: number | null = null): Promise<OrderStatus> {
         const { watcher } = this
         this.logger.log(`${run_id ? `[algo:${run_id}] `: ''}Sending order: ${JSON.stringify({operation, ticker, lots, price})}`)
-        let order: C_Order
+        let order: Order
         switch (operation){
             case 'limit_buy':
                 order = await this.exchangeClient.tradeModule.buy({ ticker, lots, price, operation })

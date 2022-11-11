@@ -1,14 +1,24 @@
-import OpenAPI from '@tinkoff/invest-openapi-js-sdk';
-import {C_CurrencyBalance, C_ExchangeApi, C_Operation, C_Portfolio} from '../exchangeClientTypes';
+import OpenAPI, {
+  Currency,
+  CurrencyPosition,
+  MarketInstrument,
+  Operation,
+  Portfolio
+} from '@tinkoff/invest-openapi-js-sdk';
+import {Order} from '../exchangeClientTypes';
 
 import { TradeModule } from './TradeModule';
 import { InfoModule } from './InfoModule';
 import {AbstractExchangeClient} from "../../lib/AbstractExchangeClient";
 
-export class ExchangeClient extends AbstractExchangeClient{
-  public readonly api: C_ExchangeApi
-  public readonly tradeModule: TradeModule
-  public readonly infoModule: InfoModule
+export class ExchangeClient extends AbstractExchangeClient<
+  OpenAPI,
+  Currency, CurrencyPosition,
+  MarketInstrument, Order,
+  Portfolio, Operation >{
+  public readonly api
+  public readonly tradeModule
+  public readonly infoModule
 
   constructor(token: string){
     super()
@@ -34,17 +44,17 @@ export class ExchangeClient extends AbstractExchangeClient{
     this.isAccountInitialized = true
   }
 
-  async getPortfolio(): Promise<C_Portfolio> {
+  async getPortfolio(): Promise<Portfolio> {
     const { api } = this
     return await api.portfolio()
   }
 
-  async getCurrenciesBalance(): Promise<C_CurrencyBalance[]> {
+  async getCurrenciesBalance(): Promise<CurrencyPosition[]> {
     const { api } = this
     return (await api.portfolioCurrencies()).currencies
   }
 
-  async getOperationsAll(from: Date = new Date(0), to: Date = new Date()): Promise<C_Operation[]> {
+  async getOperationsAll(from: Date = new Date(0), to: Date = new Date()): Promise<Operation[]> {
     const { api } = this
     const operations = await api.operations({
       from: from.toISOString(),
@@ -53,7 +63,7 @@ export class ExchangeClient extends AbstractExchangeClient{
     return operations.operations
   }
 
-  async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()): Promise<C_Operation[]> {
+  async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()): Promise<Operation[]> {
     const { api, infoModule } = this
     const security = await infoModule.getSecurity(ticker)
     const operations = await api.operations({

@@ -1,24 +1,35 @@
 import { OrderDetails } from "../../utils";
-import { C_Order } from "../../../src/exchangeClientTypes";
 import {AbstractExchangeClient} from "../../AbstractExchangeClient";
 
-export abstract class AbstractTradeModule {
-  protected readonly exchangeClient: AbstractExchangeClient
+export abstract class AbstractTradeModule<
+  ExchangeApiType,
+  CurrencyType, CurrencyBalanceType,
+  SecurityType, OrderType,
+  PortfolioType, OperationType> {
+  protected readonly exchangeClient: AbstractExchangeClient<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>
 
-  protected constructor(exchangeClient: AbstractExchangeClient){
+  protected constructor(exchangeClient: AbstractExchangeClient<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>){
     this.exchangeClient = exchangeClient
   }
 
-  abstract sell({ ticker, lots, price }: OrderDetails): Promise<C_Order>
+  abstract sell({ ticker, lots, price }: OrderDetails): Promise<OrderType>
 
-  abstract buy({ ticker, lots, price }: OrderDetails): Promise<C_Order>
+  abstract buy({ ticker, lots, price }: OrderDetails): Promise<OrderType>
 
-  abstract marketSell({ ticker, lots }: OrderDetails): Promise<C_Order>
+  abstract marketSell({ ticker, lots }: OrderDetails): Promise<OrderType>
 
-  abstract marketBuy({ ticker, lots }: OrderDetails): Promise<C_Order>
+  abstract marketBuy({ ticker, lots }: OrderDetails): Promise<OrderType>
 
-  abstract sellOrCancel(): Promise<C_Order>
+  abstract sellOrCancel(): Promise<OrderType>
 
-  abstract buyOrCancel(): Promise<C_Order>
+  abstract buyOrCancel(): Promise<OrderType>
 
 }

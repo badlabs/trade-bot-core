@@ -1,23 +1,22 @@
-import {
-    C_Currency,
-    C_Security,
-    C_Operation,
-    C_Order,
-    C_Portfolio,
-    C_CurrencyBalance
-} from "../../src/exchangeClientTypes";
 import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_CurrencyBalance} from "@prisma/client";
 import {OrderStatus} from "./orderDetails";
 import {OperationType} from "./database";
+import {
+    extractCurrencyBalanceType,
+    extractCurrencyType, extractOperationType, extractOrderType,
+    extractPortfolioType,
+    extractSecurityType
+} from "./extractTypes";
+import {AbstractExchangeClient} from "../AbstractExchangeClient";
 
-export interface ITranslatorsCD {
-    currency(currency: C_Currency): Promise<D_Currency>,
-    currencyBalance(currency: C_CurrencyBalance): Promise<D_CurrencyBalance>,
-    portfolio(portfolio: C_Portfolio): Promise<D_PortfolioPosition[]>
-    security(security: C_Security): Promise<D_Security>
-    operation(operation: C_Operation): Promise<D_Operation>
-    operations(operations: C_Operation[]): Promise<D_Operation[]>
-    order(order: C_Order): Promise<D_Order>
-    orderStatus(order: C_Order): OrderStatus
-    orderOperation(order: C_Order): OperationType
+export interface ITranslatorsCD<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+    currency(currency: extractCurrencyType<ExchangeClient>): Promise<D_Currency>,
+    currencyBalance(currency: extractCurrencyBalanceType<ExchangeClient>): Promise<D_CurrencyBalance>,
+    portfolio(portfolio: extractPortfolioType<ExchangeClient>): Promise<D_PortfolioPosition[]>
+    security(security: extractSecurityType<ExchangeClient>): Promise<D_Security>
+    operation(operation: extractOperationType<ExchangeClient>): Promise<D_Operation>
+    operations(operations: extractOperationType<ExchangeClient>[]): Promise<D_Operation[]>
+    order(order: extractOrderType<ExchangeClient>): Promise<D_Order>
+    orderStatus(order: extractOrderType<ExchangeClient>): OrderStatus
+    orderOperation(order: extractOrderType<ExchangeClient>): OperationType
 }

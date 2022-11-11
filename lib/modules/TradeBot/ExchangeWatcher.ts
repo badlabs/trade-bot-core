@@ -1,14 +1,14 @@
 import {ExchangeAnalyzer, ExchangeTrader} from "./index";
 import {TradeBot} from "../../TradeBot";
 import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_Order, D_CurrencyBalance} from "@prisma/client";
-import {C_Currency, C_Portfolio, C_Security, C_Order, C_CurrencyBalance} from "../../../src/exchangeClientTypes";
+import {Order} from "../../../src/exchangeClientTypes";
 import { ExchangeClient } from "src/ExchangeClient/ExchangeClient";
 import {initTranslators} from "../../../src/cdTranslators";
 import {ITranslatorsCD, OperationType, OrderStatus} from "../../utils";
 
 export class ExchangeWatcher {
     private readonly tradebot: TradeBot
-    private readonly translators: ITranslatorsCD
+    private readonly translators: ITranslatorsCD<ExchangeClient>
     private get analyzer(): ExchangeAnalyzer { return this.tradebot.analyzer }
     private get trader(): ExchangeTrader { return this.tradebot.trader }
     private get exchangeClient(): ExchangeClient { return this.tradebot.exchangeClient }
@@ -20,19 +20,19 @@ export class ExchangeWatcher {
 
     async getPortfolio(): Promise<D_PortfolioPosition[]> {
         const { exchangeClient, translators } = this
-        const portfolio: C_Portfolio = await exchangeClient.getPortfolio()
+        const portfolio = await exchangeClient.getPortfolio()
         return translators.portfolio(portfolio)
     }
 
     async getCurrenciesBalance(): Promise<D_CurrencyBalance[]> {
         const { exchangeClient, translators } = this
-        const currencies: C_CurrencyBalance[] = await exchangeClient.getCurrenciesBalance()
+        const currencies = await exchangeClient.getCurrenciesBalance()
         return await Promise.all(currencies.map(c => translators.currencyBalance(c)))
     }
 
     async getCurrencies(): Promise<D_Currency[]> {
         const { exchangeClient, translators } = this
-        const currencies: C_Currency[] = await exchangeClient.infoModule.getCurrencies()
+        const currencies = await exchangeClient.infoModule.getCurrencies()
         return await Promise.all(currencies.map(c => translators.currency(c)))
     }
 
@@ -55,7 +55,7 @@ export class ExchangeWatcher {
 
     async getSecurityCurrency(ticker: string): Promise<D_Currency> {
         const { exchangeClient, translators } = this
-        const currency: C_Currency = await exchangeClient.infoModule.getSecurityCurrency(ticker)
+        const currency = await exchangeClient.infoModule.getSecurityCurrency(ticker)
         return translators.currency(currency)
     }
 
@@ -75,7 +75,7 @@ export class ExchangeWatcher {
         )
     }
 
-    onOrderSent(order: C_Order, operation_type: OperationType, run_id: number | null = null): OrderStatus {
+    onOrderSent(order: Order, operation_type: OperationType, run_id: number | null = null): OrderStatus {
         const { translators, analyzer } = this
         const status = translators.orderStatus(order)
         translators.order(order)

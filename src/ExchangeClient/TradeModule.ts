@@ -1,16 +1,26 @@
 import { ExchangeClient } from "./ExchangeClient";
 import { OrderDetails } from "../../lib/utils";
-import { C_Order } from "../exchangeClientTypes";
+import { Order } from "../exchangeClientTypes";
 import {AbstractTradeModule} from "../../lib/modules";
-import {PlacedLimitOrder, PlacedMarketOrder} from "@tinkoff/invest-openapi-js-sdk";
+import OpenAPI, {
+  Currency,
+  CurrencyPosition,
+  MarketInstrument, Operation,
+  PlacedLimitOrder,
+  PlacedMarketOrder, Portfolio
+} from "@tinkoff/invest-openapi-js-sdk";
 
-export class TradeModule extends AbstractTradeModule{
+export class TradeModule extends AbstractTradeModule<
+  OpenAPI,
+  Currency, CurrencyPosition,
+  MarketInstrument, Order,
+  Portfolio, Operation >{
 
   constructor(exchangeClient: ExchangeClient){
     super(exchangeClient)
   }
 
-  private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): C_Order {
+  private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): Order {
     return {
       figi,
       operation: order.operation,
@@ -23,7 +33,7 @@ export class TradeModule extends AbstractTradeModule{
     }
   }
 
-  private async placedMarketOrderToOrder(order: PlacedMarketOrder, figi: string, ticker: string): Promise<C_Order> {
+  private async placedMarketOrderToOrder(order: PlacedMarketOrder, figi: string, ticker: string): Promise<Order> {
     const price = await this.exchangeClient.infoModule.getSecurityLastPrice(ticker)
     return {
       figi,
@@ -45,39 +55,39 @@ export class TradeModule extends AbstractTradeModule{
     return figi
   }
 
-  public async sell({ ticker, lots, price }: OrderDetails): Promise<C_Order> {
+  public async sell({ ticker, lots, price }: OrderDetails) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.limitOrder({figi, operation: 'Sell', lots, price})
     return TradeModule.placedLimitOrderToOrder(placedOrder, figi, price)
   }
 
-  public async buy({ ticker, lots, price }: OrderDetails): Promise<C_Order> {
+  public async buy({ ticker, lots, price }: OrderDetails) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.limitOrder({figi, operation: 'Buy', lots, price})
     return TradeModule.placedLimitOrderToOrder(placedOrder, figi, price)
   }
 
-  public async marketSell({ ticker, lots }: OrderDetails): Promise<C_Order> {
+  public async marketSell({ ticker, lots }: OrderDetails) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.marketOrder({figi, operation: 'Sell', lots})
     return this.placedMarketOrderToOrder(placedOrder, figi, ticker)
   }
 
-  public async marketBuy({ ticker, lots }: OrderDetails): Promise<C_Order> {
+  public async marketBuy({ ticker, lots }: OrderDetails) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.marketOrder({figi, operation: 'Buy', lots})
     return this.placedMarketOrderToOrder(placedOrder, figi, ticker)
   }
 
-  public async sellOrCancel(): Promise<C_Order> {
+  public async sellOrCancel(): Promise<Order> {
     throw new Error("Method not implemented.");
   }
 
-  public async buyOrCancel(): Promise<C_Order> {
+  public async buyOrCancel(): Promise<Order> {
     throw new Error("Method not implemented.");
   }
 

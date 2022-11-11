@@ -1,22 +1,33 @@
-import { C_Currency, C_Security, C_Operation } from "../../../src/exchangeClientTypes";
 import {AbstractExchangeClient} from "../../AbstractExchangeClient";
 
-export abstract class AbstractInfoModule {
-  protected readonly exchangeClient: AbstractExchangeClient
+export abstract class AbstractInfoModule<
+  ExchangeApiType,
+  CurrencyType, CurrencyBalanceType,
+  SecurityType, OrderType,
+  PortfolioType, OperationType> {
+  protected readonly exchangeClient: AbstractExchangeClient<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>
 
-  protected constructor(exchangeClient: AbstractExchangeClient){
+  protected constructor(exchangeClient: AbstractExchangeClient<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>){
     this.exchangeClient = exchangeClient
   }
 
-  abstract getCurrencies(): Promise<C_Currency[]>
+  abstract getCurrencies(): Promise<CurrencyType[]>
 
   abstract getSecurityLastPrice(ticker: string): Promise<number>
 
-  abstract getSecurityCurrency(ticker: string): Promise<C_Currency>
+  abstract getSecurityCurrency(ticker: string): Promise<CurrencyType>
 
   abstract getSecurityName(ticker: string): Promise<string>
 
-  abstract getSecurity(ticker: string, ignoreCache: boolean): Promise<C_Security | null>
+  abstract getSecurity(ticker: string, ignoreCache: boolean): Promise<SecurityType | null>
 
-  abstract getSecurityByExchangeId(id: string, ignoreCache: boolean): Promise<C_Security | null>
+  abstract getSecurityByExchangeId(id: string, ignoreCache: boolean): Promise<SecurityType | null>
 }

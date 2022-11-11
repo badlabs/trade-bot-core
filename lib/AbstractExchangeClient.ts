@@ -1,13 +1,22 @@
-import OpenAPI from '@tinkoff/invest-openapi-js-sdk';
-import {C_CurrencyBalance, C_ExchangeApi, C_Operation, C_Portfolio} from '../src/exchangeClientTypes';
-
 import {AbstractInfoModule} from "./modules/AbstractExchangeClient/AbstractInfoModule";
 import {AbstractTradeModule} from "./modules/AbstractExchangeClient/AbstractTradeModule";
 
-export abstract class AbstractExchangeClient {
-  abstract readonly api: C_ExchangeApi
-  abstract readonly tradeModule: AbstractTradeModule
-  abstract readonly infoModule: AbstractInfoModule
+export abstract class AbstractExchangeClient<
+  ExchangeApiType,
+  CurrencyType, CurrencyBalanceType,
+  SecurityType, OrderType,
+  PortfolioType, OperationType> {
+  abstract readonly api: ExchangeApiType
+  abstract readonly tradeModule: AbstractTradeModule<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>
+  abstract readonly infoModule: AbstractInfoModule<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>
   private _isAccountInitialized: boolean = false
   public get isAccountInitialized(): boolean { return this._isAccountInitialized }
   protected set isAccountInitialized(value: boolean) { this._isAccountInitialized = value }
@@ -15,11 +24,11 @@ export abstract class AbstractExchangeClient {
 
   protected abstract initAccount(): Promise<unknown>
 
-  abstract getPortfolio(): Promise<C_Portfolio>
+  abstract getPortfolio(): Promise<PortfolioType>
 
-  abstract getCurrenciesBalance(): Promise<C_CurrencyBalance[]>
+  abstract getCurrenciesBalance(): Promise<CurrencyBalanceType[]>
 
-  abstract getOperationsAll(from: Date, to: Date): Promise<C_Operation[]>
+  abstract getOperationsAll(from: Date, to: Date): Promise<OperationType[]>
 
-  abstract getOperationsBySecurity(ticker: string, from: Date, to: Date): Promise<C_Operation[]>
+  abstract getOperationsBySecurity(ticker: string, from: Date, to: Date): Promise<OperationType[]>
 }
