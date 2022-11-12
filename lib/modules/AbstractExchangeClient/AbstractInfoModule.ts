@@ -20,12 +20,6 @@ export abstract class AbstractInfoModule<
     this.exchangeClient = exchangeClient
   }
 
-  get translator(): AbstractTranslator<AbstractExchangeClient<
-      ExchangeApiType,
-      CurrencyType, CurrencyBalanceType,
-      SecurityType, OrderType,
-      PortfolioType, OperationType>> {return this.exchangeClient.translator}
-
   abstract getCurrencies(): Promise<CurrencyType[]>
 
   abstract getSecurityLastPrice(ticker: string): Promise<number>
@@ -34,7 +28,7 @@ export abstract class AbstractInfoModule<
 
   abstract getSecurityName(ticker: string): Promise<string>
 
-  abstract getSecurity(ticker: string, ignoreCache: boolean): Promise<SecurityType | null>
+  abstract getSecurity(ticker: string, ignoreCache?: boolean): Promise<SecurityType | null>
 
-  abstract getSecurityByExchangeId(id: string, ignoreCache: boolean): Promise<SecurityType | null>
+  abstract getSecurityByExchangeId(id: string, ignoreCache?: boolean): Promise<SecurityType | null>
 }

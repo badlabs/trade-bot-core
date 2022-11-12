@@ -18,11 +18,11 @@ export abstract class AbstractExchangeClient<
     CurrencyType, CurrencyBalanceType,
     SecurityType, OrderType,
     PortfolioType, OperationType>
-  abstract readonly translator: AbstractTranslator<AbstractExchangeClient<
-      ExchangeApiType,
-      CurrencyType, CurrencyBalanceType,
-      SecurityType, OrderType,
-      PortfolioType, OperationType>>
+  abstract readonly translator: AbstractTranslator<
+    ExchangeApiType,
+    CurrencyType, CurrencyBalanceType,
+    SecurityType, OrderType,
+    PortfolioType, OperationType>
   private _isAccountInitialized: boolean = false
   public get isAccountInitialized(): boolean { return this._isAccountInitialized }
   protected set isAccountInitialized(value: boolean) { this._isAccountInitialized = value }

@@ -8,14 +8,15 @@ import {extractOrderType} from "../../utils/extractTypes";
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>>{
     private readonly tradebot: TradeBot<ExchangeClient>
-    private readonly translator: AbstractTranslator<AbstractExchangeClient<any, any, any, any, any, any, any>>
+    private get translator(): AbstractTranslator<any, any, any, any, any, any, any> {
+        return this.exchangeClient.translator
+    }
     private get analyzer(): ExchangeAnalyzer<ExchangeClient> { return this.tradebot.analyzer }
     private get trader(): ExchangeTrader<ExchangeClient> { return this.tradebot.trader }
     private get exchangeClient(): ExchangeClient { return this.tradebot.exchangeClient }
 
     constructor(tradebot: TradeBot<ExchangeClient>) {
         this.tradebot = tradebot
-        this.translator = tradebot.exchangeClient.translator
     }
 
     async getPortfolio(): Promise<D_PortfolioPosition[]> {

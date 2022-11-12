@@ -8,10 +8,14 @@ import {
     extractPortfolioType,
     extractSecurityType
 } from "../../lib/utils/extractTypes";
-import {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from "@tinkoff/invest-openapi-js-sdk";
+import OpenAPI, {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from "@tinkoff/invest-openapi-js-sdk";
 import {Order} from "../types/Order";
 
-export class Translator extends AbstractTranslator<ExchangeClient> {
+export class Translator extends AbstractTranslator<
+    OpenAPI,
+    Currency, CurrencyPosition,
+    MarketInstrument, Order,
+    Portfolio, Operation> {
     constructor(exchangeClient: ExchangeClient) {
         super(exchangeClient);
     }
@@ -95,7 +99,6 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
             case "PendingReplace": return 'pending_replace'
             case 'PendingCancel': return 'pending_cancel'
         }
-        return "rejected"
     }
 
     orderOperation(order: Order): OperationType {
@@ -107,6 +110,5 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
             case "Sell": return 'limit_sell'
             case "SellOrCancel": return 'sell_or_cancel'
         }
-        return "limit_buy"
     }
 }
