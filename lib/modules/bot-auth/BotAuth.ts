@@ -1,7 +1,5 @@
-import { Request } from "express"
-import { IncomingMessage } from "http"
-import { config } from "../../../config"
-import {IHttpHeadersCarrier} from "../bot-api/utils";
+import { config } from '../../../config'
+import {IHttpHeadersCarrier} from '../bot-api/utils'
 
 export class BotAuth{
   private readonly botToken: string

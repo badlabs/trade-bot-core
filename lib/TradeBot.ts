@@ -1,6 +1,5 @@
-import { config } from "../config";
+import { config } from '../config'
 import {
-    AbstractTradeAlgorithm,
     BotApi,
     BotAuth,
     BotLogger,
@@ -8,7 +7,7 @@ import {
     ExchangeTrader,
     ExchangeWatcher
 } from "./modules";
-import {AbstractExchangeClient} from "./abstract/AbstractExchangeClient";
+import {AbstractExchangeClient, AbstractTradeAlgorithm} from './abstract'
 
 export class TradeBot<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
     public readonly exchangeClient: ExchangeClient

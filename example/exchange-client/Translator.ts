@@ -1,16 +1,9 @@
-import {OperationType, OrderStatus} from "../../lib/utils";
-import {AbstractTranslator} from "../../lib/abstract/AbstractTranslator";
-import {AbstractExchangeClient} from "../../lib/abstract/AbstractExchangeClient";
-import {ExchangeClient} from "./ExchangeClient";
-import {D_Currency, D_CurrencyBalance, D_Operation, D_Order, D_PortfolioPosition, D_Security} from "@prisma/client";
-import {
-    extractCurrencyBalanceType,
-    extractCurrencyType, extractOperationType, extractOrderType,
-    extractPortfolioType,
-    extractSecurityType
-} from "../../lib/utils/extractTypes";
-import OpenAPI, {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from "@tinkoff/invest-openapi-js-sdk";
-import {Order} from "../types/Order";
+import {OperationType, OrderStatus} from '../../lib/utils'
+import {AbstractTranslator} from '../../lib/abstract'
+import {ExchangeClient} from './ExchangeClient'
+import {D_Currency, D_CurrencyBalance, D_Operation, D_Order, D_PortfolioPosition, D_Security} from '@prisma/client'
+import OpenAPI, {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from '@tinkoff/invest-openapi-js-sdk'
+import {Order} from '../types'
 
 export class Translator extends AbstractTranslator<
     OpenAPI,

@@ -1,14 +1,14 @@
-import { ExchangeClient } from "./ExchangeClient";
-import { OrderDetails } from "../../lib/utils";
-import { Order } from "../types/Order";
-import {AbstractTradeModule} from "../../lib/abstract";
+import { ExchangeClient } from './ExchangeClient'
+import { OrderDetails } from '../../lib/utils'
+import { Order } from '../types'
+import {AbstractTradeModule} from '../../lib/abstract'
 import OpenAPI, {
   Currency,
   CurrencyPosition,
   MarketInstrument, Operation,
   PlacedLimitOrder,
   PlacedMarketOrder, Portfolio
-} from "@tinkoff/invest-openapi-js-sdk";
+} from '@tinkoff/invest-openapi-js-sdk'
 
 export class TradeModule extends AbstractTradeModule<
   OpenAPI,

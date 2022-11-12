@@ -1,10 +1,10 @@
-import { config } from '../../../config'
 import { TradeBot } from 'lib/TradeBot'
 import { Express } from 'express'
-import { createWebSocketServer } from './ws'
-import { expressApp } from './rest'
 import http from 'http'
 import { Server } from 'socket.io'
+import { createWebSocketServer } from './ws'
+import { expressApp } from './rest'
+import { config } from '../../../config'
 
 export class BotApi {
   private readonly _tradeBot: TradeBot<any>

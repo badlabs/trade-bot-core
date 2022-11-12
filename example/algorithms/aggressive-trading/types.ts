@@ -1,4 +1,4 @@
-import {Job} from "node-schedule";
+import {Job} from 'node-schedule'
 
 export type AggressiveTraderInput = {
     security_ticker: string

@@ -1,11 +1,9 @@
-import {ExchangeAnalyzer, ExchangeTrader} from "../index";
-import {TradeBot} from "../../TradeBot";
-import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_Order, D_CurrencyBalance} from "@prisma/client";
-import {Order} from "../../../example/types/Order";
-import {OperationType, OrderStatus} from "../../utils";
-import {AbstractTranslator} from "../../abstract/AbstractTranslator";
-import {AbstractExchangeClient} from "../../abstract/AbstractExchangeClient";
-import {extractOrderType} from "../../utils/extractTypes";
+import {TradeBot} from 'lib/TradeBot'
+import {ExchangeAnalyzer, ExchangeTrader} from 'lib/modules'
+import {AbstractTranslator, AbstractExchangeClient} from 'lib/abstract'
+import {OperationType, OrderStatus} from 'lib/utils'
+import {extractOrderType} from 'lib/types'
+import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_CurrencyBalance} from '@prisma/client'
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>>{
     private readonly tradebot: TradeBot<ExchangeClient>

@@ -1,8 +1,8 @@
-import { IncomingHttpHeaders } from "http";
-import { Application } from "express";
-import { TradeBot } from "lib/TradeBot";
-import {OperationType} from "../../types/database";
-import {AbstractExchangeClient} from "../../abstract/AbstractExchangeClient";
+import { TradeBot } from 'lib/TradeBot'
+import { AbstractExchangeClient } from 'lib/abstract'
+import { OperationType } from 'lib/types'
+import { IncomingHttpHeaders } from 'http'
+import { Application } from 'express'
 
 export interface IHttpHeadersCarrier {
     headers: IncomingHttpHeaders

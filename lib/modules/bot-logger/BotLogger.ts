@@ -1,9 +1,8 @@
 import fs from 'fs'
-import { config } from '../../../config';
-import {createRollingFileLogger, Logger} from "simple-node-logger";
-import { TradeBot } from 'lib/TradeBot';
-import { BotApi } from '../bot-api/BotApi';
-
+import {createRollingFileLogger, Logger} from 'simple-node-logger'
+import { TradeBot } from 'lib/TradeBot'
+import { BotApi } from '../bot-api'
+import { config } from '../../../config'
 
 export class BotLogger {
   private readonly tradebot: TradeBot<any>

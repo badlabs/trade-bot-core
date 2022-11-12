@@ -1,5 +1,5 @@
-import {Router} from "express";
-import {getTradeBotFromExpress} from "../utils";
+import {Router} from 'express'
+import {getTradeBotFromExpress} from '../../utils'
 
 const router = Router();
 

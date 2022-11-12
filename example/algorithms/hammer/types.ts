@@ -1,5 +1,5 @@
-import {OrderDetails} from "../../../lib/utils";
-import {Job} from "node-schedule";
+import {OrderDetails} from 'lib/utils'
+import {Job} from 'node-schedule'
 
 export type HammerInput = {
     order: OrderDetails,

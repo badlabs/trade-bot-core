@@ -1,10 +1,9 @@
-import {D_AlgorithmRun, D_Security} from "@prisma/client";
-import { ExchangeAnalyzer } from "../../../lib/modules";
-import { AbstractTradeAlgorithm } from "../../../lib/modules/exchange-analyzer/trade-algorithms-engine";
-import { addSecondsToDate, OrderDetails } from '../../../lib/utils'
-import {Job, scheduledJobs, scheduleJob} from "node-schedule";
-import {ExchangeClient} from "../../exchange-client";
-import {AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData} from "./types";
+import {D_AlgorithmRun, D_Security} from '@prisma/client'
+import { ExchangeAnalyzer } from '../../../lib/modules'
+import { AbstractTradeAlgorithm } from '../../../lib/abstract'
+import {ExchangeClient} from '../../exchange-client'
+import {AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData} from './types'
+import {Job, scheduleJob} from 'node-schedule'
 
 export class AggressiveTradingAlgorithm
     extends AbstractTradeAlgorithm<ExchangeClient, AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData> {

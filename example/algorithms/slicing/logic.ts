@@ -1,9 +1,9 @@
-import { D_AlgorithmRun } from "@prisma/client";
-import { ExchangeAnalyzer } from "../../../lib/modules";
-import { AbstractTradeAlgorithm } from "../../../lib/modules/exchange-analyzer/trade-algorithms-engine";
-import {addMinutesToDate, addSecondsToDate, wait, OrderDetails} from '../../../lib/utils'
-import {ExchangeClient} from "../../exchange-client";
-import {SlicingInput, SlicingState, SlicingStopData} from "./types";
+import { D_AlgorithmRun } from '@prisma/client'
+import { ExchangeAnalyzer } from '../../../lib/modules'
+import { AbstractTradeAlgorithm } from '../../../lib/abstract'
+import {addMinutesToDate, addSecondsToDate, OrderDetails} from '../../../lib/utils'
+import {ExchangeClient} from '../../exchange-client'
+import {SlicingInput, SlicingState, SlicingStopData} from './types'
 
 export class SlicingAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, SlicingInput, SlicingState, SlicingStopData> {
   get name(): string { return 'slicing' }

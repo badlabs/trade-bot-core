@@ -1,4 +1,4 @@
-import {AbstractExchangeClient} from "../abstract/AbstractExchangeClient"
+import {AbstractExchangeClient} from "../abstract"
 
 export type extractExchangeApiType<ExchangeClient> = ExchangeClient extends AbstractExchangeClient<
   infer ExchangeApiType,

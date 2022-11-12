@@ -1,11 +1,8 @@
-import {ExchangeWatcher} from "../index";
-import {OrderDetails, OrderStatus} from "lib/types/orderDetails";
-import {TradeBot} from "../../TradeBot";
-import {Job} from "node-schedule";
-import { BotLogger } from "../bot-logger/BotLogger";
-import {AbstractExchangeClient} from "../../abstract/AbstractExchangeClient";
-import {extractOrderType} from "../../utils/extractTypes";
-const schedule = require('node-schedule');
+import {TradeBot} from 'lib/TradeBot'
+import {ExchangeWatcher, BotLogger} from 'lib/modules'
+import {AbstractExchangeClient} from 'lib/abstract'
+import {extractOrderType,OrderDetails, OrderStatus} from 'lib/types'
+import {Job, JobCallback, scheduleJob} from 'node-schedule'
 
 export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
     private readonly tradebot: TradeBot<ExchangeClient>
@@ -17,12 +14,12 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, a
         this.tradebot = tradebot
     }
 
-    scheduleAction(action: Function, date: Date): Job {
-        return schedule.scheduleJob(date, action)
+    scheduleAction(action: JobCallback, date: Date): Job {
+        return scheduleJob(date, action)
     }
 
     scheduleOrder(date: Date, order: OrderDetails, run_id: number | null = null, ): Job {
-        return schedule.scheduleJob(date, async () => {
+        return scheduleJob(date, async () => {
             await this.sendOrder(order, run_id)
         })
     }

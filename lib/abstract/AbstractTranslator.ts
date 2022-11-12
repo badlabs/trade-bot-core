@@ -1,7 +1,7 @@
-import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_CurrencyBalance} from "@prisma/client";
-import {OrderStatus} from "../types/orderDetails";
-import {OperationType as OperationTypeEnum} from "../types/database";
-import {AbstractExchangeClient} from "./AbstractExchangeClient";
+import {AbstractExchangeClient} from './AbstractExchangeClient'
+import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_CurrencyBalance} from '@prisma/client'
+import {OrderStatus, OperationType as OperationTypeEnum} from 'lib/types'
+
 
 export abstract class AbstractTranslator<ExchangeApiType,
     CurrencyType, CurrencyBalanceType,
