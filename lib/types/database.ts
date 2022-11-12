@@ -1,5 +1,6 @@
 import {OperationType} from "./CommonSubjectArea";
 
+// TODO: move types to appropriate place
 export type OperationId = { exchange_id: string } | { created_at: Date }
 export type OrderId = { exchange_id: string } | { created_at: Date }
 
