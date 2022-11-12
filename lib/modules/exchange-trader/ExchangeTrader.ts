@@ -48,6 +48,8 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
             case "market_sell":
                 order = await this.exchangeClient.tradeModule.marketSell({ ticker, lots, price, operation })
                 break
+            default:
+                throw new Error(`Wrong operation defined in order: ${JSON.stringify({ ticker, lots, price, operation })}`)
         }
         return watcher.onOrderSent(order, operation, run_id)
     }

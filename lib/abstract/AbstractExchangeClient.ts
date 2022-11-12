@@ -2,7 +2,7 @@ import {AbstractInfoModule} from "./AbstractInfoModule";
 import {AbstractTradeModule} from "./AbstractTradeModule";
 import {AbstractTranslator} from "./AbstractTranslator";
 import {SubjectAreaTemplate} from "../types";
-import {GetCurrencyBalanceType, GetCurrencyType, GetOperationType, GetPortfolioType} from "../types/extractors";
+import {GetCurrencyBalanceType, GetOperationType, GetPortfolioType} from "../types/extractors";
 
 export abstract class AbstractExchangeClient<
   ExchangeApiType = any,

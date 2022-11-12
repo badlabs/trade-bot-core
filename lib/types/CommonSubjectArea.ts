@@ -3,11 +3,11 @@ import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_Cur
 
 export type OrderStatus = 'new' | 'cancelled' |
     'fill' | 'partially_fill' | 'replaced' |
-    'rejected' | 'pending_new' | 'pending_replace' | 'pending_cancel'
+    'rejected' | 'pending_new' | 'pending_replace' | 'pending_cancel' | 'undefined'
 
 export type OperationType = 'limit_buy' | 'limit_sell' |
     'market_buy' | 'market_sell' |
-    'buy_or_cancel' | 'sell_or_cancel'
+    'buy_or_cancel' | 'sell_or_cancel' | 'undefined'
 
 type CommonCurrency = D_Currency
 type CommonCurrencyBalance = D_CurrencyBalance
