@@ -1,6 +1,6 @@
 import {TradeBot} from "../lib/TradeBot";
 import {ExchangeClient} from "../example/exchange-client";
-import { OperationType, awaitTime } from "../lib/utils";
+import { OperationType, wait } from "../lib/utils";
 
 (async () => {
 
@@ -12,7 +12,7 @@ import { OperationType, awaitTime } from "../lib/utils";
   console.info(`${new Date()} Waiting initialization...`)
 
   while (!tradeBot.exchangeClient.isAccountInitialized){
-    await awaitTime(10)
+    await wait(10)
   }
   await tradeBot.analyzer.updateCurrencies()
   console.info(`${new Date()} Starting tests...`)

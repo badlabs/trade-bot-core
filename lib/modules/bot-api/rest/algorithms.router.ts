@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {awaitTime, getTradeBotFromExpress} from "../../../utils";
+import {getTradeBotFromExpress} from "../utils";
 
 const router = Router();
 
