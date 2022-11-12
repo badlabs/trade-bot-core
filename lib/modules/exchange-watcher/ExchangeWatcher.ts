@@ -2,12 +2,12 @@ import {TradeBot} from 'lib/TradeBot'
 import {ExchangeAnalyzer, ExchangeTrader} from 'lib/modules'
 import {AbstractTranslator, AbstractExchangeClient} from 'lib/abstract'
 import {OperationType, OrderStatus} from 'lib/utils'
-import {extractOrderType} from 'lib/types'
 import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_CurrencyBalance} from '@prisma/client'
+import {GetOrderType} from "../../types/extractors";
 
-export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>>{
+export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
     private readonly tradebot: TradeBot<ExchangeClient>
-    private get translator(): AbstractTranslator<any, any, any, any, any, any, any> {
+    private get translator(): AbstractTranslator {
         return this.exchangeClient.translator
     }
     private get analyzer(): ExchangeAnalyzer<ExchangeClient> { return this.tradebot.analyzer }
@@ -75,7 +75,7 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient<any, 
         )
     }
 
-    onOrderSent(order: extractOrderType<ExchangeClient>, operation_type: OperationType, run_id: number | null = null): OrderStatus {
+    onOrderSent(order: GetOrderType<ExchangeClient>, operation_type: OperationType, run_id: number | null = null): OrderStatus {
         const { translator, analyzer } = this
         const status = translator.orderStatus(order)
         translator.order(order)

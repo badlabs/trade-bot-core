@@ -24,7 +24,7 @@ import {scheduleJob} from 'node-schedule'
 const db = new PrismaClient()
 
 export class ExchangeAnalyzer<
-    ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+    ExchangeClient extends AbstractExchangeClient> {
     readonly tradebot: TradeBot<ExchangeClient>
     get trader(): ExchangeTrader<ExchangeClient> { return this.tradebot.trader }
     get watcher(): ExchangeWatcher<ExchangeClient> { return this.tradebot.watcher }
@@ -32,7 +32,7 @@ export class ExchangeAnalyzer<
 
     constructor(tradebot: TradeBot<ExchangeClient>,
                 initAlgorithmsCallback:
-                    (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
+                    (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient>[]
                     = () => []
     ) {
         this.tradebot = tradebot

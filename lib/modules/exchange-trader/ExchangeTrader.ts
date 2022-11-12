@@ -1,10 +1,11 @@
 import {TradeBot} from 'lib/TradeBot'
 import {ExchangeWatcher, BotLogger} from 'lib/modules'
 import {AbstractExchangeClient} from 'lib/abstract'
-import {extractOrderType,OrderDetails, OrderStatus} from 'lib/types'
+import {OrderDetails, OrderStatus} from 'lib/types'
 import {Job, JobCallback, scheduleJob} from 'node-schedule'
+import {GetOrderType} from "../../types/extractors";
 
-export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
     private readonly tradebot: TradeBot<ExchangeClient>
     private get watcher(): ExchangeWatcher<ExchangeClient> { return this.tradebot.watcher }
     private get logger(): BotLogger { return this.tradebot.logger }
@@ -27,7 +28,7 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient<any, a
     async sendOrder({ ticker, lots, price, operation }: OrderDetails, run_id: number | null = null): Promise<OrderStatus> {
         const { watcher } = this
         this.logger.log(`${run_id ? `[algo:${run_id}] `: ''}Sending order: ${JSON.stringify({operation, ticker, lots, price})}`)
-        let order: extractOrderType<ExchangeClient>
+        let order: GetOrderType<ExchangeClient>
         switch (operation){
             case 'limit_buy':
                 order = await this.exchangeClient.tradeModule.buy({ ticker, lots, price, operation })

@@ -4,7 +4,7 @@ import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from 'li
 
 export abstract class AbstractTradeAlgorithm<
   ExchangeClient extends AbstractExchangeClient,
-  InputsType, StateType, StopDataType>{
+  InputsType = any, StateType = any, StopDataType = any>{
   protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
   protected get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
   protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }

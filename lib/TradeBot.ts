@@ -9,7 +9,7 @@ import {
 } from "./modules";
 import {AbstractExchangeClient, AbstractTradeAlgorithm} from './abstract'
 
-export class TradeBot<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+export class TradeBot<ExchangeClient extends AbstractExchangeClient> {
     public readonly exchangeClient: ExchangeClient
     public readonly analyzer: ExchangeAnalyzer<ExchangeClient>
     public readonly trader: ExchangeTrader<ExchangeClient>
@@ -22,7 +22,7 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient<any, any, an
         exchangeClient: ExchangeClient,
         botToken?: string,
         initAlgorithmsCallback?:
-            (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient, any, any, any>[]
+            (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient>[]
     }) {
         this.logger = new BotLogger(this)
         this.logger.log('TradeBot Initialization...')
