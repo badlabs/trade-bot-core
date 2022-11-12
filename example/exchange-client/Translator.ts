@@ -4,12 +4,9 @@ import {ExchangeClient} from './ExchangeClient'
 import {D_Currency, D_CurrencyBalance, D_Operation, D_Order, D_PortfolioPosition, D_Security} from '@prisma/client'
 import OpenAPI, {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from '@tinkoff/invest-openapi-js-sdk'
 import {Order} from '../types'
+import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class Translator extends AbstractTranslator<
-    OpenAPI,
-    Currency, CurrencyPosition,
-    MarketInstrument, Order,
-    Portfolio, Operation> {
+export class Translator extends AbstractTranslator<OpenAPI, SubjectArea> {
     constructor(exchangeClient: ExchangeClient) {
         super(exchangeClient);
     }

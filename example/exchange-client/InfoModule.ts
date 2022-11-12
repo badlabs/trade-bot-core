@@ -8,14 +8,11 @@ import OpenAPI, {
   Portfolio
 } from '@tinkoff/invest-openapi-js-sdk'
 import {Order} from '../types'
+import {SubjectArea} from "../subject-area/SubjectArea";
 
 const securitiesCache = new Map<string, MarketInstrument>()
 
-export class InfoModule extends AbstractInfoModule<
-  OpenAPI,
-  Currency, CurrencyPosition,
-  MarketInstrument, Order,
-  Portfolio, Operation >{
+export class InfoModule extends AbstractInfoModule<OpenAPI, SubjectArea>{
 
   constructor(exchangeClient: ExchangeClient){
     super(exchangeClient)

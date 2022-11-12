@@ -9,12 +9,9 @@ import OpenAPI, {
   PlacedLimitOrder,
   PlacedMarketOrder, Portfolio
 } from '@tinkoff/invest-openapi-js-sdk'
+import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class TradeModule extends AbstractTradeModule<
-  OpenAPI,
-  Currency, CurrencyPosition,
-  MarketInstrument, Order,
-  Portfolio, Operation >{
+export class TradeModule extends AbstractTradeModule<OpenAPI, SubjectArea>{
 
   constructor(exchangeClient: ExchangeClient){
     super(exchangeClient)

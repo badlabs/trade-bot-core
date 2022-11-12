@@ -5,17 +5,13 @@ import OpenAPI, {
   Operation,
   Portfolio
 } from '@tinkoff/invest-openapi-js-sdk'
-import {Order} from '../types'
 import {AbstractExchangeClient} from '../../lib/abstract'
 import { TradeModule } from './TradeModule'
 import { InfoModule } from './InfoModule'
 import {Translator} from "./Translator"
+import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class ExchangeClient extends AbstractExchangeClient<
-  OpenAPI,
-  Currency, CurrencyPosition,
-  MarketInstrument, Order,
-  Portfolio, Operation >{
+export class ExchangeClient extends AbstractExchangeClient<OpenAPI, SubjectArea>{
   public readonly api
   public readonly tradeModule
   public readonly infoModule
