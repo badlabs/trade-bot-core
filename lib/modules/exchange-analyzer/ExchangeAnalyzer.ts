@@ -1,9 +1,9 @@
+import {addDaysToDate} from "../../utils";
 import {
-    addDaysToDate,
     GetOperationsOptions,
     GetOrdersOptions,
     OperationId,
-    OperationType} from "../../utils";
+    OperationType} from "../../types";
 import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'lib/abstract'
 import {ExchangeTrader, ExchangeWatcher} from 'lib/modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'

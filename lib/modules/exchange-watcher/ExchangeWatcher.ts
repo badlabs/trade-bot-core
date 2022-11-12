@@ -1,7 +1,7 @@
 import {TradeBot} from 'lib/TradeBot'
 import {ExchangeAnalyzer, ExchangeTrader} from 'lib/modules'
 import {AbstractTranslator, AbstractExchangeClient} from 'lib/abstract'
-import {OperationType, OrderStatus} from 'lib/utils'
+import {OperationType, OrderStatus} from 'lib/types'
 import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_CurrencyBalance} from '@prisma/client'
 import {GetOrderType} from "../../types/extractors";
 

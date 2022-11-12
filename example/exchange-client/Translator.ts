@@ -1,4 +1,4 @@
-import {OperationType, OrderStatus} from '../../lib/utils'
+import {OperationType, OrderStatus} from '../../lib/types'
 import {AbstractTranslator} from '../../lib/abstract'
 import {ExchangeClient} from './ExchangeClient'
 import {D_Currency, D_CurrencyBalance, D_Operation, D_Order, D_PortfolioPosition, D_Security} from '@prisma/client'

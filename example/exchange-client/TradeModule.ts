@@ -1,5 +1,5 @@
 import { ExchangeClient } from './ExchangeClient'
-import { OrderDetails } from '../../lib/utils'
+import { OrderDetails } from '../../lib/types'
 import { Order } from '../types'
 import {AbstractTradeModule} from '../../lib/abstract'
 import OpenAPI, {
