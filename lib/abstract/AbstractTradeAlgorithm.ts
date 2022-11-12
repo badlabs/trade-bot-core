@@ -3,7 +3,7 @@ import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from 'lib/modules'
 
 export abstract class AbstractTradeAlgorithm<
-  ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>,
+  ExchangeClient extends AbstractExchangeClient,
   InputsType, StateType, StopDataType>{
   protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
   protected get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
