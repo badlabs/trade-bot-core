@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from "../../abstract";
-import {SubjectAreaTemplate} from "../SubjectArea";
+import {SubjectAreaTemplate} from "../SubjectAreaTemplate";
 
 export type GetCurrencyType<T> =
     T extends AbstractExchangeClient<any, SubjectAreaTemplate<infer CurrencyType>> ? CurrencyType :

@@ -1,4 +1,5 @@
 export * from './database'
 export * from './orderDetails'
-export * from './SubjectArea'
+export * from './SubjectAreaTemplate'
 export * as extractors from './extractors'
+export * from './CommonSubjectArea'

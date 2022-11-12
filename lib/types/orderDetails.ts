@@ -1,4 +1,4 @@
-import { OperationType } from "./database";
+import { OperationType } from "./CommonSubjectArea";
 
 export type OrderDetails = {
     operation: OperationType
@@ -6,7 +6,3 @@ export type OrderDetails = {
     lots: number
     price: number
 }
-
-export type OrderStatus = 'new' | 'cancelled' |
-    'fill' | 'partially_fill' | 'replaced' |
-    'rejected' | 'pending_new' | 'pending_replace' | 'pending_cancel'

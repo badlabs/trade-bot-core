@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from "../../abstract";
-import {SubjectAreaTemplate} from "../SubjectArea";
+import {SubjectAreaTemplate} from "../SubjectAreaTemplate";
 
 export type GetPortfolioType<T> =
     T extends AbstractExchangeClient<
