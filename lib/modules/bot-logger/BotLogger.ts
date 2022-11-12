@@ -2,7 +2,7 @@ import fs from 'fs'
 import { config } from '../../../config';
 import {createRollingFileLogger, Logger} from "simple-node-logger";
 import { TradeBot } from 'lib/TradeBot';
-import { BotApi } from './BotApi/BotApi';
+import { BotApi } from '../bot-api/BotApi';
 
 
 export class BotLogger {

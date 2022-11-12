@@ -1,6 +1,6 @@
 import {D_AlgorithmRun, D_Security} from "@prisma/client";
 import { ExchangeAnalyzer } from "../../../lib/modules";
-import { AbstractTradeAlgorithm } from "../../../lib/modules/TradeBot/ExchangeAnalyzer/TradeAlgorithms";
+import { AbstractTradeAlgorithm } from "../../../lib/modules/exchange-analyzer/trade-algorithms-engine";
 import { addSecondsToDate, OrderDetails } from '../../../lib/utils'
 import {Job, scheduledJobs, scheduleJob} from "node-schedule";
 import {ExchangeClient} from "../../exchange-client";

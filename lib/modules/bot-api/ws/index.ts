@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { TradeBot } from '../../../../TradeBot';
+import { TradeBot } from '../../../TradeBot';
 import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'

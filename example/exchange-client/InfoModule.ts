@@ -1,5 +1,5 @@
 import { ExchangeClient } from "./ExchangeClient";
-import {AbstractInfoModule} from "../../lib/modules";
+import {AbstractInfoModule} from "../../lib/abstract";
 import OpenAPI, {
   Currency,
   CurrencyPosition,

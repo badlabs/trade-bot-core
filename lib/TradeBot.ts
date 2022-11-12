@@ -8,7 +8,7 @@ import {
     ExchangeTrader,
     ExchangeWatcher
 } from "./modules";
-import {AbstractExchangeClient} from "./AbstractExchangeClient";
+import {AbstractExchangeClient} from "./abstract/AbstractExchangeClient";
 
 export class TradeBot<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
     public readonly exchangeClient: ExchangeClient

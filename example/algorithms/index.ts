@@ -1,8 +1,8 @@
 import {
     AbstractTradeAlgorithm
-} from "lib/modules/TradeBot";
+} from "lib/modules";
 import {SlicingAlgorithm} from "./slicing/logic";
-import {ExchangeAnalyzer} from "lib/modules/TradeBot";
+import {ExchangeAnalyzer} from "lib/modules";
 import {HammerAlgorithm} from "./hammer/logic";
 import {AggressiveTradingAlgorithm} from "./aggressive-trading/logic";
 import {ExchangeClient} from "../exchange-client";

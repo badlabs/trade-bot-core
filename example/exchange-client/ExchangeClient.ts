@@ -9,7 +9,7 @@ import {Order} from '../types/Order';
 
 import { TradeModule } from './TradeModule';
 import { InfoModule } from './InfoModule';
-import {AbstractExchangeClient} from "../../lib/AbstractExchangeClient";
+import {AbstractExchangeClient} from "../../lib/abstract/AbstractExchangeClient";
 import {Translator} from "./Translator";
 
 export class ExchangeClient extends AbstractExchangeClient<

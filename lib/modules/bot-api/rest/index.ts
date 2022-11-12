@@ -17,7 +17,7 @@ app.get('/', function (req, res) {
 import {algosRouter} from "./algorithms.router";
 import { stateRouter } from "./state.router";
 import { authRouter } from './auth.router'
-import { getTradeBotFromExpress } from '../../../../utils';
+import { getTradeBotFromExpress } from '../../../utils';
 router.use('/auth', authRouter)
 router.use((req: Request, res: Response, next: NextFunction) => {
     if (getTradeBotFromExpress(req).auth.authByRequest(req)) next()

@@ -1,5 +1,6 @@
-import {AbstractTranslator, OperationType, OrderStatus} from "../../lib/utils";
-import {AbstractExchangeClient} from "../../lib/AbstractExchangeClient";
+import {OperationType, OrderStatus} from "../../lib/utils";
+import {AbstractTranslator} from "../../lib/abstract/AbstractTranslator";
+import {AbstractExchangeClient} from "../../lib/abstract/AbstractExchangeClient";
 import {ExchangeClient} from "./ExchangeClient";
 import {D_Currency, D_CurrencyBalance, D_Operation, D_Order, D_PortfolioPosition, D_Security} from "@prisma/client";
 import {

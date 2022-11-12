@@ -1,5 +1,5 @@
-import { OrderDetails } from "../../utils";
-import {AbstractExchangeClient} from "../../AbstractExchangeClient";
+import { OrderDetails } from "../utils";
+import {AbstractExchangeClient} from "./AbstractExchangeClient";
 
 export abstract class AbstractTradeModule<
   ExchangeApiType,

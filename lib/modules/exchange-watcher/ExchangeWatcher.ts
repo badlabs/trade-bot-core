@@ -1,9 +1,10 @@
-import {ExchangeAnalyzer, ExchangeTrader} from "./index";
+import {ExchangeAnalyzer, ExchangeTrader} from "../index";
 import {TradeBot} from "../../TradeBot";
 import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_Order, D_CurrencyBalance} from "@prisma/client";
 import {Order} from "../../../example/types/Order";
-import {AbstractTranslator, OperationType, OrderStatus} from "../../utils";
-import {AbstractExchangeClient} from "../../AbstractExchangeClient";
+import {OperationType, OrderStatus} from "../../utils";
+import {AbstractTranslator} from "../../abstract/AbstractTranslator";
+import {AbstractExchangeClient} from "../../abstract/AbstractExchangeClient";
 import {extractOrderType} from "../../utils/extractTypes";
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>>{

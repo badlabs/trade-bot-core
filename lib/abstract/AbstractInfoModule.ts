@@ -1,5 +1,5 @@
-import {AbstractExchangeClient} from "../../AbstractExchangeClient";
-import {AbstractTranslator, ITranslator} from "../../utils";
+import {AbstractExchangeClient} from "./AbstractExchangeClient";
+import {AbstractTranslator} from "./AbstractTranslator";
 
 export abstract class AbstractInfoModule<
   ExchangeApiType,

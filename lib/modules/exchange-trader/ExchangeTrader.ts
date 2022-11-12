@@ -1,9 +1,9 @@
-import {ExchangeWatcher} from "./index";
-import {OrderDetails, OrderStatus} from "lib/utils/orderDetails";
+import {ExchangeWatcher} from "../index";
+import {OrderDetails, OrderStatus} from "lib/types/orderDetails";
 import {TradeBot} from "../../TradeBot";
 import {Job} from "node-schedule";
-import { BotLogger } from "./BotLogger";
-import {AbstractExchangeClient} from "../../AbstractExchangeClient";
+import { BotLogger } from "../bot-logger/BotLogger";
+import {AbstractExchangeClient} from "../../abstract/AbstractExchangeClient";
 import {extractOrderType} from "../../utils/extractTypes";
 const schedule = require('node-schedule');
 

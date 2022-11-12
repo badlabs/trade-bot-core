@@ -1,6 +1,6 @@
-import {addDaysToDate, GetOperationsOptions, GetOrdersOptions, OperationId, OperationType} from "../../../utils";
+import {addDaysToDate, GetOperationsOptions, GetOrdersOptions, OperationId, OperationType} from "../../utils";
 import {AbstractTradeAlgorithm, ExchangeTrader, ExchangeWatcher} from "../index";
-import {TradeAlgorithmsEngine} from "./TradeAlgorithms";
+import {TradeAlgorithmsEngine} from "./trade-algorithms-engine";
 import {TradeBot} from "lib/TradeBot";
 import {
     D_Currency,
@@ -14,7 +14,7 @@ import {
     D_Order, D_CurrencyBalance
 } from "@prisma/client";
 import {scheduleJob} from "node-schedule";
-import {AbstractExchangeClient} from "../../../AbstractExchangeClient";
+import {AbstractExchangeClient} from "../../abstract/AbstractExchangeClient";
 
 const db = new PrismaClient()
 

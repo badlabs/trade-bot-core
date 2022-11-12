@@ -1,6 +1,6 @@
 import { D_AlgorithmRun, D_Algorithm } from "@prisma/client";
-import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from "lib/modules/TradeBot/index";
-import {AbstractExchangeClient} from "../../../../AbstractExchangeClient";
+import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from "lib/modules";
+import {AbstractExchangeClient} from "./AbstractExchangeClient";
 
 export abstract class AbstractTradeAlgorithm<
   ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>,
