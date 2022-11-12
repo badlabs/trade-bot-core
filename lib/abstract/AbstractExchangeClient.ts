@@ -2,7 +2,7 @@ import {AbstractInfoModule} from "./AbstractInfoModule";
 import {AbstractTradeModule} from "./AbstractTradeModule";
 import {AbstractTranslator} from "./AbstractTranslator";
 import {SubjectAreaTemplate} from "../types";
-import {GetCurrencyType, GetOperationType, GetPortfolioType} from "../types/extractors";
+import {GetCurrencyBalanceType, GetCurrencyType, GetOperationType, GetPortfolioType} from "../types/extractors";
 
 export abstract class AbstractExchangeClient<
   ExchangeApiType = any,
@@ -22,7 +22,7 @@ export abstract class AbstractExchangeClient<
 
   abstract getPortfolio(): Promise<GetPortfolioType<SubjectArea>>
 
-  abstract getCurrenciesBalance(): Promise<GetCurrencyType<SubjectArea>[]>
+  abstract getCurrenciesBalance(): Promise<GetCurrencyBalanceType<SubjectArea>[]>
 
   abstract getOperationsAll(from: Date, to: Date): Promise<GetOperationType<SubjectArea>[]>
 

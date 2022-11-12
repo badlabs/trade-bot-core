@@ -12,7 +12,7 @@ interface IExpressAppCarrier {
     app: Application
 }
 
-export function getTradeBotFromExpress(expressAppCarrier: IExpressAppCarrier): TradeBot<AbstractExchangeClient<any, any, any, any, any, any, any>> {
+export function getTradeBotFromExpress(expressAppCarrier: IExpressAppCarrier): TradeBot<AbstractExchangeClient> {
     return expressAppCarrier.app.get('tradeBot')
 }
 

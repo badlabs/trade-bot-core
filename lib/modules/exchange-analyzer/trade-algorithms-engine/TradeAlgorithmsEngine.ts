@@ -3,7 +3,7 @@ import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'lib/abstract'
 import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'lib/modules'
 import { D_Algorithm, D_AlgorithmRun } from '@prisma/client'
 
-export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient<any, any, any, any, any, any, any>> {
+export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient> {
     protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
     protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
     protected get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
