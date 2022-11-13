@@ -11,7 +11,7 @@ import {
 } from "../../lib/types/extractors";
 import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class Translator extends AbstractTranslator<SubjectArea> {
+export class Translator extends AbstractTranslator<ExchangeClient> {
 
     async currency(currency: GetCurrencyType<SubjectArea>): Promise<GetCurrencyType<CommonSubjectArea>> {
         return { name: currency, ticker: currency }

@@ -3,12 +3,12 @@ import {AbstractInfoModule} from '../../lib/abstract'
 import {SubjectArea} from "../subject-area/SubjectArea";
 import {GetCurrencyType, GetSecurityType} from "../../lib/types/extractors";
 
-const securitiesCache = new Map<string, GetSecurityType<SubjectArea>>()
+const securitiesCache = new Map<string, GetSecurityType<ExchangeClient>>()
 
-export class InfoModule extends AbstractInfoModule<SubjectArea>{
+export class InfoModule extends AbstractInfoModule<ExchangeClient>{
 
   async getCurrencies() {
-    return [ 'CHF', "CNY", 'EUR', "GBP", "HKD", "JPY", "RUB", "TRY", "USD" ] as GetCurrencyType<SubjectArea>[]
+    return [ 'CHF', "CNY", 'EUR', "GBP", "HKD", "JPY", "RUB", "TRY", "USD" ]
   }
 
   async getSecurityLastPrice(ticker: string) {
@@ -40,7 +40,7 @@ export class InfoModule extends AbstractInfoModule<SubjectArea>{
       securitiesCache.set(ticker, security)
       return security
     }
-    return securitiesCache.get(ticker)
+    return securitiesCache.get(ticker) ?? null
   }
 
   async getSecurityByExchangeId(id: string, ignoreCache: boolean = false) {
@@ -51,6 +51,6 @@ export class InfoModule extends AbstractInfoModule<SubjectArea>{
       securitiesCache.set(id, security)
       return security
     }
-    return securitiesCache.get(id)
+    return securitiesCache.get(id) ?? null
   }
 }

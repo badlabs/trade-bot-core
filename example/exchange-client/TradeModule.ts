@@ -6,8 +6,9 @@ import {
 } from '@tinkoff/invest-openapi-js-sdk'
 import {SubjectArea} from "../subject-area/SubjectArea";
 import {GetOrderType} from "../../lib/types/extractors";
+import {ExchangeClient} from "./ExchangeClient";
 
-export class TradeModule extends AbstractTradeModule<SubjectArea>{
+export class TradeModule extends AbstractTradeModule<ExchangeClient>{
 
   private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): GetOrderType<SubjectArea> {
     return {
