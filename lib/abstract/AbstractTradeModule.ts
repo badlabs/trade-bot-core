@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {CreateOrderOptions, SubjectAreaTemplate} from '../types'
+import {CreateOrderOptions, DomainTemplate} from '../types'
 import {GetOrderType} from "../types/extractors";
 
 

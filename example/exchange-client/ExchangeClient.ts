@@ -3,9 +3,9 @@ import {AbstractExchangeClient} from '../../lib/abstract'
 import { TradeModule } from './TradeModule'
 import { InfoModule } from './InfoModule'
 import {Translator} from "./Translator"
-import {SubjectArea} from "../subject-area/SubjectArea";
+import {Domain} from "../domain/Domain";
 
-export class ExchangeClient extends AbstractExchangeClient<SubjectArea, OpenAPI>{
+export class ExchangeClient extends AbstractExchangeClient<Domain, OpenAPI>{
   constructor(token: string){
     super({
       infoModule: new InfoModule(),

@@ -1,6 +1,6 @@
 import {AbstractExchangeClient} from "../../abstract";
-import {SubjectAreaTemplate} from "../SubjectAreaTemplate";
+import {DomainTemplate} from "../DomainTemplate";
 
 export type GetCurrencyBalanceType<T> =
-    T extends AbstractExchangeClient<infer SubjectArea> ? SubjectArea['currencyBalance'] :
-        T extends SubjectAreaTemplate ? T['currencyBalance'] : never
+    T extends AbstractExchangeClient<infer Domain> ? Domain['currencyBalance'] :
+        T extends DomainTemplate ? T['currencyBalance'] : never

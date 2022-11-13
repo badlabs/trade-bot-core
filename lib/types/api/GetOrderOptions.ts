@@ -1,4 +1,4 @@
-import {OperationType} from "../CommonSubjectArea";
+import {OperationType} from "../CommonDomain";
 
 export type GetOrdersOptions = {
     from?: Date,

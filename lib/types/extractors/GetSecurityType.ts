@@ -1,6 +1,6 @@
 import {AbstractExchangeClient} from "../../abstract";
-import {SubjectAreaTemplate} from "../SubjectAreaTemplate";
+import {DomainTemplate} from "../DomainTemplate";
 
 export type GetSecurityType<T> =
-    T extends AbstractExchangeClient<infer SubjectArea> ? SubjectArea['security'] :
-        T extends SubjectAreaTemplate ? T['security'] : never
+    T extends AbstractExchangeClient<infer Domain> ? Domain['security'] :
+        T extends DomainTemplate ? T['security'] : never

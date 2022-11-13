@@ -1,4 +1,4 @@
-export type SubjectAreaTemplate<
+export type DomainTemplate<
     CurrencyType = any,
     CurrencyBalanceType = any,
     SecurityType = any,

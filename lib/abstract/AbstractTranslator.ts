@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {OrderStatus, OperationType, SubjectAreaTemplate, CommonSubjectArea} from 'lib/types'
+import {OrderStatus, OperationType, DomainTemplate, CommonDomain} from 'lib/types'
 import {
     GetCurrencyType,
     GetCurrencyBalanceType,
@@ -17,25 +17,25 @@ export abstract class AbstractTranslator<ExchangeClient extends AbstractExchange
     }
 
     abstract currency(currency: GetCurrencyType<ExchangeClient>):
-        Promise<GetCurrencyType<CommonSubjectArea>>
+        Promise<GetCurrencyType<CommonDomain>>
 
     abstract currencyBalance(currency: GetCurrencyBalanceType<ExchangeClient>):
-        Promise<GetCurrencyBalanceType<CommonSubjectArea>>
+        Promise<GetCurrencyBalanceType<CommonDomain>>
 
     abstract portfolio(portfolio: GetPortfolioType<ExchangeClient>):
-        Promise<GetPortfolioType<CommonSubjectArea>[]>
+        Promise<GetPortfolioType<CommonDomain>[]>
 
     abstract security(security: GetSecurityType<ExchangeClient>):
-        Promise<GetSecurityType<CommonSubjectArea>>
+        Promise<GetSecurityType<CommonDomain>>
 
     abstract operation(operation: GetOperationType<ExchangeClient>):
-        Promise<GetOperationType<CommonSubjectArea>>
+        Promise<GetOperationType<CommonDomain>>
 
     abstract operations(operations: GetOperationType<ExchangeClient>[]):
-        Promise<GetOperationType<CommonSubjectArea>[]>
+        Promise<GetOperationType<CommonDomain>[]>
 
     abstract order(order: GetOrderType<ExchangeClient>):
-        Promise<GetOrderType<CommonSubjectArea>>
+        Promise<GetOrderType<CommonDomain>>
 
     abstract orderStatus(order: GetOrderType<ExchangeClient>): OrderStatus
 

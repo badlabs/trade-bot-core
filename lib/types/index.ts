@@ -1,4 +1,4 @@
-export * from './SubjectAreaTemplate'
+export * from './DomainTemplate'
 export * as extractors from './extractors'
-export * from './CommonSubjectArea'
+export * from './CommonDomain'
 export * from './api'

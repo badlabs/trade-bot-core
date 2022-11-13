@@ -1,6 +1,6 @@
 import {AbstractExchangeClient} from "../../abstract";
-import {SubjectAreaTemplate} from "../SubjectAreaTemplate";
+import {DomainTemplate} from "../DomainTemplate";
 
 export type GetPortfolioType<T> =
-    T extends AbstractExchangeClient<infer SubjectArea> ? SubjectArea['portfolio'] :
-        T extends SubjectAreaTemplate ? T['portfolio'] : never
+    T extends AbstractExchangeClient<infer Domain> ? Domain['portfolio'] :
+        T extends DomainTemplate ? T['portfolio'] : never

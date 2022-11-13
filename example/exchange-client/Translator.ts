@@ -1,7 +1,6 @@
-import {OperationType, OrderStatus, CommonSubjectArea} from '../../lib/types'
+import {OperationType, OrderStatus, CommonDomain} from '../../lib/types'
 import {AbstractTranslator} from '../../lib/abstract'
 import {ExchangeClient} from './ExchangeClient'
-import {Order} from '../types'
 import {
     GetCurrencyBalanceType,
     GetCurrencyType,
@@ -9,19 +8,19 @@ import {
     GetPortfolioType,
     GetSecurityType
 } from "../../lib/types/extractors";
-import {SubjectArea} from "../subject-area/SubjectArea";
+import {Domain} from "../domain/Domain";
 
 export class Translator extends AbstractTranslator<ExchangeClient> {
 
-    async currency(currency: GetCurrencyType<SubjectArea>): Promise<GetCurrencyType<CommonSubjectArea>> {
+    async currency(currency: GetCurrencyType<Domain>): Promise<GetCurrencyType<CommonDomain>> {
         return { name: currency, ticker: currency }
     }
 
-    async currencyBalance(currency: GetCurrencyBalanceType<SubjectArea>): Promise<GetCurrencyBalanceType<CommonSubjectArea>> {
+    async currencyBalance(currency: GetCurrencyBalanceType<Domain>): Promise<GetCurrencyBalanceType<CommonDomain>> {
         return { currency_ticker: currency.currency, balance: currency.balance }
     }
 
-    async portfolio(portfolio: GetPortfolioType<SubjectArea>): Promise<GetPortfolioType<CommonSubjectArea>[]> {
+    async portfolio(portfolio: GetPortfolioType<Domain>): Promise<GetPortfolioType<CommonDomain>[]> {
         return portfolio.positions
             .map(position => {
                 return {
@@ -31,7 +30,7 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
             })
     }
 
-    async security(security: GetSecurityType<SubjectArea>): Promise<GetSecurityType<CommonSubjectArea>> {
+    async security(security: GetSecurityType<Domain>): Promise<GetSecurityType<CommonDomain>> {
         if (!security.currency) throw new Error(`Security with ticker "${security.ticker}" have no currency`)
         return {
             currency_ticker: security.currency,
@@ -41,7 +40,7 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
         }
     }
 
-    async operation(operation: GetOperationType<SubjectArea>): Promise<GetOperationType<CommonSubjectArea>> {
+    async operation(operation: GetOperationType<Domain>): Promise<GetOperationType<CommonDomain>> {
         const security = operation?.figi ?
             await this.exchangeClient.infoModule.getSecurityByExchangeId(operation?.figi) :
             null
@@ -59,7 +58,7 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
         }
     }
 
-    async operations(operations: GetOperationType<SubjectArea>[]): Promise<GetOperationType<CommonSubjectArea>[]> {
+    async operations(operations: GetOperationType<Domain>[]): Promise<GetOperationType<CommonDomain>[]> {
         const securityIds = Array.from(new Set(operations.map(op => op.figi)))
         await Promise.all(securityIds.map(async (id) => {
             if (id)
@@ -68,7 +67,7 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
         return await Promise.all(operations.map(op => this.operation(op)))
     }
 
-    async order(order: GetOrderType<SubjectArea>): Promise<GetOrderType<CommonSubjectArea>> {
+    async order(order: GetOrderType<Domain>): Promise<GetOrderType<CommonDomain>> {
         const security = await this.exchangeClient.infoModule.getSecurityByExchangeId(order.figi)
         return {
             operation_type: this.orderOperation(order),
@@ -82,7 +81,7 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
         }
     }
 
-    orderStatus(order: GetOrderType<SubjectArea>): OrderStatus {
+    orderStatus(order: GetOrderType<Domain>): OrderStatus {
         switch (order.status) {
             case "New": return 'new'
             case "Cancelled": return 'cancelled'
@@ -97,7 +96,7 @@ export class Translator extends AbstractTranslator<ExchangeClient> {
         }
     }
 
-    orderOperation(order: Order): OperationType {
+    orderOperation(order: GetOrderType<Domain>): OperationType {
         switch (order.operation) {
             case "Buy": return "limit_buy"
             case "BuyOrCancel": return "buy_or_cancel"

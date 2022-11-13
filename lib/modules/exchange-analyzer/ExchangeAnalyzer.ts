@@ -3,7 +3,7 @@ import {
     GetOperationsOptions,
     GetOrdersOptions,
     OperationType,
-    CommonSubjectArea} from "../../types";
+    CommonDomain} from "../../types";
 import {OperationId} from "../../types/db";
 import {GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
     GetPortfolioType, GetOperationType, GetOrderType} from "../../types/extractors";
@@ -57,7 +57,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         })
     }
 
-    private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonSubjectArea> | null> {
+    private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonDomain> | null> {
         const { watcher } = this
         const securityInCache = await db.d_Security.findFirst({ where: { ticker } })
         if (!securityInCache) {
@@ -67,7 +67,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return securityInCache
     }
 
-    private async loadSecuritiesIfNotExist(tickers: string[]): Promise<GetSecurityType<CommonSubjectArea>[]> {
+    private async loadSecuritiesIfNotExist(tickers: string[]): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
         const securitiesInCache = await db.d_Security.findMany({ where: { ticker: { in: tickers } } })
         const securitiesToAdd = await Promise.all(tickers
@@ -78,7 +78,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Currencies
 
-    async updateCurrencies(): Promise<GetCurrencyType<CommonSubjectArea>[]> {
+    async updateCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrencies()
         return await Promise.all(relevantCurrencies
@@ -90,13 +90,13 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         )
     }
 
-    async getCurrencies(): Promise<GetCurrencyType<CommonSubjectArea>[]> {
+    async getCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
         return db.d_Currency.findMany({})
     }
 
     // Currencies Balance
 
-    async updateCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonSubjectArea>[]> {
+    async updateCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrenciesBalance()
         return await Promise.all(relevantCurrencies
@@ -108,15 +108,15 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         )
     }
 
-    async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonSubjectArea>[]> {
+    async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
         return db.d_CurrencyBalance.findMany({})
     }
 
     // Securities
 
-    async updateSecurities(): Promise<GetSecurityType<CommonSubjectArea>[]> {
+    async updateSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
-        const securities: GetSecurityType<CommonSubjectArea>[] = await db.d_Security.findMany({  })
+        const securities: GetSecurityType<CommonDomain>[] = await db.d_Security.findMany({  })
         const securitiesPrices = await Promise.all(
             securities.map((security): Promise<number> => watcher.getSecurityLastPrice(security.ticker))
         )
@@ -129,17 +129,17 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return await Promise.all(updatePromises)
     }
 
-    async getSecurities(): Promise<GetSecurityType<CommonSubjectArea>[]> {
+    async getSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         return db.d_Security.findMany({})
     }
 
-    async getSecurity(ticker: string): Promise<GetSecurityType<CommonSubjectArea>> {
+    async getSecurity(ticker: string): Promise<GetSecurityType<CommonDomain>> {
         const security = await db.d_Security.findUnique({ where: { ticker } })
         if (!security) throw new Error(`Security with ticker:${ticker} was not found`)
         return security
     }
 
-    async addSecurities(...securities: GetSecurityType<CommonSubjectArea>[]): Promise<GetSecurityType<CommonSubjectArea>[]> {
+    async addSecurities(...securities: GetSecurityType<CommonDomain>[]): Promise<GetSecurityType<CommonDomain>[]> {
         const createOrUpdatePromises = securities
             .map((security) => db.d_Security.upsert({
                     where: { ticker: security.ticker },
@@ -170,7 +170,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
             where: { security_ticker: securityTicker }
         })
     }
-    async updateFollowedSecurities(): Promise<GetSecurityType<CommonSubjectArea>[]> {
+    async updateFollowedSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
         const securitiesToUpdate = await db.d_FollowedSecurity.findMany({})
         const securitiesPrices = await Promise.all(
@@ -185,7 +185,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Portfolio
 
-    async updatePortfolio(): Promise<GetPortfolioType<CommonSubjectArea>[]>{
+    async updatePortfolio(): Promise<GetPortfolioType<CommonDomain>[]>{
         const { watcher } = this
         const relevantPortfolio = await watcher.getPortfolio()
         const securities = await Promise.all(relevantPortfolio.map(p => watcher.getSecurity(p.security_ticker)))
@@ -205,7 +205,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     }
 
-    async getPortfolio(): Promise<GetPortfolioType<CommonSubjectArea>[]> {
+    async getPortfolio(): Promise<GetPortfolioType<CommonDomain>[]> {
         return db.d_PortfolioPosition.findMany({})
     }
 
@@ -213,7 +213,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         const { count: deleted } = await db.d_PortfolioPosition.deleteMany({})
         return deleted
     }
-    async addPortfolioPosition(portfolioPosition: GetPortfolioType<CommonSubjectArea>): Promise<GetPortfolioType<CommonSubjectArea>> {
+    async addPortfolioPosition(portfolioPosition: GetPortfolioType<CommonDomain>): Promise<GetPortfolioType<CommonDomain>> {
         return await db.$transaction(async (db) => {
             const positionToUpdate = await db.d_PortfolioPosition.findUnique({
                 where: { security_ticker: portfolioPosition.security_ticker }
@@ -225,7 +225,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
             })
         })
     }
-    async removePortfolioPosition(portfolioPosition: GetPortfolioType<CommonSubjectArea>): Promise<GetPortfolioType<CommonSubjectArea> | null> {
+    async removePortfolioPosition(portfolioPosition: GetPortfolioType<CommonDomain>): Promise<GetPortfolioType<CommonDomain> | null> {
         return await db.$transaction(async (db) => {
             const positionToUpdate = await db.d_PortfolioPosition.findUnique({
                 where: { security_ticker: portfolioPosition.security_ticker }
@@ -270,7 +270,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         })
         let buyPrice = 0
         let boughtAmount = position?.amount || 0
-        for ( let buyOperation of lastSecurityBuyOperations as GetOperationType<CommonSubjectArea>[] ){
+        for ( let buyOperation of lastSecurityBuyOperations as GetOperationType<CommonDomain>[] ){
             if (!buyOperation.amount_requested) continue
             if (buyOperation.amount_requested >= boughtAmount){
                 buyPrice += boughtAmount * buyOperation.price
@@ -284,7 +284,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Operations
 
-    async fixOperation(operation: GetOperationType<CommonSubjectArea>): Promise<GetOperationType<CommonSubjectArea>> {
+    async fixOperation(operation: GetOperationType<CommonDomain>): Promise<GetOperationType<CommonDomain>> {
         const operationId: OperationId = operation.exchange_id ?
             { exchange_id: operation.exchange_id} :
             { created_at: operation.created_at }
@@ -296,10 +296,10 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
                 updated_at: new Date()
             }
         })
-        return result as GetOperationType<CommonSubjectArea>
+        return result as GetOperationType<CommonDomain>
     }
 
-    async updateOperationsAll(from?: Date, to?: Date ): Promise<GetOperationType<CommonSubjectArea>[]> {
+    async updateOperationsAll(from?: Date, to?: Date ): Promise<GetOperationType<CommonDomain>[]> {
         const { watcher, fixOperation } = this
         const allOperations = await watcher.getOperations(from || addDaysToDate(new Date(), -1), to)
         // @ts-ignore
@@ -308,7 +308,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
             .filter(t => t !== null))
         return await Promise.all(allOperations.map(operation => fixOperation(operation)))
     }
-    async updateOperationsBySecurity(ticker: string): Promise<GetOperationType<CommonSubjectArea>[]> {
+    async updateOperationsBySecurity(ticker: string): Promise<GetOperationType<CommonDomain>[]> {
         const { watcher, fixOperation } = this
         const allOperations = await watcher.getOperationsBySecurity(ticker, addDaysToDate(new Date(), -1))
         // @ts-ignore
@@ -317,7 +317,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
             .filter(t => t !== null))
         return await Promise.all(allOperations.map(operation => fixOperation(operation)))
     }
-    async getOperations({ from, to, operation, securityTicker }: GetOperationsOptions): Promise<GetOperationType<CommonSubjectArea>[]> {
+    async getOperations({ from, to, operation, securityTicker }: GetOperationsOptions): Promise<GetOperationType<CommonDomain>[]> {
         const result = await db.d_Operation.findMany({
             orderBy: { created_at: 'desc' },
             where: {
@@ -329,18 +329,18 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
                 security_ticker: securityTicker
             }
         })
-        return result as GetOperationType<CommonSubjectArea>[]
+        return result as GetOperationType<CommonDomain>[]
     }
 
     // Orders
 
-    async saveOrder(order: GetOrderType<CommonSubjectArea>, operation_type: OperationType, run_id: number | null = null): Promise<GetOrderType<CommonSubjectArea>> {
+    async saveOrder(order: GetOrderType<CommonDomain>, operation_type: OperationType, run_id: number | null = null): Promise<GetOrderType<CommonDomain>> {
         await this.loadSecurityIfNotExist(order.security_ticker)
         const result = await db.d_Order.create({ data: {...order, run_id, operation_type} })
-        return result as GetOrderType<CommonSubjectArea>
+        return result as GetOrderType<CommonDomain>
     }
 
-    async getOrders({ from, to, operation, securityTicker, runId }: GetOrdersOptions): Promise<GetOrderType<CommonSubjectArea>[]> {
+    async getOrders({ from, to, operation, securityTicker, runId }: GetOrdersOptions): Promise<GetOrderType<CommonDomain>[]> {
         const result = await db.d_Order.findMany({
             orderBy: { created_at: 'desc' },
             where: {
@@ -353,7 +353,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
                 run_id: runId
             }
         })
-        return result as GetOrderType<CommonSubjectArea>[]
+        return result as GetOrderType<CommonDomain>[]
     }
 
     // Algorithms

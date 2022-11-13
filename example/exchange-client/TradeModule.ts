@@ -4,13 +4,13 @@ import {
   PlacedLimitOrder,
   PlacedMarketOrder
 } from '@tinkoff/invest-openapi-js-sdk'
-import {SubjectArea} from "../subject-area/SubjectArea";
+import {Domain} from "../domain/Domain";
 import {GetOrderType} from "../../lib/types/extractors";
 import {ExchangeClient} from "./ExchangeClient";
 
 export class TradeModule extends AbstractTradeModule<ExchangeClient>{
 
-  private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): GetOrderType<SubjectArea> {
+  private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): GetOrderType<Domain> {
     return {
       figi,
       operation: order.operation,
@@ -24,7 +24,7 @@ export class TradeModule extends AbstractTradeModule<ExchangeClient>{
   }
 
   private async placedMarketOrderToOrder(order: PlacedMarketOrder, figi: string, ticker: string):
-      Promise<GetOrderType<SubjectArea>> {
+      Promise<GetOrderType<Domain>> {
     const price = await this.exchangeClient.infoModule.getSecurityLastPrice(ticker)
     return {
       figi,
@@ -75,11 +75,11 @@ export class TradeModule extends AbstractTradeModule<ExchangeClient>{
     return this.placedMarketOrderToOrder(placedOrder, figi, ticker)
   }
 
-  public async sellOrCancel(): Promise<GetOrderType<SubjectArea>> {
+  public async sellOrCancel(): Promise<GetOrderType<Domain>> {
     throw new Error("Method not implemented.");
   }
 
-  public async buyOrCancel(): Promise<GetOrderType<SubjectArea>> {
+  public async buyOrCancel(): Promise<GetOrderType<Domain>> {
     throw new Error("Method not implemented.");
   }
 

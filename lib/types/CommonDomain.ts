@@ -1,4 +1,4 @@
-import {SubjectAreaTemplate} from "./SubjectAreaTemplate";
+import {DomainTemplate} from "./DomainTemplate";
 import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_CurrencyBalance} from '@prisma/client'
 
 export type OrderStatus = 'new' | 'cancelled' |
@@ -20,5 +20,5 @@ type CommonOperation = Omit<D_Operation, 'operation_type'> & {
     operation_type: OperationType
 }
 
-export type CommonSubjectArea = SubjectAreaTemplate<
+export type CommonDomain = DomainTemplate<
     CommonCurrency, CommonCurrencyBalance, CommonSecurity, CommonOrder, CommonPortfolio, CommonOperation>
