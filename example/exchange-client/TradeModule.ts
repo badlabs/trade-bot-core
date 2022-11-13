@@ -1,4 +1,3 @@
-import { ExchangeClient } from './ExchangeClient'
 import { CreateOrderOptions } from '../../lib/types'
 import {AbstractTradeModule} from '../../lib/abstract'
 import {
@@ -9,10 +8,6 @@ import {SubjectArea} from "../subject-area/SubjectArea";
 import {GetOrderType} from "../../lib/types/extractors";
 
 export class TradeModule extends AbstractTradeModule<SubjectArea>{
-
-  constructor(exchangeClient: ExchangeClient){
-    super(exchangeClient)
-  }
 
   private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): GetOrderType<SubjectArea> {
     return {

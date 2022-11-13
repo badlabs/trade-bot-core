@@ -4,9 +4,9 @@ import {GetOrderType} from "../types/extractors";
 
 
 export abstract class AbstractTradeModule<SubjectArea extends SubjectAreaTemplate> {
-  protected readonly exchangeClient: AbstractExchangeClient<SubjectArea>
+  protected exchangeClient: AbstractExchangeClient<SubjectArea>
 
-  protected constructor(exchangeClient: AbstractExchangeClient<SubjectArea>){
+  setExchangeClient(exchangeClient: AbstractExchangeClient<SubjectArea>){
     this.exchangeClient = exchangeClient
   }
 

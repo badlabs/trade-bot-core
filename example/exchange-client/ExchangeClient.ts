@@ -6,22 +6,16 @@ import {Translator} from "./Translator"
 import {SubjectArea} from "../subject-area/SubjectArea";
 
 export class ExchangeClient extends AbstractExchangeClient<SubjectArea, OpenAPI>{
-  public readonly api
-  public readonly tradeModule
-  public readonly infoModule
-  public readonly translator
-
   constructor(token: string){
-    super()
-    this.api = new OpenAPI({
-        apiURL: 'https://api-invest.tinkoff.ru/openapi/sandbox',
-        socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws',
-        secretToken: token
-    })
-    this.infoModule = new InfoModule(this)
-    this.tradeModule = new TradeModule(this)
-    this.translator = new Translator(this)
-    this.initAccount()
+    super({
+      infoModule: new InfoModule(),
+      tradeModule: new TradeModule(),
+      translator: new Translator()
+    }, new OpenAPI({
+      apiURL: 'https://api-invest.tinkoff.ru/openapi/sandbox',
+      socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws',
+      secretToken: token
+    }))
   }
 
   protected async initAccount(){

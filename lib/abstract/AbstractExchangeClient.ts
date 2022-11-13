@@ -7,16 +7,29 @@ import {GetCurrencyBalanceType, GetOperationType, GetPortfolioType} from "../typ
 export abstract class AbstractExchangeClient<
     SubjectArea extends SubjectAreaTemplate = SubjectAreaTemplate,
     ExchangeApiType = any> {
-
-  abstract readonly api: ExchangeApiType
-  abstract readonly tradeModule: AbstractTradeModule<SubjectArea>
-  abstract readonly infoModule: AbstractInfoModule<SubjectArea>
-  abstract readonly translator: AbstractTranslator<SubjectArea>
-
   private _isAccountInitialized: boolean = false
   public get isAccountInitialized(): boolean { return this._isAccountInitialized }
   protected set isAccountInitialized(value: boolean) { this._isAccountInitialized = value }
 
+  readonly api: ExchangeApiType
+  readonly tradeModule: AbstractTradeModule<SubjectArea>
+  readonly infoModule: AbstractInfoModule<SubjectArea>
+  readonly translator: AbstractTranslator<SubjectArea>
+
+  protected constructor(modules: {
+    tradeModule: AbstractTradeModule<SubjectArea>
+    infoModule: AbstractInfoModule<SubjectArea>
+    translator: AbstractTranslator<SubjectArea>
+  }, api: ExchangeApiType) {
+    this.api = api
+    this.tradeModule = modules.tradeModule
+    this.infoModule = modules.infoModule
+    this.translator = modules.translator
+    this.tradeModule.setExchangeClient(this)
+    this.infoModule.setExchangeClient(this)
+    this.translator.setExchangeClient(this)
+    this.initAccount()
+  }
 
   protected abstract initAccount(): Promise<unknown>
 
