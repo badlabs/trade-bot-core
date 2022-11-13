@@ -2,5 +2,5 @@ import {AbstractExchangeClient} from "../../abstract";
 import {SubjectAreaTemplate} from "../SubjectAreaTemplate";
 
 export type GetOrderType<T> =
-    T extends AbstractExchangeClient<any, SubjectAreaTemplate<any, any, any, infer OrderType>> ? OrderType :
-        T extends SubjectAreaTemplate<any, any, any, infer OrderType> ? OrderType : never
+    T extends AbstractExchangeClient<infer SubjectArea> ? SubjectArea['order'] :
+        T extends SubjectAreaTemplate ? T['order'] : never
