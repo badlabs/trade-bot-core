@@ -16,7 +16,7 @@ import {
     D_FollowedSecurity,
     D_Algorithm,
     D_AlgorithmRun
-} from '@prisma/client'
+} from '../../db'
 import {scheduleJob} from 'node-schedule'
 
 const db = new PrismaClient()

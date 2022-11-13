@@ -1,4 +1,4 @@
-import { D_AlgorithmRun } from '@prisma/client'
+import { D_AlgorithmRun } from '../../../src/db'
 import { ExchangeAnalyzer } from '../../../src/modules'
 import { AbstractTradeAlgorithm } from '../../../src/abstract'
 import {addMinutesToDate, addSecondsToDate} from '../../../src/utils'

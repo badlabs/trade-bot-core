@@ -1,4 +1,4 @@
-import { D_AlgorithmRun, D_Algorithm } from '@prisma/client'
+import { D_AlgorithmRun, D_Algorithm } from '../db'
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from 'src/modules'
 

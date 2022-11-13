@@ -1,7 +1,7 @@
 import { TradeBot } from 'src/TradeBot'
 import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'src/abstract'
 import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'src/modules'
-import { D_Algorithm, D_AlgorithmRun } from '@prisma/client'
+import { D_Algorithm, D_AlgorithmRun } from '../../../db'
 
 export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient> {
     protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>

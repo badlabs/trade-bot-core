@@ -1,4 +1,4 @@
-import {D_AlgorithmRun, D_Security} from '@prisma/client'
+import {D_AlgorithmRun, D_Security} from '../../../src/db'
 import { ExchangeAnalyzer } from '../../../src/modules'
 import { AbstractTradeAlgorithm } from '../../../src/abstract'
 import {ExchangeClient} from '../../exchange-client'

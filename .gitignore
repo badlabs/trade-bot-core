@@ -128,8 +128,9 @@ gen
 *.db
 *.db-journal
 
-### Prisma migrations
+### Prisma
 prisma/migrations
+src/db
 
 ### Temporary files
 

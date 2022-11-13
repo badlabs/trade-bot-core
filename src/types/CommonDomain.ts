@@ -1,5 +1,5 @@
 import {DomainTemplate} from "./DomainTemplate";
-import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_CurrencyBalance} from '@prisma/client'
+import {D_Currency, D_PortfolioPosition, D_Security, D_Operation, D_Order, D_CurrencyBalance} from '../db'
 
 export type OrderStatus = 'new' | 'cancelled' |
     'fill' | 'partially_fill' | 'replaced' |
