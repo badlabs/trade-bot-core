@@ -8,7 +8,7 @@ import {
     GetPortfolioType,
     GetSecurityType
 } from "../../lib/types/extractors";
-import {Domain} from "../domain/Domain";
+import {Domain} from "../Domain";
 
 export class Translator extends AbstractTranslator<ExchangeClient> {
 

@@ -4,7 +4,7 @@ import {
   PlacedLimitOrder,
   PlacedMarketOrder
 } from '@tinkoff/invest-openapi-js-sdk'
-import {Domain} from "../domain/Domain";
+import {Domain} from "../Domain";
 import {GetOrderType} from "../../lib/types/extractors";
 import {ExchangeClient} from "./ExchangeClient";
 

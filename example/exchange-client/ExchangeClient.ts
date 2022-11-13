@@ -3,7 +3,7 @@ import {AbstractExchangeClient} from '../../lib/abstract'
 import { TradeModule } from './TradeModule'
 import { InfoModule } from './InfoModule'
 import {Translator} from "./Translator"
-import {Domain} from "../domain/Domain";
+import {Domain} from "../Domain";
 
 export class ExchangeClient extends AbstractExchangeClient<Domain, OpenAPI>{
   constructor(token: string){
