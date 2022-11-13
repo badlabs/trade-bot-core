@@ -1,22 +1,23 @@
 import {AbstractExchangeClient} from "./AbstractExchangeClient";
 import {GetCurrencyType, GetSecurityType} from "../types/extractors";
+import {SubjectAreaTemplate} from "../types";
 
-export abstract class AbstractInfoModule<ExchangeClient extends AbstractExchangeClient> {
-  protected readonly exchangeClient: ExchangeClient
+export abstract class AbstractInfoModule<SubjectArea extends SubjectAreaTemplate> {
+  protected readonly exchangeClient: AbstractExchangeClient<SubjectArea>
 
-  protected constructor(exchangeClient: ExchangeClient){
+  protected constructor(exchangeClient: AbstractExchangeClient<SubjectArea>){
     this.exchangeClient = exchangeClient
   }
 
-  abstract getCurrencies(): Promise<GetCurrencyType<ExchangeClient>[]>
+  abstract getCurrencies(): Promise<GetCurrencyType<SubjectArea>[]>
 
   abstract getSecurityLastPrice(ticker: string): Promise<number>
 
-  abstract getSecurityCurrency(ticker: string): Promise<GetCurrencyType<ExchangeClient>>
+  abstract getSecurityCurrency(ticker: string): Promise<GetCurrencyType<SubjectArea>>
 
   abstract getSecurityName(ticker: string): Promise<string>
 
-  abstract getSecurity(ticker: string, ignoreCache?: boolean): Promise<GetSecurityType<ExchangeClient> | null>
+  abstract getSecurity(ticker: string, ignoreCache?: boolean): Promise<GetSecurityType<SubjectArea> | null>
 
-  abstract getSecurityByExchangeId(id: string, ignoreCache?: boolean): Promise<GetSecurityType<ExchangeClient> | null>
+  abstract getSecurityByExchangeId(id: string, ignoreCache?: boolean): Promise<GetSecurityType<SubjectArea> | null>
 }

@@ -10,8 +10,9 @@ import {
     GetPortfolioType,
     GetSecurityType
 } from "../../lib/types/extractors";
+import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class Translator extends AbstractTranslator<ExchangeClient> {
+export class Translator extends AbstractTranslator<SubjectArea> {
     constructor(exchangeClient: ExchangeClient) {
         super(exchangeClient);
     }

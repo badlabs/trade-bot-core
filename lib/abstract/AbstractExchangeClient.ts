@@ -5,13 +5,13 @@ import {SubjectAreaTemplate} from "../types";
 import {GetCurrencyBalanceType, GetOperationType, GetPortfolioType} from "../types/extractors";
 
 export abstract class AbstractExchangeClient<
-  ExchangeApiType = any,
-  SubjectArea extends SubjectAreaTemplate = SubjectAreaTemplate> {
+    SubjectArea extends SubjectAreaTemplate = SubjectAreaTemplate,
+    ExchangeApiType = any> {
 
   abstract readonly api: ExchangeApiType
-  abstract readonly tradeModule: AbstractTradeModule<AbstractExchangeClient<ExchangeApiType, SubjectArea>>
-  abstract readonly infoModule: AbstractInfoModule<AbstractExchangeClient<ExchangeApiType, SubjectArea>>
-  abstract readonly translator: AbstractTranslator<AbstractExchangeClient<ExchangeApiType, SubjectArea>>
+  abstract readonly tradeModule: AbstractTradeModule<SubjectArea>
+  abstract readonly infoModule: AbstractInfoModule<SubjectArea>
+  abstract readonly translator: AbstractTranslator<SubjectArea>
 
   private _isAccountInitialized: boolean = false
   public get isAccountInitialized(): boolean { return this._isAccountInitialized }

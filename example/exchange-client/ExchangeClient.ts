@@ -9,7 +9,7 @@ import { InfoModule } from './InfoModule'
 import {Translator} from "./Translator"
 import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class ExchangeClient extends AbstractExchangeClient<OpenAPI, SubjectArea>{
+export class ExchangeClient extends AbstractExchangeClient<SubjectArea, OpenAPI>{
   public readonly api
   public readonly tradeModule
   public readonly infoModule

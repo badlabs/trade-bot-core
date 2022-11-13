@@ -9,27 +9,27 @@ import {
     GetOrderType} from "../types/extractors";
 
 
-export abstract class AbstractTranslator<ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient>{
-    protected readonly exchangeClient: ExchangeClient
+export abstract class AbstractTranslator<SubjectArea extends SubjectAreaTemplate = SubjectAreaTemplate>{
+    protected readonly exchangeClient: AbstractExchangeClient<SubjectArea>
 
-    protected constructor(exchangeClient: ExchangeClient) {
+    protected constructor(exchangeClient: AbstractExchangeClient<SubjectArea>) {
         this.exchangeClient = exchangeClient
     }
 
-    abstract currency(currency: GetCurrencyType<ExchangeClient>):
+    abstract currency(currency: GetCurrencyType<SubjectArea>):
         Promise<GetCurrencyType<CommonSubjectArea>>
-    abstract currencyBalance(currency: GetCurrencyBalanceType<ExchangeClient>):
+    abstract currencyBalance(currency: GetCurrencyBalanceType<SubjectArea>):
         Promise<GetCurrencyBalanceType<CommonSubjectArea>>
-    abstract portfolio(portfolio: GetPortfolioType<ExchangeClient>):
+    abstract portfolio(portfolio: GetPortfolioType<SubjectArea>):
         Promise<GetPortfolioType<CommonSubjectArea>[]>
-    abstract security(security: GetSecurityType<ExchangeClient>):
+    abstract security(security: GetSecurityType<SubjectArea>):
         Promise<GetSecurityType<CommonSubjectArea>>
-    abstract operation(operation: GetOperationType<ExchangeClient>):
+    abstract operation(operation: GetOperationType<SubjectArea>):
         Promise<GetOperationType<CommonSubjectArea>>
-    abstract operations(operations: GetOperationType<ExchangeClient>[]):
+    abstract operations(operations: GetOperationType<SubjectArea>[]):
         Promise<GetOperationType<CommonSubjectArea>[]>
-    abstract order(order: GetOrderType<ExchangeClient>):
+    abstract order(order: GetOrderType<SubjectArea>):
         Promise<GetOrderType<CommonSubjectArea>>
-    abstract orderStatus(order: GetOrderType<ExchangeClient>): OrderStatus
-    abstract orderOperation(order: GetOrderType<ExchangeClient>): OperationType
+    abstract orderStatus(order: GetOrderType<SubjectArea>): OrderStatus
+    abstract orderOperation(order: GetOrderType<SubjectArea>): OperationType
 }
