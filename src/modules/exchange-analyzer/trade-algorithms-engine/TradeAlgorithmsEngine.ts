@@ -1,7 +1,7 @@
 import { TradeBot } from 'src/TradeBot'
 import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'src/abstract'
 import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'src/modules'
-import { D_Algorithm, D_AlgorithmRun } from '../../../db'
+import { Algorithm, AlgorithmRun } from '../../../db'
 
 export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient> {
     protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
@@ -20,11 +20,11 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
         this.continueAlgorithms()
     }
 
-    get description(): D_Algorithm[] {
+    get description(): Algorithm[] {
         return this.algorithms.map(algo => algo.details)
     }
 
-    async runAlgorithm(name: string, inputs: any): Promise<D_AlgorithmRun>{
+    async runAlgorithm(name: string, inputs: any): Promise<AlgorithmRun>{
         const { algorithms } = this
         const algo = algorithms.find(a => a.name === name)
         if (!algo) throw new Error(`Algorithm with name "${name}" was not found`)

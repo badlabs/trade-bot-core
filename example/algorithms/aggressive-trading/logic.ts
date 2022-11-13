@@ -1,9 +1,10 @@
-import {D_AlgorithmRun, D_Security} from '../../../src/db'
 import { ExchangeAnalyzer } from '../../../src/modules'
 import { AbstractTradeAlgorithm } from '../../../src/abstract'
 import {ExchangeClient} from '../../exchange-client'
 import {AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData} from './types'
 import {Job, scheduleJob} from 'node-schedule'
+import {GetSecurityType} from "../../../src/types/extractors";
+import {CommonDomain} from "../../../src/types";
 
 export class AggressiveTradingAlgorithm
     extends AbstractTradeAlgorithm<ExchangeClient, AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData> {
@@ -19,9 +20,9 @@ export class AggressiveTradingAlgorithm
     super(analyzer)
   }
 
-  private async followSecurity(securityTicker: string): Promise<D_Security> {
+  private async followSecurity(securityTicker: string): Promise<GetSecurityType<CommonDomain>> {
     const { analyzer, watcher } = this
-    let security: D_Security = await watcher.getSecurity(securityTicker)
+    let security: GetSecurityType<CommonDomain> = await watcher.getSecurity(securityTicker)
     security = (await analyzer.addSecurities(security))[0]
     await analyzer.followSecurity(security.ticker)
     return security
@@ -29,7 +30,7 @@ export class AggressiveTradingAlgorithm
 
   private async watchSecurity(securityTicker: string, runId: number, state: AggressiveTraderState): Promise<Job | undefined> {
     const { analyzer, watcher, trader } = this
-    let security: D_Security
+    let security: GetSecurityType<CommonDomain>
     try {
       security = await this.followSecurity(securityTicker)
     }
@@ -88,7 +89,7 @@ export class AggressiveTradingAlgorithm
     })
   }
 
-  async main({security_ticker}: AggressiveTraderInput): Promise<D_AlgorithmRun> {
+  async main({security_ticker}: AggressiveTraderInput) {
     const { watcher } = this
     const security = await watcher.getSecurity(security_ticker)
     const state: AggressiveTraderState = {
@@ -98,7 +99,7 @@ export class AggressiveTradingAlgorithm
       sold: 0,
       bought: 0
     }
-    const algorithmRun: D_AlgorithmRun = await this.fixStart({security_ticker}, state)
+    const algorithmRun = await this.fixStart({security_ticker}, state)
     const job = await this.watchSecurity(security_ticker, algorithmRun.id, state)
     if (job) this.stopData.set(algorithmRun.id, { job })
 
@@ -106,8 +107,8 @@ export class AggressiveTradingAlgorithm
     return algorithmRun
   }
 
-  async continue(id: number): Promise<D_AlgorithmRun> {
-    const algorithmRun: D_AlgorithmRun = await this.loadProgress(id)
+  async continue(id: number) {
+    const algorithmRun = await this.loadProgress(id)
     const { security_ticker }: AggressiveTraderInput = JSON.parse(algorithmRun.inputs)
     const state: AggressiveTraderState = JSON.parse(algorithmRun.state)
     const job = await this.watchSecurity(security_ticker, algorithmRun.id, state)
@@ -116,7 +117,7 @@ export class AggressiveTradingAlgorithm
     return await this.fixContinue(id)
   }
 
-  async stop(id: number): Promise<D_AlgorithmRun> {
+  async stop(id: number) {
     const stopData = this.stopData.get(id)
     if (!stopData) throw new Error(`Algorithm run with id:${id} was not found.`)
     stopData.job.cancel()

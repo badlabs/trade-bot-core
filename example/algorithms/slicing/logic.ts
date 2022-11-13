@@ -1,8 +1,6 @@
-import { D_AlgorithmRun } from '../../../src/db'
 import { ExchangeAnalyzer } from '../../../src/modules'
 import { AbstractTradeAlgorithm } from '../../../src/abstract'
 import {addMinutesToDate, addSecondsToDate} from '../../../src/utils'
-import {CreateOrderOptions} from '../../../src/types'
 import {ExchangeClient} from '../../exchange-client'
 import {SlicingInput, SlicingState, SlicingStopData} from './types'
 
@@ -21,7 +19,7 @@ export class SlicingAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Sli
     super(analyzer)
   }
 
-  async main(inputs: SlicingInput): Promise<D_AlgorithmRun> {
+  async main(inputs: SlicingInput) {
     const { order, parts, minutes } = inputs
     const { trader } = this
     const lotsInOrder: number = Math.floor(order.lots / parts)
@@ -36,7 +34,7 @@ export class SlicingAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Sli
       lastLots -= 1
     }
 
-    const algorithmRun: D_AlgorithmRun = await this.fixStart(inputs, { orders_sended: 0, lots_in_orders: lotsInOrders })
+    const algorithmRun = await this.fixStart(inputs, { orders_sended: 0, lots_in_orders: lotsInOrders })
     const stopData: SlicingStopData = { jobs: [] }
 
     const startPoint = addSecondsToDate(new Date(), 10)
@@ -57,8 +55,8 @@ export class SlicingAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Sli
 
     return algorithmRun
   }
-  async continue(id: number): Promise<D_AlgorithmRun> {
-    const algorithmRun: D_AlgorithmRun = await this.loadProgress(id)
+  async continue(id: number) {
+    const algorithmRun = await this.loadProgress(id)
     const { order, parts, minutes } = JSON.parse(algorithmRun.inputs)
     const { orders_sended, lots_in_orders } = JSON.parse(algorithmRun.state)
     const { trader } = this
@@ -83,7 +81,7 @@ export class SlicingAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Sli
     return await this.fixContinue(id)
   }
 
-  async stop(id: number): Promise<D_AlgorithmRun> {
+  async stop(id: number) {
     const stopData = this.stopData.get(id)
     if (!stopData) throw new Error(`Algorithm run with id:${id} was not found.`)
     stopData.jobs.forEach(job => {

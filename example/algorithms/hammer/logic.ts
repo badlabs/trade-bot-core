@@ -1,4 +1,3 @@
-import { D_AlgorithmRun } from '../../../src/db'
 import { ExchangeAnalyzer } from '../../../src/modules'
 import { AbstractTradeAlgorithm } from '../../../src/abstract'
 import { addSecondsToDate } from '../../../src/utils'
@@ -29,13 +28,13 @@ export class HammerAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Hamm
     catch (e) { await this.fixError(run_id, e) }
   }
 
-  async main(inputs: HammerInput): Promise<D_AlgorithmRun> {
+  async main(inputs: HammerInput) {
     const { order, seconds_before, date } = inputs
     const { trader } = this
 
     const send_date = addSecondsToDate(new Date(date), -seconds_before)
 
-    const algorithmRun: D_AlgorithmRun = await this.fixStart(inputs, { send_date })
+    const algorithmRun = await this.fixStart(inputs, { send_date })
 
     const job = trader.scheduleAction(async () => {
       await this.sendUntilNotRejected(order, algorithmRun.id)
@@ -47,8 +46,8 @@ export class HammerAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Hamm
     return algorithmRun
   }
 
-  async continue(id: number): Promise<D_AlgorithmRun> {
-    const algorithmRun: D_AlgorithmRun = await this.loadProgress(id)
+  async continue(id: number) {
+    const algorithmRun = await this.loadProgress(id)
     const { order } = JSON.parse(algorithmRun.inputs)
     const { send_date } = JSON.parse(algorithmRun.state)
     const { trader } = this
@@ -63,7 +62,7 @@ export class HammerAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Hamm
     return await this.fixContinue(id)
   }
 
-  async stop(id: number): Promise<D_AlgorithmRun> {
+  async stop(id: number) {
     const stopData = this.stopData.get(id)
     if (!stopData) throw new Error(`Algorithm run with id:${id} was not found.`)
     stopData?.job?.cancel()
