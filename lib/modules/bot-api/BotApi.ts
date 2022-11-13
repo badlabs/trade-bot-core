@@ -7,12 +7,12 @@ import { expressApp } from './rest'
 import { config } from '../../../config'
 
 export class BotApi {
-  private readonly _tradeBot: TradeBot<any>
+  private readonly _tradeBot: TradeBot
   private _restServer: Express
   private _webSocketServer: Server
   private _httpServer: http.Server
 
-  constructor(tradeBot: TradeBot<any>){
+  constructor(tradeBot: TradeBot){
     this._tradeBot = tradeBot
     this.configureServers()
   }

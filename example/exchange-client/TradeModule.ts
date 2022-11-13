@@ -3,11 +3,8 @@ import { CreateOrderOptions } from '../../lib/types'
 import { Order } from '../types'
 import {AbstractTradeModule} from '../../lib/abstract'
 import OpenAPI, {
-  Currency,
-  CurrencyPosition,
-  MarketInstrument, Operation,
   PlacedLimitOrder,
-  PlacedMarketOrder, Portfolio
+  PlacedMarketOrder
 } from '@tinkoff/invest-openapi-js-sdk'
 import {SubjectArea} from "../subject-area/SubjectArea";
 

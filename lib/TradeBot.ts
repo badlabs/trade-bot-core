@@ -9,7 +9,7 @@ import {
 } from "./modules";
 import {AbstractExchangeClient, AbstractTradeAlgorithm} from './abstract'
 
-export class TradeBot<ExchangeClient extends AbstractExchangeClient> {
+export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient> {
     public readonly exchangeClient: ExchangeClient
     public readonly analyzer: ExchangeAnalyzer<ExchangeClient>
     public readonly trader: ExchangeTrader<ExchangeClient>

@@ -2,12 +2,8 @@ import { ExchangeClient } from './ExchangeClient'
 import {AbstractInfoModule} from '../../lib/abstract'
 import OpenAPI, {
   Currency,
-  CurrencyPosition,
   MarketInstrument,
-  Operation,
-  Portfolio
 } from '@tinkoff/invest-openapi-js-sdk'
-import {Order} from '../types'
 import {SubjectArea} from "../subject-area/SubjectArea";
 
 const securitiesCache = new Map<string, MarketInstrument>()

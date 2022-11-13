@@ -1,7 +1,5 @@
 import OpenAPI, {
-  Currency,
   CurrencyPosition,
-  MarketInstrument,
   Operation,
   Portfolio
 } from '@tinkoff/invest-openapi-js-sdk'
