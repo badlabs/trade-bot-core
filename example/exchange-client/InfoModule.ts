@@ -7,7 +7,7 @@ const securitiesCache = new Map<string, GetSecurityType<ExchangeClient>>()
 
 export class InfoModule extends AbstractInfoModule<ExchangeClient>{
 
-  async getCurrencies() {
+  async getCurrencies(): Promise<GetCurrencyType<ExchangeClient>[]> {
     return [ 'CHF', "CNY", 'EUR', "GBP", "HKD", "JPY", "RUB", "TRY", "USD" ]
   }
 

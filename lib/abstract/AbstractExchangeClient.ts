@@ -12,14 +12,14 @@ export abstract class AbstractExchangeClient<
   protected set isAccountInitialized(value: boolean) { this._isAccountInitialized = value }
 
   readonly api: ExchangeApiType
-  readonly tradeModule: AbstractTradeModule<AbstractExchangeClient>
-  readonly infoModule: AbstractInfoModule<AbstractExchangeClient>
-  readonly translator: AbstractTranslator<AbstractExchangeClient>
+  readonly tradeModule: AbstractTradeModule<AbstractExchangeClient<SubjectArea, ExchangeApiType>>
+  readonly infoModule: AbstractInfoModule<AbstractExchangeClient<SubjectArea, ExchangeApiType>>
+  readonly translator: AbstractTranslator<AbstractExchangeClient<SubjectArea, ExchangeApiType>>
 
   protected constructor(modules: {
-    tradeModule: AbstractTradeModule<AbstractExchangeClient>
-    infoModule: AbstractInfoModule<AbstractExchangeClient>
-    translator: AbstractTranslator<AbstractExchangeClient>
+    tradeModule: AbstractTradeModule<AbstractExchangeClient<SubjectArea, ExchangeApiType>>
+    infoModule: AbstractInfoModule<AbstractExchangeClient<SubjectArea, ExchangeApiType>>
+    translator: AbstractTranslator<AbstractExchangeClient<SubjectArea, ExchangeApiType>>
   }, api: ExchangeApiType) {
     this.api = api
     this.tradeModule = modules.tradeModule

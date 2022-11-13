@@ -9,7 +9,7 @@ import {
     GetOrderType} from "../types/extractors";
 
 
-export abstract class AbstractTranslator<ExchangeClient extends AbstractExchangeClient>{
+export abstract class AbstractTranslator<ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient>{
     protected exchangeClient: ExchangeClient
 
     setExchangeClient(exchangeClient: ExchangeClient) {
