@@ -2,9 +2,9 @@ import {addDaysToDate} from "../../utils";
 import {
     GetOperationsOptions,
     GetOrdersOptions,
-    OperationId,
     OperationType,
     CommonSubjectArea} from "../../types";
+import {OperationId} from "../../types/db";
 import {GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
     GetPortfolioType, GetOperationType, GetOrderType} from "../../types/extractors";
 import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'lib/abstract'

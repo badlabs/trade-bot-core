@@ -1,5 +1,5 @@
 import { ExchangeClient } from './ExchangeClient'
-import { OrderDetails } from '../../lib/types'
+import { CreateOrderOptions } from '../../lib/types'
 import { Order } from '../types'
 import {AbstractTradeModule} from '../../lib/abstract'
 import OpenAPI, {
@@ -52,28 +52,28 @@ export class TradeModule extends AbstractTradeModule<OpenAPI, SubjectArea>{
     return figi
   }
 
-  public async sell({ ticker, lots, price }: OrderDetails) {
+  public async sell({ ticker, lots, price }: CreateOrderOptions) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.limitOrder({figi, operation: 'Sell', lots, price})
     return TradeModule.placedLimitOrderToOrder(placedOrder, figi, price)
   }
 
-  public async buy({ ticker, lots, price }: OrderDetails) {
+  public async buy({ ticker, lots, price }: CreateOrderOptions) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.limitOrder({figi, operation: 'Buy', lots, price})
     return TradeModule.placedLimitOrderToOrder(placedOrder, figi, price)
   }
 
-  public async marketSell({ ticker, lots }: OrderDetails) {
+  public async marketSell({ ticker, lots }: CreateOrderOptions) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.marketOrder({figi, operation: 'Sell', lots})
     return this.placedMarketOrderToOrder(placedOrder, figi, ticker)
   }
 
-  public async marketBuy({ ticker, lots }: OrderDetails) {
+  public async marketBuy({ ticker, lots }: CreateOrderOptions) {
     const { exchangeClient } = this
     const figi = await this.getFigi(ticker)
     const placedOrder = await exchangeClient.api.marketOrder({figi, operation: 'Buy', lots})

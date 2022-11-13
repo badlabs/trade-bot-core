@@ -1,0 +1,1 @@
+export type OperationId = { exchange_id: string } | { created_at: Date }

@@ -1,6 +1,6 @@
 // create routes
 import {NextFunction, Request, Response, Router} from 'express'
-import {getTradeBotFromExpress} from '../../utils'
+import {getTradeBotFromExpress} from '../../../../utils/rest'
 import {authRouter} from './auth.router'
 import {algosRouter} from './algorithms.router'
 import {stateRouter} from './state.router'

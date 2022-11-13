@@ -2,7 +2,7 @@ import { D_AlgorithmRun } from '@prisma/client'
 import { ExchangeAnalyzer } from '../../../lib/modules'
 import { AbstractTradeAlgorithm } from '../../../lib/abstract'
 import { addSecondsToDate } from '../../../lib/utils'
-import { OrderDetails } from '../../../lib/types'
+import { CreateOrderOptions } from '../../../lib/types'
 import {ExchangeClient} from '../../exchange-client'
 import {HammerInput, HammerState, HammerStopData} from './types'
 
@@ -21,7 +21,7 @@ export class HammerAlgorithm extends AbstractTradeAlgorithm<ExchangeClient, Hamm
     super(analyzer)
   }
 
-  async sendUntilNotRejected(order: OrderDetails, run_id: number) {
+  async sendUntilNotRejected(order: CreateOrderOptions, run_id: number) {
     try {
       const status = await this.trader.sendOrder(order, run_id)
       if (status === 'rejected') await this.sendUntilNotRejected(order, run_id)

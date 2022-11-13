@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {OrderDetails, SubjectAreaTemplate} from '../types'
+import {CreateOrderOptions, SubjectAreaTemplate} from '../types'
 import {GetOrderType} from "../types/extractors";
 
 
@@ -12,13 +12,13 @@ export abstract class AbstractTradeModule<
     this.exchangeClient = exchangeClient
   }
 
-  abstract sell({ ticker, lots, price }: OrderDetails): Promise<GetOrderType<SubjectArea>>
+  abstract sell({ ticker, lots, price }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
 
-  abstract buy({ ticker, lots, price }: OrderDetails): Promise<GetOrderType<SubjectArea>>
+  abstract buy({ ticker, lots, price }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
 
-  abstract marketSell({ ticker, lots }: OrderDetails): Promise<GetOrderType<SubjectArea>>
+  abstract marketSell({ ticker, lots }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
 
-  abstract marketBuy({ ticker, lots }: OrderDetails): Promise<GetOrderType<SubjectArea>>
+  abstract marketBuy({ ticker, lots }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
 
   abstract sellOrCancel(): Promise<GetOrderType<SubjectArea>>
 

@@ -1,5 +1,5 @@
 import { config } from '../../../config'
-import {IHttpHeadersCarrier} from '../bot-api/utils'
+import {IHttpHeadersCarrier} from '../../types/rest'
 
 export class BotAuth{
   private readonly botToken: string

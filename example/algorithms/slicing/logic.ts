@@ -2,7 +2,7 @@ import { D_AlgorithmRun } from '@prisma/client'
 import { ExchangeAnalyzer } from '../../../lib/modules'
 import { AbstractTradeAlgorithm } from '../../../lib/abstract'
 import {addMinutesToDate, addSecondsToDate} from '../../../lib/utils'
-import {OrderDetails} from '../../../lib/types'
+import {CreateOrderOptions} from '../../../lib/types'
 import {ExchangeClient} from '../../exchange-client'
 import {SlicingInput, SlicingState, SlicingStopData} from './types'
 
