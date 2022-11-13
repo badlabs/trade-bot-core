@@ -1,6 +1,6 @@
-import {TradeBot} from "../lib/TradeBot";
+import {TradeBot} from "../src/TradeBot";
 import {ExchangeClient} from "../example/exchange-client";
-import { OperationType, wait } from "../lib/utils";
+import { OperationType, wait } from "../src/utils";
 
 (async () => {
 

@@ -1,5 +1,5 @@
 import OpenAPI from '@tinkoff/invest-openapi-js-sdk'
-import {AbstractExchangeClient} from '../../lib/abstract'
+import {AbstractExchangeClient} from '../../src/abstract'
 import { TradeModule } from './TradeModule'
 import { InfoModule } from './InfoModule'
 import {Translator} from "./Translator"

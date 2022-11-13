@@ -1,5 +1,5 @@
-import {OperationType, OrderStatus, CommonDomain} from '../../lib/types'
-import {AbstractTranslator} from '../../lib/abstract'
+import {OperationType, OrderStatus, CommonDomain} from '../../src/types'
+import {AbstractTranslator} from '../../src/abstract'
 import {ExchangeClient} from './ExchangeClient'
 import {
     GetCurrencyBalanceType,
@@ -7,7 +7,7 @@ import {
     GetOperationType, GetOrderType,
     GetPortfolioType,
     GetSecurityType
-} from "../../lib/types/extractors";
+} from "../../src/types/extractors";
 import {Domain} from "../Domain";
 
 export class Translator extends AbstractTranslator<ExchangeClient> {

@@ -1,6 +1,6 @@
 import {D_AlgorithmRun, D_Security} from '@prisma/client'
-import { ExchangeAnalyzer } from '../../../lib/modules'
-import { AbstractTradeAlgorithm } from '../../../lib/abstract'
+import { ExchangeAnalyzer } from '../../../src/modules'
+import { AbstractTradeAlgorithm } from '../../../src/abstract'
 import {ExchangeClient} from '../../exchange-client'
 import {AggressiveTraderInput, AggressiveTraderState, AggressiveTraderStopData} from './types'
 import {Job, scheduleJob} from 'node-schedule'

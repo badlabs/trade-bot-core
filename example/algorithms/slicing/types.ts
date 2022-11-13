@@ -1,4 +1,4 @@
-import {OrderDetails} from 'lib/utils'
+import {OrderDetails} from 'src/utils'
 import {Job} from 'node-schedule'
 
 export type SlicingInput = {

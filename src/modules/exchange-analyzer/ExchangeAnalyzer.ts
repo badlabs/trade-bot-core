@@ -7,10 +7,10 @@ import {
 import {OperationId} from "../../types/db";
 import {GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
     GetPortfolioType, GetOperationType, GetOrderType} from "../../types/extractors";
-import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'lib/abstract'
-import {ExchangeTrader, ExchangeWatcher} from 'lib/modules'
+import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'src/abstract'
+import {ExchangeTrader, ExchangeWatcher} from 'src/modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'
-import {TradeBot} from 'lib/TradeBot'
+import {TradeBot} from 'src/TradeBot'
 import {
     PrismaClient,
     D_FollowedSecurity,

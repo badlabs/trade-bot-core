@@ -1,7 +1,7 @@
 import { ExchangeClient } from './ExchangeClient'
-import {AbstractInfoModule} from '../../lib/abstract'
+import {AbstractInfoModule} from '../../src/abstract'
 import {Domain} from "../Domain";
-import {GetCurrencyType, GetSecurityType} from "../../lib/types/extractors";
+import {GetCurrencyType, GetSecurityType} from "../../src/types/extractors";
 
 const securitiesCache = new Map<string, GetSecurityType<ExchangeClient>>()
 

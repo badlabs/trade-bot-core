@@ -1,5 +1,5 @@
 import {PlacedMarketOrder} from "@tinkoff/invest-openapi-js-sdk";
-import {GetOrderType} from "../../lib/types/extractors";
+import {GetOrderType} from "../../src/types/extractors";
 import {Domain} from "../Domain";
 import {ExchangeClient} from "../exchange-client";
 

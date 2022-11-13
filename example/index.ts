@@ -1,4 +1,4 @@
-import {TradeBot} from "../lib";
+import {TradeBot} from "../src";
 import {ExchangeClient} from "./exchange-client";
 import {initAlgorithms} from "./algorithms";
 const tradebot = new TradeBot({

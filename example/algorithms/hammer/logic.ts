@@ -1,8 +1,8 @@
 import { D_AlgorithmRun } from '@prisma/client'
-import { ExchangeAnalyzer } from '../../../lib/modules'
-import { AbstractTradeAlgorithm } from '../../../lib/abstract'
-import { addSecondsToDate } from '../../../lib/utils'
-import { CreateOrderOptions } from '../../../lib/types'
+import { ExchangeAnalyzer } from '../../../src/modules'
+import { AbstractTradeAlgorithm } from '../../../src/abstract'
+import { addSecondsToDate } from '../../../src/utils'
+import { CreateOrderOptions } from '../../../src/types'
 import {ExchangeClient} from '../../exchange-client'
 import {HammerInput, HammerState, HammerStopData} from './types'
 

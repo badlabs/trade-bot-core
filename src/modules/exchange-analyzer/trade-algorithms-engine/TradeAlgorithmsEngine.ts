@@ -1,6 +1,6 @@
-import { TradeBot } from 'lib/TradeBot'
-import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'lib/abstract'
-import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'lib/modules'
+import { TradeBot } from 'src/TradeBot'
+import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'src/abstract'
+import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'src/modules'
 import { D_Algorithm, D_AlgorithmRun } from '@prisma/client'
 
 export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient> {

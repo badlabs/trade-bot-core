@@ -1,4 +1,4 @@
-import { TradeBot } from 'lib/TradeBot'
+import { TradeBot } from 'src/TradeBot'
 import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
