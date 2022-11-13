@@ -1,8 +1,9 @@
 import {TradeBot} from 'lib/TradeBot'
 import {ExchangeAnalyzer, ExchangeTrader} from 'lib/modules'
 import {AbstractTranslator, AbstractExchangeClient} from 'lib/abstract'
-import {OperationType, OrderStatus} from 'lib/types'
-import {D_PortfolioPosition, D_Currency, D_Operation, D_Security, D_CurrencyBalance} from '@prisma/client'
+import {OperationType, OrderStatus, CommonSubjectArea} from 'lib/types'
+import {GetPortfolioType, GetCurrencyType,
+    GetOperationType, GetSecurityType, GetCurrencyBalanceType} from 'lib/types/extractors'
 import {GetOrderType} from "../../types/extractors";
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
@@ -18,25 +19,25 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         this.tradebot = tradebot
     }
 
-    async getPortfolio(): Promise<D_PortfolioPosition[]> {
+    async getPortfolio(): Promise<GetPortfolioType<CommonSubjectArea>[]> {
         const { exchangeClient, translator } = this
         const portfolio = await exchangeClient.getPortfolio()
         return translator.portfolio(portfolio)
     }
 
-    async getCurrenciesBalance(): Promise<D_CurrencyBalance[]> {
+    async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonSubjectArea>[]> {
         const { exchangeClient, translator } = this
         const currencies = await exchangeClient.getCurrenciesBalance()
         return await Promise.all(currencies.map(c => translator.currencyBalance(c)))
     }
 
-    async getCurrencies(): Promise<D_Currency[]> {
+    async getCurrencies(): Promise<GetCurrencyType<CommonSubjectArea>[]> {
         const { exchangeClient, translator } = this
         const currencies = await exchangeClient.infoModule.getCurrencies()
         return await Promise.all(currencies.map(c => translator.currency(c)))
     }
 
-    async getSecurity(ticker: string): Promise<D_Security>{
+    async getSecurity(ticker: string): Promise<GetSecurityType<CommonSubjectArea>>{
         const { exchangeClient, translator } = this
         const security = await exchangeClient.infoModule.getSecurity(ticker, false)
         if (!security) throw new Error(`Security with ticker "${ticker}" was not found`)
@@ -53,13 +54,13 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         return await exchangeClient.infoModule.getSecurityLastPrice(ticker)
     }
 
-    async getSecurityCurrency(ticker: string): Promise<D_Currency> {
+    async getSecurityCurrency(ticker: string): Promise<GetCurrencyType<CommonSubjectArea>> {
         const { exchangeClient, translator } = this
         const currency = await exchangeClient.infoModule.getSecurityCurrency(ticker)
         return translator.currency(currency)
     }
 
-    async getOperations(from: Date = new Date(0), to: Date = new Date()): Promise<D_Operation[]>{
+    async getOperations(from: Date = new Date(0), to: Date = new Date()): Promise<GetOperationType<CommonSubjectArea>[]>{
         const { exchangeClient, translator } = this
         const relevantOperations = await exchangeClient.getOperationsAll(from, to)
         return translator.operations(relevantOperations
@@ -67,7 +68,7 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         )
     }
 
-    async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()): Promise<D_Operation[]>{
+    async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()): Promise<GetOperationType<CommonSubjectArea>[]>{
         const { exchangeClient, translator } = this
         const relevantOperations = await exchangeClient.getOperationsBySecurity(ticker, from, to)
         return translator.operations(relevantOperations

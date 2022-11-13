@@ -3,21 +3,19 @@ import {
     GetOperationsOptions,
     GetOrdersOptions,
     OperationId,
-    OperationType} from "../../types";
+    OperationType,
+    CommonSubjectArea} from "../../types";
+import {GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
+    GetPortfolioType, GetOperationType, GetOrderType} from "../../types/extractors";
 import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'lib/abstract'
 import {ExchangeTrader, ExchangeWatcher} from 'lib/modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'
 import {TradeBot} from 'lib/TradeBot'
 import {
-    D_Currency,
-    D_PortfolioPosition,
     PrismaClient,
-    D_Security,
     D_FollowedSecurity,
-    D_Operation,
     D_Algorithm,
-    D_AlgorithmRun,
-    D_Order, D_CurrencyBalance
+    D_AlgorithmRun
 } from '@prisma/client'
 import {scheduleJob} from 'node-schedule'
 
@@ -60,7 +58,7 @@ export class ExchangeAnalyzer<
         })
     }
 
-    private async loadSecurityIfNotExist(ticker: string): Promise<D_Security | null> {
+    private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonSubjectArea> | null> {
         const { watcher } = this
         const securityInCache = await db.d_Security.findFirst({ where: { ticker } })
         if (!securityInCache) {
@@ -70,7 +68,7 @@ export class ExchangeAnalyzer<
         return securityInCache
     }
 
-    private async loadSecuritiesIfNotExist(tickers: string[]): Promise<D_Security[]> {
+    private async loadSecuritiesIfNotExist(tickers: string[]): Promise<GetSecurityType<CommonSubjectArea>[]> {
         const { watcher } = this
         const securitiesInCache = await db.d_Security.findMany({ where: { ticker: { in: tickers } } })
         const securitiesToAdd = await Promise.all(tickers
@@ -81,7 +79,7 @@ export class ExchangeAnalyzer<
 
     // Currencies
 
-    async updateCurrencies(): Promise<D_Currency[]> {
+    async updateCurrencies(): Promise<GetCurrencyType<CommonSubjectArea>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrencies()
         return await Promise.all(relevantCurrencies
@@ -93,13 +91,13 @@ export class ExchangeAnalyzer<
         )
     }
 
-    async getCurrencies(): Promise<D_Currency[]> {
+    async getCurrencies(): Promise<GetCurrencyType<CommonSubjectArea>[]> {
         return db.d_Currency.findMany({})
     }
 
     // Currencies Balance
 
-    async updateCurrenciesBalance(): Promise<D_CurrencyBalance[]> {
+    async updateCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonSubjectArea>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrenciesBalance()
         return await Promise.all(relevantCurrencies
@@ -111,15 +109,15 @@ export class ExchangeAnalyzer<
         )
     }
 
-    async getCurrenciesBalance(): Promise<D_CurrencyBalance[]> {
+    async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonSubjectArea>[]> {
         return db.d_CurrencyBalance.findMany({})
     }
 
     // Securities
 
-    async updateSecurities(): Promise<D_Security[]> {
+    async updateSecurities(): Promise<GetSecurityType<CommonSubjectArea>[]> {
         const { watcher } = this
-        const securities: D_Security[] = await db.d_Security.findMany({  })
+        const securities: GetSecurityType<CommonSubjectArea>[] = await db.d_Security.findMany({  })
         const securitiesPrices = await Promise.all(
             securities.map((security): Promise<number> => watcher.getSecurityLastPrice(security.ticker))
         )
@@ -132,17 +130,17 @@ export class ExchangeAnalyzer<
         return await Promise.all(updatePromises)
     }
 
-    async getSecurities(): Promise<D_Security[]> {
+    async getSecurities(): Promise<GetSecurityType<CommonSubjectArea>[]> {
         return db.d_Security.findMany({})
     }
 
-    async getSecurity(ticker: string): Promise<D_Security> {
+    async getSecurity(ticker: string): Promise<GetSecurityType<CommonSubjectArea>> {
         const security = await db.d_Security.findUnique({ where: { ticker } })
         if (!security) throw new Error(`Security with ticker:${ticker} was not found`)
         return security
     }
 
-    async addSecurities(...securities: D_Security[]): Promise<D_Security[]> {
+    async addSecurities(...securities: GetSecurityType<CommonSubjectArea>[]): Promise<GetSecurityType<CommonSubjectArea>[]> {
         const createOrUpdatePromises = securities
             .map((security) => db.d_Security.upsert({
                     where: { ticker: security.ticker },
@@ -173,7 +171,7 @@ export class ExchangeAnalyzer<
             where: { security_ticker: securityTicker }
         })
     }
-    async updateFollowedSecurities(): Promise<D_Security[]> {
+    async updateFollowedSecurities(): Promise<GetSecurityType<CommonSubjectArea>[]> {
         const { watcher } = this
         const securitiesToUpdate = await db.d_FollowedSecurity.findMany({})
         const securitiesPrices = await Promise.all(
@@ -188,7 +186,7 @@ export class ExchangeAnalyzer<
 
     // Portfolio
 
-    async updatePortfolio(): Promise<D_PortfolioPosition[]>{
+    async updatePortfolio(): Promise<GetPortfolioType<CommonSubjectArea>[]>{
         const { watcher } = this
         const relevantPortfolio = await watcher.getPortfolio()
         const securities = await Promise.all(relevantPortfolio.map(p => watcher.getSecurity(p.security_ticker)))
@@ -208,7 +206,7 @@ export class ExchangeAnalyzer<
 
     }
 
-    async getPortfolio(): Promise<D_PortfolioPosition[]> {
+    async getPortfolio(): Promise<GetPortfolioType<CommonSubjectArea>[]> {
         return db.d_PortfolioPosition.findMany({})
     }
 
@@ -216,7 +214,7 @@ export class ExchangeAnalyzer<
         const { count: deleted } = await db.d_PortfolioPosition.deleteMany({})
         return deleted
     }
-    async addPortfolioPosition(portfolioPosition: D_PortfolioPosition): Promise<D_PortfolioPosition> {
+    async addPortfolioPosition(portfolioPosition: GetPortfolioType<CommonSubjectArea>): Promise<GetPortfolioType<CommonSubjectArea>> {
         return await db.$transaction(async (db) => {
             const positionToUpdate = await db.d_PortfolioPosition.findUnique({
                 where: { security_ticker: portfolioPosition.security_ticker }
@@ -228,7 +226,7 @@ export class ExchangeAnalyzer<
             })
         })
     }
-    async removePortfolioPosition(portfolioPosition: D_PortfolioPosition): Promise<D_PortfolioPosition | null> {
+    async removePortfolioPosition(portfolioPosition: GetPortfolioType<CommonSubjectArea>): Promise<GetPortfolioType<CommonSubjectArea> | null> {
         return await db.$transaction(async (db) => {
             const positionToUpdate = await db.d_PortfolioPosition.findUnique({
                 where: { security_ticker: portfolioPosition.security_ticker }
@@ -263,7 +261,7 @@ export class ExchangeAnalyzer<
             boughtStats = await getBoughtStats(countOperations)
             if (countOperations > boughtStats._count._all) break
         }
-        const lastSecurityBuyOperations: D_Operation[] = await db.d_Operation.findMany({
+        const lastSecurityBuyOperations = await db.d_Operation.findMany({
             orderBy: { created_at: 'desc' },
                 where: {
                     operation_type: 'buy',
@@ -273,7 +271,7 @@ export class ExchangeAnalyzer<
         })
         let buyPrice = 0
         let boughtAmount = position?.amount || 0
-        for ( let buyOperation of lastSecurityBuyOperations ){
+        for ( let buyOperation of lastSecurityBuyOperations as GetOperationType<CommonSubjectArea>[] ){
             if (!buyOperation.amount_requested) continue
             if (buyOperation.amount_requested >= boughtAmount){
                 buyPrice += boughtAmount * buyOperation.price
@@ -287,11 +285,11 @@ export class ExchangeAnalyzer<
 
     // Operations
 
-    async fixOperation(operation: D_Operation): Promise<D_Operation> {
+    async fixOperation(operation: GetOperationType<CommonSubjectArea>): Promise<GetOperationType<CommonSubjectArea>> {
         const operationId: OperationId = operation.exchange_id ?
             { exchange_id: operation.exchange_id} :
             { created_at: operation.created_at }
-        return db.d_Operation.upsert({
+        const result = await db.d_Operation.upsert({
             where: operationId,
             update: { operation_type: operation.operation_type, amount: operation.amount, updated_at: new Date() },
             create: {
@@ -299,9 +297,10 @@ export class ExchangeAnalyzer<
                 updated_at: new Date()
             }
         })
+        return result as GetOperationType<CommonSubjectArea>
     }
 
-    async updateOperationsAll(from?: Date, to?: Date ): Promise<D_Operation[]> {
+    async updateOperationsAll(from?: Date, to?: Date ): Promise<GetOperationType<CommonSubjectArea>[]> {
         const { watcher, fixOperation } = this
         const allOperations = await watcher.getOperations(from || addDaysToDate(new Date(), -1), to)
         // @ts-ignore
@@ -310,7 +309,7 @@ export class ExchangeAnalyzer<
             .filter(t => t !== null))
         return await Promise.all(allOperations.map(operation => fixOperation(operation)))
     }
-    async updateOperationsBySecurity(ticker: string): Promise<D_Operation[]> {
+    async updateOperationsBySecurity(ticker: string): Promise<GetOperationType<CommonSubjectArea>[]> {
         const { watcher, fixOperation } = this
         const allOperations = await watcher.getOperationsBySecurity(ticker, addDaysToDate(new Date(), -1))
         // @ts-ignore
@@ -319,8 +318,8 @@ export class ExchangeAnalyzer<
             .filter(t => t !== null))
         return await Promise.all(allOperations.map(operation => fixOperation(operation)))
     }
-    async getOperations({ from, to, operation, securityTicker }: GetOperationsOptions): Promise<D_Operation[]> {
-        return db.d_Operation.findMany({
+    async getOperations({ from, to, operation, securityTicker }: GetOperationsOptions): Promise<GetOperationType<CommonSubjectArea>[]> {
+        const result = await db.d_Operation.findMany({
             orderBy: { created_at: 'desc' },
             where: {
                 AND: [
@@ -331,17 +330,19 @@ export class ExchangeAnalyzer<
                 security_ticker: securityTicker
             }
         })
+        return result as GetOperationType<CommonSubjectArea>[]
     }
 
     // Orders
 
-    async saveOrder(order: D_Order, operation_type: OperationType, run_id: number | null = null): Promise<D_Order> {
+    async saveOrder(order: GetOrderType<CommonSubjectArea>, operation_type: OperationType, run_id: number | null = null): Promise<GetOrderType<CommonSubjectArea>> {
         await this.loadSecurityIfNotExist(order.security_ticker)
-        return db.d_Order.create({ data: {...order, run_id, operation_type} })
+        const result = await db.d_Order.create({ data: {...order, run_id, operation_type} })
+        return result as GetOrderType<CommonSubjectArea>
     }
 
-    async getOrders({ from, to, operation, securityTicker, runId }: GetOrdersOptions): Promise<D_Order[]> {
-        return db.d_Order.findMany({
+    async getOrders({ from, to, operation, securityTicker, runId }: GetOrdersOptions): Promise<GetOrderType<CommonSubjectArea>[]> {
+        const result = await db.d_Order.findMany({
             orderBy: { created_at: 'desc' },
             where: {
                 AND: [
@@ -353,6 +354,7 @@ export class ExchangeAnalyzer<
                 run_id: runId
             }
         })
+        return result as GetOrderType<CommonSubjectArea>[]
     }
 
     // Algorithms
