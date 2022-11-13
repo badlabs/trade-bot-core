@@ -1,27 +1,25 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {CreateOrderOptions, SubjectAreaTemplate} from '../types'
+import {CreateOrderOptions} from '../types'
 import {GetOrderType} from "../types/extractors";
 
 
-export abstract class AbstractTradeModule<
-  ExchangeApiType = any,
-  SubjectArea extends SubjectAreaTemplate = SubjectAreaTemplate> {
-  protected readonly exchangeClient: AbstractExchangeClient<ExchangeApiType, SubjectArea>
+export abstract class AbstractTradeModule<ExchangeClient extends AbstractExchangeClient> {
+  protected readonly exchangeClient: ExchangeClient
 
-  protected constructor(exchangeClient: AbstractExchangeClient<ExchangeApiType, SubjectArea>){
+  protected constructor(exchangeClient: ExchangeClient){
     this.exchangeClient = exchangeClient
   }
 
-  abstract sell({ ticker, lots, price }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
+  abstract sell({ ticker, lots, price }: CreateOrderOptions): Promise<GetOrderType<ExchangeClient>>
 
-  abstract buy({ ticker, lots, price }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
+  abstract buy({ ticker, lots, price }: CreateOrderOptions): Promise<GetOrderType<ExchangeClient>>
 
-  abstract marketSell({ ticker, lots }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
+  abstract marketSell({ ticker, lots }: CreateOrderOptions): Promise<GetOrderType<ExchangeClient>>
 
-  abstract marketBuy({ ticker, lots }: CreateOrderOptions): Promise<GetOrderType<SubjectArea>>
+  abstract marketBuy({ ticker, lots }: CreateOrderOptions): Promise<GetOrderType<ExchangeClient>>
 
-  abstract sellOrCancel(): Promise<GetOrderType<SubjectArea>>
+  abstract sellOrCancel(): Promise<GetOrderType<ExchangeClient>>
 
-  abstract buyOrCancel(): Promise<GetOrderType<SubjectArea>>
+  abstract buyOrCancel(): Promise<GetOrderType<ExchangeClient>>
 
 }

@@ -2,13 +2,12 @@ import { ExchangeClient } from './ExchangeClient'
 import { CreateOrderOptions } from '../../lib/types'
 import { Order } from '../types'
 import {AbstractTradeModule} from '../../lib/abstract'
-import OpenAPI, {
+import {
   PlacedLimitOrder,
   PlacedMarketOrder
 } from '@tinkoff/invest-openapi-js-sdk'
-import {SubjectArea} from "../subject-area/SubjectArea";
 
-export class TradeModule extends AbstractTradeModule<OpenAPI, SubjectArea>{
+export class TradeModule extends AbstractTradeModule<ExchangeClient>{
 
   constructor(exchangeClient: ExchangeClient){
     super(exchangeClient)

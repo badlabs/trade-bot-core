@@ -1,14 +1,13 @@
 import { ExchangeClient } from './ExchangeClient'
 import {AbstractInfoModule} from '../../lib/abstract'
-import OpenAPI, {
+import {
   Currency,
   MarketInstrument,
 } from '@tinkoff/invest-openapi-js-sdk'
-import {SubjectArea} from "../subject-area/SubjectArea";
 
 const securitiesCache = new Map<string, MarketInstrument>()
 
-export class InfoModule extends AbstractInfoModule<OpenAPI, SubjectArea>{
+export class InfoModule extends AbstractInfoModule<ExchangeClient>{
 
   constructor(exchangeClient: ExchangeClient){
     super(exchangeClient)

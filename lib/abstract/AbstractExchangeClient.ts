@@ -9,9 +9,9 @@ export abstract class AbstractExchangeClient<
   SubjectArea extends SubjectAreaTemplate = SubjectAreaTemplate> {
 
   abstract readonly api: ExchangeApiType
-  abstract readonly tradeModule: AbstractTradeModule<ExchangeApiType, SubjectArea>
-  abstract readonly infoModule: AbstractInfoModule<ExchangeApiType, SubjectArea>
-  abstract readonly translator: AbstractTranslator<ExchangeApiType, SubjectArea>
+  abstract readonly tradeModule: AbstractTradeModule<AbstractExchangeClient<ExchangeApiType, SubjectArea>>
+  abstract readonly infoModule: AbstractInfoModule<AbstractExchangeClient<ExchangeApiType, SubjectArea>>
+  abstract readonly translator: AbstractTranslator<AbstractExchangeClient<ExchangeApiType, SubjectArea>>
 
   private _isAccountInitialized: boolean = false
   public get isAccountInitialized(): boolean { return this._isAccountInitialized }

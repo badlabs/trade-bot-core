@@ -1,9 +1,8 @@
 import {OperationType, OrderStatus, CommonSubjectArea} from '../../lib/types'
 import {AbstractTranslator} from '../../lib/abstract'
 import {ExchangeClient} from './ExchangeClient'
-import OpenAPI, {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from '@tinkoff/invest-openapi-js-sdk'
+import {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from '@tinkoff/invest-openapi-js-sdk'
 import {Order} from '../types'
-import {SubjectArea} from "../subject-area/SubjectArea";
 import {
     GetCurrencyBalanceType,
     GetCurrencyType,
@@ -12,7 +11,7 @@ import {
     GetSecurityType
 } from "../../lib/types/extractors";
 
-export class Translator extends AbstractTranslator<OpenAPI, SubjectArea> {
+export class Translator extends AbstractTranslator<ExchangeClient> {
     constructor(exchangeClient: ExchangeClient) {
         super(exchangeClient);
     }
