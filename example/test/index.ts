@@ -1,12 +1,14 @@
-import {TradeBot} from "../src/TradeBot";
-import {ExchangeClient} from "../example/exchange-client";
-import { OperationType, wait } from "../src/utils";
+import {TradeBot} from "../../src";
+import {ExchangeClient} from "../exchange-client";
+import { wait } from "../../src/utils";
+import {initAlgorithms} from "../algorithms";
 
 (async () => {
 
   const tradeBot = new TradeBot({
     exchangeClient: new ExchangeClient(process.env.TINKOFF_SANDBOX_API_KEY || ''),
-    botToken: process.env.BOT_TOKEN || ''
+    botToken: process.env.BOT_TOKEN || '',
+    initAlgorithmsCallback: initAlgorithms
   })
 
   console.info(`${new Date()} Waiting initialization...`)
