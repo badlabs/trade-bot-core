@@ -1,12 +1,9 @@
 import { ExchangeClient } from './ExchangeClient'
 import {AbstractInfoModule} from '../../lib/abstract'
-import {
-  Currency,
-  MarketInstrument,
-} from '@tinkoff/invest-openapi-js-sdk'
 import {SubjectArea} from "../subject-area/SubjectArea";
+import {GetCurrencyType, GetSecurityType} from "../../lib/types/extractors";
 
-const securitiesCache = new Map<string, MarketInstrument>()
+const securitiesCache = new Map<string, GetSecurityType<SubjectArea>>()
 
 export class InfoModule extends AbstractInfoModule<SubjectArea>{
 
@@ -15,17 +12,17 @@ export class InfoModule extends AbstractInfoModule<SubjectArea>{
   }
 
   async getCurrencies() {
-    return [ 'CHF', "CNY", 'EUR', "GBP", "HKD", "JPY", "RUB", "TRY", "USD" ] as Currency[]
+    return [ 'CHF', "CNY", 'EUR', "GBP", "HKD", "JPY", "RUB", "TRY", "USD" ] as GetCurrencyType<SubjectArea>[]
   }
 
-  async getSecurityLastPrice(ticker: string): Promise<number> {
+  async getSecurityLastPrice(ticker: string) {
     const { exchangeClient } = this
     const security = await this.getSecurity(ticker, true)
     const orderBook = await exchangeClient.api.orderbookGet({ figi: security?.figi || '' })
     return orderBook?.lastPrice || 0
   }
 
-  async getSecurityCurrency(ticker: string): Promise<Currency> {
+  async getSecurityCurrency(ticker: string) {
     const { getSecurity } = this
     const security = await getSecurity(ticker)
     if (!security) throw new Error(`Security with ticker "${ticker}" was not found`)
@@ -33,13 +30,13 @@ export class InfoModule extends AbstractInfoModule<SubjectArea>{
     return security.currency
   }
 
-  async getSecurityName(ticker: string): Promise<string> {
+  async getSecurityName(ticker: string) {
     const { getSecurity } = this
     const security = await getSecurity(ticker)
     return security?.name || ''
   }
 
-  async getSecurity(ticker: string, ignoreCache: boolean = false): Promise<MarketInstrument | null> {
+  async getSecurity(ticker: string, ignoreCache: boolean = false) {
     const { exchangeClient } = this
     if (!securitiesCache.has(ticker) || ignoreCache){
       const security = await exchangeClient.api.searchOne({ ticker })
@@ -47,11 +44,10 @@ export class InfoModule extends AbstractInfoModule<SubjectArea>{
       securitiesCache.set(ticker, security)
       return security
     }
-    // @ts-ignore
     return securitiesCache.get(ticker)
   }
 
-  async getSecurityByExchangeId(id: string, ignoreCache: boolean = false): Promise<MarketInstrument | null>{
+  async getSecurityByExchangeId(id: string, ignoreCache: boolean = false) {
     const { exchangeClient } = this
     if (!securitiesCache.has(id) || ignoreCache){
       const security = await exchangeClient.api.searchOne({ figi: id })
@@ -59,7 +55,6 @@ export class InfoModule extends AbstractInfoModule<SubjectArea>{
       securitiesCache.set(id, security)
       return security
     }
-    // @ts-ignore
     return securitiesCache.get(id)
   }
 }

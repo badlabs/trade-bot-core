@@ -1,12 +1,12 @@
 import { ExchangeClient } from './ExchangeClient'
 import { CreateOrderOptions } from '../../lib/types'
-import { Order } from '../types'
 import {AbstractTradeModule} from '../../lib/abstract'
 import {
   PlacedLimitOrder,
   PlacedMarketOrder
 } from '@tinkoff/invest-openapi-js-sdk'
 import {SubjectArea} from "../subject-area/SubjectArea";
+import {GetOrderType} from "../../lib/types/extractors";
 
 export class TradeModule extends AbstractTradeModule<SubjectArea>{
 
@@ -14,7 +14,7 @@ export class TradeModule extends AbstractTradeModule<SubjectArea>{
     super(exchangeClient)
   }
 
-  private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): Order {
+  private static placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): GetOrderType<SubjectArea> {
     return {
       figi,
       operation: order.operation,
@@ -27,7 +27,8 @@ export class TradeModule extends AbstractTradeModule<SubjectArea>{
     }
   }
 
-  private async placedMarketOrderToOrder(order: PlacedMarketOrder, figi: string, ticker: string): Promise<Order> {
+  private async placedMarketOrderToOrder(order: PlacedMarketOrder, figi: string, ticker: string):
+      Promise<GetOrderType<SubjectArea>> {
     const price = await this.exchangeClient.infoModule.getSecurityLastPrice(ticker)
     return {
       figi,
@@ -41,6 +42,7 @@ export class TradeModule extends AbstractTradeModule<SubjectArea>{
     }
   }
 
+  // TODO: move to utils
   private async getFigi(ticker: string): Promise<string> {
     const { exchangeClient } = this
     const security = await exchangeClient.infoModule.getSecurity(ticker, false)
@@ -77,11 +79,11 @@ export class TradeModule extends AbstractTradeModule<SubjectArea>{
     return this.placedMarketOrderToOrder(placedOrder, figi, ticker)
   }
 
-  public async sellOrCancel(): Promise<Order> {
+  public async sellOrCancel(): Promise<GetOrderType<SubjectArea>> {
     throw new Error("Method not implemented.");
   }
 
-  public async buyOrCancel(): Promise<Order> {
+  public async buyOrCancel(): Promise<GetOrderType<SubjectArea>> {
     throw new Error("Method not implemented.");
   }
 

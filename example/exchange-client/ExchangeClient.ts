@@ -1,8 +1,4 @@
-import OpenAPI, {
-  CurrencyPosition,
-  Operation,
-  Portfolio
-} from '@tinkoff/invest-openapi-js-sdk'
+import OpenAPI from '@tinkoff/invest-openapi-js-sdk'
 import {AbstractExchangeClient} from '../../lib/abstract'
 import { TradeModule } from './TradeModule'
 import { InfoModule } from './InfoModule'
@@ -40,17 +36,17 @@ export class ExchangeClient extends AbstractExchangeClient<SubjectArea, OpenAPI>
     this.isAccountInitialized = true
   }
 
-  async getPortfolio(): Promise<Portfolio> {
+  async getPortfolio() {
     const { api } = this
     return await api.portfolio()
   }
 
-  async getCurrenciesBalance(): Promise<CurrencyPosition[]> {
+  async getCurrenciesBalance() {
     const { api } = this
     return (await api.portfolioCurrencies()).currencies
   }
 
-  async getOperationsAll(from: Date = new Date(0), to: Date = new Date()): Promise<Operation[]> {
+  async getOperationsAll(from: Date = new Date(0), to: Date = new Date()) {
     const { api } = this
     const operations = await api.operations({
       from: from.toISOString(),
@@ -59,7 +55,7 @@ export class ExchangeClient extends AbstractExchangeClient<SubjectArea, OpenAPI>
     return operations.operations
   }
 
-  async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()): Promise<Operation[]> {
+  async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()) {
     const { api, infoModule } = this
     const security = await infoModule.getSecurity(ticker)
     const operations = await api.operations({

@@ -1,7 +1,6 @@
 import {OperationType, OrderStatus, CommonSubjectArea} from '../../lib/types'
 import {AbstractTranslator} from '../../lib/abstract'
 import {ExchangeClient} from './ExchangeClient'
-import {Currency, CurrencyPosition, MarketInstrument, Operation, Portfolio} from '@tinkoff/invest-openapi-js-sdk'
 import {Order} from '../types'
 import {
     GetCurrencyBalanceType,
@@ -16,15 +15,15 @@ export class Translator extends AbstractTranslator<SubjectArea> {
     constructor(exchangeClient: ExchangeClient) {
         super(exchangeClient);
     }
-    async currency(currency: Currency): Promise<GetCurrencyType<CommonSubjectArea>> {
+    async currency(currency: GetCurrencyType<SubjectArea>): Promise<GetCurrencyType<CommonSubjectArea>> {
         return { name: currency, ticker: currency }
     }
 
-    async currencyBalance(currency: CurrencyPosition): Promise<GetCurrencyBalanceType<CommonSubjectArea>> {
+    async currencyBalance(currency: GetCurrencyBalanceType<SubjectArea>): Promise<GetCurrencyBalanceType<CommonSubjectArea>> {
         return { currency_ticker: currency.currency, balance: currency.balance }
     }
 
-    async portfolio(portfolio: Portfolio): Promise<GetPortfolioType<CommonSubjectArea>[]> {
+    async portfolio(portfolio: GetPortfolioType<SubjectArea>): Promise<GetPortfolioType<CommonSubjectArea>[]> {
         return portfolio.positions
             .map(position => {
                 return {
@@ -34,7 +33,7 @@ export class Translator extends AbstractTranslator<SubjectArea> {
             })
     }
 
-    async security(security: MarketInstrument): Promise<GetSecurityType<CommonSubjectArea>> {
+    async security(security: GetSecurityType<SubjectArea>): Promise<GetSecurityType<CommonSubjectArea>> {
         if (!security.currency) throw new Error(`Security with ticker "${security.ticker}" have no currency`)
         return {
             currency_ticker: security.currency,
@@ -44,7 +43,7 @@ export class Translator extends AbstractTranslator<SubjectArea> {
         }
     }
 
-    async operation(operation: Operation): Promise<GetOperationType<CommonSubjectArea>> {
+    async operation(operation: GetOperationType<SubjectArea>): Promise<GetOperationType<CommonSubjectArea>> {
         const security = operation?.figi ?
             await this.exchangeClient.infoModule.getSecurityByExchangeId(operation?.figi) :
             null
@@ -62,7 +61,7 @@ export class Translator extends AbstractTranslator<SubjectArea> {
         }
     }
 
-    async operations(operations: Operation[]): Promise<GetOperationType<CommonSubjectArea>[]> {
+    async operations(operations: GetOperationType<SubjectArea>[]): Promise<GetOperationType<CommonSubjectArea>[]> {
         const securityIds = Array.from(new Set(operations.map(op => op.figi)))
         await Promise.all(securityIds.map(async (id) => {
             if (id)
@@ -71,7 +70,7 @@ export class Translator extends AbstractTranslator<SubjectArea> {
         return await Promise.all(operations.map(op => this.operation(op)))
     }
 
-    async order(order: Order): Promise<GetOrderType<CommonSubjectArea>> {
+    async order(order: GetOrderType<SubjectArea>): Promise<GetOrderType<CommonSubjectArea>> {
         const security = await this.exchangeClient.infoModule.getSecurityByExchangeId(order.figi)
         return {
             operation_type: this.orderOperation(order),
@@ -85,7 +84,7 @@ export class Translator extends AbstractTranslator<SubjectArea> {
         }
     }
 
-    orderStatus(order: Order): OrderStatus {
+    orderStatus(order: GetOrderType<SubjectArea>): OrderStatus {
         switch (order.status) {
             case "New": return 'new'
             case "Cancelled": return 'cancelled'
