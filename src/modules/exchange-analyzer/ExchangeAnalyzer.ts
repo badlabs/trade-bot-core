@@ -11,12 +11,8 @@ import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'src/abstract'
 import {ExchangeTrader, ExchangeWatcher} from 'src/modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'
 import {TradeBot} from 'src/TradeBot'
-import {
-    PrismaClient,
-    FollowedSecurity,
-    Algorithm,
-    AlgorithmRun
-} from '../../db'
+import {PrismaClient} from '../../db'
+import {FollowedSecurity, Algorithm, AlgorithmRun} from '../../types/analyzer'
 import {scheduleJob} from 'node-schedule'
 
 const db = new PrismaClient()

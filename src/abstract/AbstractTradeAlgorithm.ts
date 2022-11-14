@@ -1,4 +1,4 @@
-import { AlgorithmRun, Algorithm } from '../db'
+import { AlgorithmRun, Algorithm } from '../types/analyzer'
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from 'src/modules'
 
