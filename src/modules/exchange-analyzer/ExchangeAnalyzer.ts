@@ -325,6 +325,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
                 security_ticker: securityTicker
             }
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
         return result as GetOperationType<CommonDomain>[]
     }
 
@@ -349,6 +350,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
                 run_id: runId
             }
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
         return result as GetOrderType<CommonDomain>[]
     }
 
@@ -368,7 +370,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     }
 
     async runAlgorithm(algorithmName: string, inputs: any, state: any = inputs): Promise<AlgorithmRun>{
-        return db.algorithmRun.create({
+        const createdRun = await db.algorithmRun.create({
             data: {
                 algorithm_name: algorithmName,
                 inputs: JSON.stringify(inputs),
@@ -376,61 +378,78 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
                 status: 'running'
             }
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return createdRun as AlgorithmRun
     }
 
     async saveAlgorithmRunProgress(id: number, state: any): Promise<AlgorithmRun>{
-        return db.algorithmRun.update({
+        const updatedRun = await db.algorithmRun.update({
             where: { id },
             data: {
                 state: JSON.stringify(state)
             }
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return updatedRun as AlgorithmRun
     }
 
     async loadAlgorithmRunProgress(id: number): Promise<AlgorithmRun | null>{
-        return db.algorithmRun.findUnique({ where: { id } })
+        const foundRun = await db.algorithmRun.findUnique({ where: { id } })
+        return foundRun as AlgorithmRun | null
     }
 
     async stopAlgorithmRun(id: number): Promise<AlgorithmRun>{
-        return db.algorithmRun.update({
+        const stoppedRun = await db.algorithmRun.update({
             where: { id },
             data: { status: 'stopped'}
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return stoppedRun as AlgorithmRun
     }
 
     async continueAlgorithmRun(id: number): Promise<AlgorithmRun>{
-        return db.algorithmRun.update({
+        const continuedRun = await db.algorithmRun.update({
             where: { id },
             data: { status: 'continued'}
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return continuedRun as AlgorithmRun
     }
 
     async finishAlgorithmRun(id: number): Promise<AlgorithmRun>{
-        return db.algorithmRun.update({
+        const finishedRun = await db.algorithmRun.update({
             where: { id },
             data: { status: 'finished'}
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return finishedRun as AlgorithmRun
     }
 
     async errorAlgorithmRun(id: number, error: Error): Promise<AlgorithmRun>{
         const run = await db.algorithmRun.findUnique({where: {id} })
         const state = { ...JSON.parse(run?.state || '{}'), error }
-        return db.algorithmRun.update({
+        const runWithError = await db.algorithmRun.update({
             where: { id },
             data: { status: 'error', state: JSON.stringify(state)}
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return runWithError as AlgorithmRun
     }
 
     async getAlgorithmRunsByAlgorithm(algorithmName: string): Promise<AlgorithmRun[]>{
-        return db.algorithmRun.findMany({
+        const runs = await db.algorithmRun.findMany({
             orderBy: { id: 'desc' },
             where: { algorithm_name: algorithmName }
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return runs as AlgorithmRun[]
     }
 
     async getUnfinishedAlgorithmRuns(): Promise<AlgorithmRun[]>{
-        return db.algorithmRun.findMany({
+        const runs = await db.algorithmRun.findMany({
             where: { status: { notIn: [ 'finished', 'stopped', 'error' ] }  }
         })
+        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
+        return runs as AlgorithmRun[]
     }
 }
