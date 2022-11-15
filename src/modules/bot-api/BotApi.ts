@@ -4,7 +4,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import { createWebSocketServer } from './ws'
 import { expressApp } from './rest'
-import { config } from '../../../config'
+import { config } from '../../config'
 
 export class BotApi {
   private readonly _tradeBot: TradeBot

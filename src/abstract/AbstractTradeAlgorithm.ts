@@ -1,6 +1,6 @@
 import { AlgorithmRun, Algorithm } from '../types/analyzer'
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from 'src/modules'
+import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
 
 export abstract class AbstractTradeAlgorithm<
   ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient,

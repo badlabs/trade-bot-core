@@ -1,4 +1,4 @@
-import { config } from '../../../config'
+import { config } from '../../config'
 import {IHttpHeadersCarrier} from '../../types/rest'
 
 export class BotAuth{
