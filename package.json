@@ -2,7 +2,15 @@
   "name": "trade-bot-core",
   "version": "0.0.1",
   "description": "Core library for trade bots",
-  "main": "example/index.ts",
+  "main": "./lib/main.js",
+  "types": "./lib/index.d.ts",
+  "typesVersions": {
+    ">=3.1": {
+      "*": [
+        "ts3.1/*"
+      ]
+    }
+  },
   "scripts": {
     "start": "ts-node example/index.ts",
     "dev": "nodemon example/index.ts",
