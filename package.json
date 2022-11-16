@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "Core library for trade bots",
   "main": "lib/main.js",
-  "type": "module",
   "types": "lib",
   "scripts": {
     "start": "ts-node example/index.ts",

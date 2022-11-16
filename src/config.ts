@@ -1,6 +1,4 @@
-try {
-  require('dotenv').config()
-}catch (e){}
+import 'dotenv/config'
 
 export const config = {
   exchange: {
