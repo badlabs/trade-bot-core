@@ -5,9 +5,6 @@
   "main": "lib/main.js",
   "types": "lib",
   "scripts": {
-    "start": "ts-node example/index.ts",
-    "dev": "nodemon example/index.ts",
-    "test": "ts-node example/test/index.ts",
     "db:update": "npx prisma migrate dev --name ''",
     "db:browse": "npx prisma studio"
   },
