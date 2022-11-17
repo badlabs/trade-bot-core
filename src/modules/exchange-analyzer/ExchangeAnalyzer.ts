@@ -47,10 +47,6 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
             this.tradebot.logger.log('Updating followed securities...')
             this.updateFollowedSecurities()
         })
-        scheduleJob('updateOperations', '*/30 * * * *', () => {
-            this.tradebot.logger.log('Updating operations...')
-            this.updateOperationsAll()
-        })
     }
 
     private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonDomain> | null> {
@@ -276,57 +272,6 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
             boughtAmount -= buyOperation.amount_requested
         }
         return buyPrice / (boughtStats?._sum?.amount_requested || 1)
-    }
-
-    // Operations
-
-    async fixOperation(operation: GetOperationType<CommonDomain>): Promise<GetOperationType<CommonDomain>> {
-        const operationId: OperationId = operation.exchange_id ?
-            { exchange_id: operation.exchange_id} :
-            { created_at: operation.created_at }
-        const result = await db.operation.upsert({
-            where: operationId,
-            update: { operation_type: operation.operation_type, amount: operation.amount, updated_at: new Date() },
-            create: {
-                ...operation,
-                updated_at: new Date()
-            }
-        })
-        return result as GetOperationType<CommonDomain>
-    }
-
-    async updateOperationsAll(from?: Date, to?: Date ): Promise<GetOperationType<CommonDomain>[]> {
-        const { watcher, fixOperation } = this
-        const allOperations = await watcher.getOperations(from || addDaysToDate(new Date(), -1), to)
-        // @ts-ignore
-        await this.loadSecuritiesIfNotExist(allOperations
-            .map(op => op.security_ticker)
-            .filter(t => t !== null))
-        return await Promise.all(allOperations.map(operation => fixOperation(operation)))
-    }
-    async updateOperationsBySecurity(ticker: string): Promise<GetOperationType<CommonDomain>[]> {
-        const { watcher, fixOperation } = this
-        const allOperations = await watcher.getOperationsBySecurity(ticker, addDaysToDate(new Date(), -1))
-        // @ts-ignore
-        await this.loadSecuritiesIfNotExist(allOperations
-            .map(op => op.security_ticker)
-            .filter(t => t !== null))
-        return await Promise.all(allOperations.map(operation => fixOperation(operation)))
-    }
-    async getOperations({ from, to, operation, securityTicker }: GetOperationsOptions): Promise<GetOperationType<CommonDomain>[]> {
-        const result = await db.operation.findMany({
-            orderBy: { created_at: 'desc' },
-            where: {
-                AND: [
-                    { created_at: { gte: from || new Date(0) } },
-                    { created_at: { lte: to || new Date() } }
-                ],
-                operation_type: operation,
-                security_ticker: securityTicker
-            }
-        })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return result as GetOperationType<CommonDomain>[]
     }
 
     // Orders
