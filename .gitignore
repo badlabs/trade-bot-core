@@ -130,7 +130,6 @@ gen
 
 ### Prisma
 prisma/migrations
-src/db
 
 ### Temporary files
 
