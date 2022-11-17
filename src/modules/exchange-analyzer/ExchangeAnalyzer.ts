@@ -205,49 +205,6 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         const { count: deleted } = await db.portfolioPosition.deleteMany({})
         return deleted
     }
-    async getPositionAverageBuyPrice(ticker: string): Promise<number> {
-        const position = await db.portfolioPosition.findUnique({where: { security_ticker: ticker }})
-        async function getBoughtStats(take: number){
-            const boughtStats = await db.operation.aggregate({
-                orderBy: { created_at: 'desc' },
-                where: {
-                    operation_type: 'buy',
-                    security_ticker: ticker
-                },
-                take,
-                _sum: { amount_requested: true },
-                _count: { _all: true }
-            })
-            return boughtStats
-        }
-        let countOperations = 5
-        let boughtStats = await getBoughtStats(countOperations)
-        while ((!!boughtStats._sum.amount_requested ? boughtStats._sum.amount_requested < (position?.amount || 0) : false) && boughtStats._count._all !== 0) {
-            countOperations++
-            boughtStats = await getBoughtStats(countOperations)
-            if (countOperations > boughtStats._count._all) break
-        }
-        const lastSecurityBuyOperations = await db.operation.findMany({
-            orderBy: { created_at: 'desc' },
-                where: {
-                    operation_type: 'buy',
-                    security_ticker: ticker
-                },
-                take: countOperations
-        })
-        let buyPrice = 0
-        let boughtAmount = position?.amount || 0
-        for ( let buyOperation of lastSecurityBuyOperations as GetOperationType<CommonDomain>[] ){
-            if (!buyOperation.amount_requested) continue
-            if (buyOperation.amount_requested >= boughtAmount){
-                buyPrice += boughtAmount * buyOperation.price
-                break
-            }
-            buyPrice += buyOperation.amount_requested * buyOperation.price
-            boughtAmount -= buyOperation.amount_requested
-        }
-        return buyPrice / (boughtStats?._sum?.amount_requested || 1)
-    }
 
     // Orders
 
