@@ -145,57 +145,6 @@ router.post('/portfolio/clear', (async (req, res) => {
   }
 }))
 
-router.get('/portfolio/:ticker/average-buy-price', (async (req, res) => {
-  try {
-    const price = await getTradeBotFromExpress(req).analyzer.getPositionAverageBuyPrice(req.params.ticker)
-    res.send({ ticker: req.params.ticker, price })
-  }
-  catch (e) {
-    res.status(400).send(e)
-  }
-}))
-
-// Operations
-
-router.get('/operations', (async (req, res) => {
-  try {
-    const options: GetOperationsOptions = {
-      from: req.query['from'] ? new Date(String(req.query['from']) ) : undefined,
-      to: req.query['to'] ? new Date(String(req.query['to']) ) : undefined,
-      securityTicker: req.query['securityTicker'] ? String(req.query['securityTicker']) : undefined,
-      operation: req.query['operation'] ? String(req.query['operation']) : undefined
-    }
-    const portfolio = await getTradeBotFromExpress(req).analyzer.getOperations(options)
-    res.send(portfolio)
-  }
-  catch (e) {
-    res.status(400).send(e)
-  }
-}))
-
-router.post('/operations', (async (req, res) => {
-  try {
-    const from = req.body?.from ? new Date(String(req.body.from) ) : undefined
-    const to = req.body?.to ? new Date(req.body.to) : undefined
-    const portfolio = await getTradeBotFromExpress(req).analyzer
-        .updateOperationsAll(from, to)
-    res.send(portfolio)
-  }
-  catch (e) {
-    res.status(400).send(e)
-  }
-}))
-
-router.post('/operations/:ticker', (async (req, res) => {
-  try {
-    const portfolio = await getTradeBotFromExpress(req).analyzer.updateOperationsBySecurity(req.params.ticker)
-    res.send(portfolio)
-  }
-  catch (e) {
-    res.status(400).send(e)
-  }
-}))
-
 // Orders
 
 router.get('/orders', (async (req, res) => {
