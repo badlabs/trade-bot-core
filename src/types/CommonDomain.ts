@@ -1,5 +1,5 @@
 import {DomainTemplate} from "./DomainTemplate";
-import {Currency, PortfolioPosition, Security, Operation, Order, CurrencyBalance} from '../db'
+import {Currency, PortfolioPosition, Security, Order, CurrencyBalance} from '../db'
 
 export type OrderStatus = 'new' | 'cancelled' |
     'fill' | 'partially_fill' | 'replaced' |
@@ -16,9 +16,6 @@ type CommonOrder = Omit<Order, 'status_first'> & {
     status_first: OrderStatus
 }
 type CommonPortfolio = PortfolioPosition
-type CommonOperation = Omit<Operation, 'operation_type'> & {
-    operation_type: OperationType
-}
 
 export type CommonDomain = DomainTemplate<
-    CommonCurrency, CommonCurrencyBalance, CommonSecurity, CommonOrder, CommonPortfolio, CommonOperation>
+    CommonCurrency, CommonCurrencyBalance, CommonSecurity, CommonOrder, CommonPortfolio>

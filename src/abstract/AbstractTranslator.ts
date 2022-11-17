@@ -5,7 +5,6 @@ import {
     GetCurrencyBalanceType,
     GetPortfolioType,
     GetSecurityType,
-    GetOperationType,
     GetOrderType} from "../types/extractors";
 
 
@@ -27,12 +26,6 @@ export abstract class AbstractTranslator<ExchangeClient extends AbstractExchange
 
     abstract security(security: GetSecurityType<ExchangeClient>):
         Promise<GetSecurityType<CommonDomain>>
-
-    abstract operation(operation: GetOperationType<ExchangeClient>):
-        Promise<GetOperationType<CommonDomain>>
-
-    abstract operations(operations: GetOperationType<ExchangeClient>[]):
-        Promise<GetOperationType<CommonDomain>[]>
 
     abstract order(order: GetOrderType<ExchangeClient>):
         Promise<GetOrderType<CommonDomain>>

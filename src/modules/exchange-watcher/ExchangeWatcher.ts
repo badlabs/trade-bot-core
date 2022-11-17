@@ -3,7 +3,7 @@ import {ExchangeAnalyzer, ExchangeTrader} from 'src/modules'
 import {AbstractTranslator, AbstractExchangeClient} from 'src/abstract'
 import {OperationType, OrderStatus, CommonDomain} from 'src/types'
 import {GetPortfolioType, GetCurrencyType,
-    GetOperationType, GetSecurityType, GetCurrencyBalanceType} from 'src/types/extractors'
+    GetSecurityType, GetCurrencyBalanceType} from 'src/types/extractors'
 import {GetOrderType} from "../../types/extractors";
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
