@@ -29,7 +29,11 @@
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+
+    // Decorators
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src"

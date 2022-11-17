@@ -35,11 +35,15 @@
     "@tinkoff/invest-openapi-js-sdk": "^1.5.0",
     "@types/ws": "^8.5.3",
     "axios": "^0.24.0",
+    "better-sqlite3": "^7.6.2",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "node-schedule": "^2.1.0",
     "redux": "^4.2.0",
+    "reflect-metadata": "^0.1.13",
     "simple-node-logger": "^21.8.12",
-    "socket.io": "^4.5.0"
+    "socket.io": "^4.5.0",
+    "sqlite3": "^5.1.2",
+    "typeorm": "^0.3.10"
   }
 }
