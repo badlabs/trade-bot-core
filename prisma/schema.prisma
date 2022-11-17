@@ -43,7 +43,6 @@ model Security {
   currency              Currency  @relation(fields: [currency_ticker], references: [ticker])
   followed_security     FollowedSecurity?
   portfolio_position    PortfolioPosition?
-  operations            Operation[]
   orders                Order[]
 }
 
@@ -81,22 +80,6 @@ model Order {
   algorithm_run       AlgorithmRun?  @relation(fields: [run_id], references: [id])
 
   @@id([security_ticker, created_at])
-}
-
-model Operation {
-  @@map("Operations")
-
-  exchange_id         String?   @unique
-  security_ticker     String?
-  status              String
-  operation_type      String
-  amount              Int?
-  amount_requested    Int?
-  price               Float
-  updated_at          DateTime  @updatedAt
-  created_at          DateTime  @default(now()) @id
-
-  security          Security? @relation(fields: [security_ticker], references: [ticker])
 }
 
 model Algorithm {
