@@ -60,22 +60,6 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         return translator.currency(currency)
     }
 
-    async getOperations(from: Date = new Date(0), to: Date = new Date()): Promise<GetOperationType<CommonDomain>[]>{
-        const { exchangeClient, translator } = this
-        const relevantOperations = await exchangeClient.getOperationsAll(from, to)
-        return translator.operations(relevantOperations
-            .filter(operation => operation.operationType === "Buy" || operation.operationType === "Sell")
-        )
-    }
-
-    async getOperationsBySecurity(ticker: string, from: Date = new Date(0), to: Date = new Date()): Promise<GetOperationType<CommonDomain>[]>{
-        const { exchangeClient, translator } = this
-        const relevantOperations = await exchangeClient.getOperationsBySecurity(ticker, from, to)
-        return translator.operations(relevantOperations
-            .filter(operation => operation.operationType === "Buy" || operation.operationType === "Sell")
-        )
-    }
-
     onOrderSent(order: GetOrderType<ExchangeClient>, operation_type: OperationType, run_id: number | null = null): OrderStatus {
         const { translator, analyzer } = this
         const status = translator.orderStatus(order)
