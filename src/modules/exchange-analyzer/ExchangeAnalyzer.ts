@@ -205,31 +205,6 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         const { count: deleted } = await db.portfolioPosition.deleteMany({})
         return deleted
     }
-    async addPortfolioPosition(portfolioPosition: GetPortfolioType<CommonDomain>): Promise<GetPortfolioType<CommonDomain>> {
-        return await db.$transaction(async (db) => {
-            const positionToUpdate = await db.portfolioPosition.findUnique({
-                where: { security_ticker: portfolioPosition.security_ticker }
-            })
-            return db.portfolioPosition.upsert({
-                where: { security_ticker: portfolioPosition.security_ticker },
-                update: { amount: (positionToUpdate?.amount || 0) + portfolioPosition.amount },
-                create: portfolioPosition
-            })
-        })
-    }
-    async removePortfolioPosition(portfolioPosition: GetPortfolioType<CommonDomain>): Promise<GetPortfolioType<CommonDomain> | null> {
-        return await db.$transaction(async (db) => {
-            const positionToUpdate = await db.portfolioPosition.findUnique({
-                where: { security_ticker: portfolioPosition.security_ticker }
-            })
-            if ((positionToUpdate?.amount || 0) - portfolioPosition.amount > 0)
-                return db.portfolioPosition.update({
-                    where: { security_ticker: portfolioPosition.security_ticker },
-                    data: { amount: (positionToUpdate?.amount || 0) + portfolioPosition.amount }
-                })
-            return db.portfolioPosition.delete({ where: { security_ticker: portfolioPosition.security_ticker } })
-        })
-    }
     async getPositionAverageBuyPrice(ticker: string): Promise<number> {
         const position = await db.portfolioPosition.findUnique({where: { security_ticker: ticker }})
         async function getBoughtStats(take: number){
