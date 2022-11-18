@@ -1,4 +1,5 @@
 import {deepCopy} from "../utils";
+import {SecuritiesStore} from "./SecuritiesStore";
 
 type CurrencyBalance = {
     type: 'currency'
@@ -17,6 +18,7 @@ export type PortfolioPosition = CurrencyBalance | SecurityBalance
 export class PortfolioStore {
     // TODO: Create Proxy on updates
     private items: PortfolioPosition[] = []
+    private securitiesStore: SecuritiesStore
 
     private findPosition(position: PortfolioPosition, searchIn: PortfolioPosition[] = this.items) {
         return searchIn.find(item => {
@@ -28,6 +30,11 @@ export class PortfolioStore {
             }
             return false
         })
+    }
+
+    setSecuritiesStore(store: SecuritiesStore){
+        if (!this.securitiesStore)
+            this.securitiesStore = store
     }
 
     get portfolio() { return deepCopy(this.items) }
@@ -46,6 +53,9 @@ export class PortfolioStore {
                 this.items.push(position)
             } else {
                 foundPosition.amount = position.amount
+            }
+            if (position.type === 'security') {
+                this.securitiesStore.follow(position.securityTicker)
             }
         }
     }
