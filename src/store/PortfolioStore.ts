@@ -1,13 +1,13 @@
 import {deepCopy} from "../utils";
 import {SecuritiesStore} from "./SecuritiesStore";
 
-type CurrencyBalance = {
+export type CurrencyBalance = {
     type: 'currency'
     currencyTicker: string
     amount: number
 }
 
-type SecurityBalance = {
+export type SecurityBalance = {
     type: 'security'
     securityTicker: string
     amount: number
