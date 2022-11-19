@@ -39,7 +39,7 @@ export class Order {
         type: 'int',
         transformer: dateTransformer
     })
-    updatedAt: Date
+    updatedAt?: Date = new Date()
 
     @Column({ type: 'int', nullable: false})
     algorithmRunId?: number
