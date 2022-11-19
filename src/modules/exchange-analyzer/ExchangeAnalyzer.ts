@@ -16,6 +16,7 @@ import {TradeBot} from '../../TradeBot'
 import {db, Algorithm, AlgorithmRun, Order} from '../../db'
 import {store} from '../../store'
 import {AlgorithmRunStatus} from "../../db/AlgorithmRun";
+import {HandleError} from "../../utils/HandleError";
 
 export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     readonly tradebot: TradeBot<ExchangeClient>
@@ -34,6 +35,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         this.initUpdaters()
     }
 
+    @HandleError()
     private async initUpdaters(){
         scheduleJob('updateBalance', '*/1 * * * *', () => {
             this.tradebot.logger.log('Updating balance...')
@@ -49,6 +51,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         })
     }
 
+    @HandleError()
     private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonDomain> | undefined> {
         const { watcher } = this
         const securityInCache = store.securitiesStore.securities.find(s => s.ticker === ticker)
@@ -59,6 +62,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return securityInCache
     }
 
+    @HandleError()
     private async loadSecuritiesIfNotExist(tickers: string[]): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
         const securitiesInCache = store.securitiesStore.securities.filter(s => tickers.includes(s.ticker))
@@ -70,6 +74,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Currencies
 
+    @HandleError()
     async updateCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrencies()
@@ -77,12 +82,14 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return store.currenciesStore.currencies
     }
 
+    @HandleError()
     async getCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
         return store.currenciesStore.currencies
     }
 
     // Currencies Balance
 
+    @HandleError()
     async updateCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrenciesBalance()
@@ -90,12 +97,14 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return store.portfolioStore.currencies
     }
 
+    @HandleError()
     async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
         return store.portfolioStore.currencies
     }
 
     // Securities
 
+    @HandleError()
     async updateSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
         const securities: GetSecurityType<CommonDomain>[] = store.securitiesStore.securities
@@ -111,16 +120,19 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return store.securitiesStore.securities
     }
 
+    @HandleError()
     async getSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         return store.securitiesStore.securities
     }
 
+    @HandleError()
     async getSecurity(ticker: string): Promise<GetSecurityType<CommonDomain>> {
         const security = store.securitiesStore.securities.find(s => s.ticker === ticker)
         if (!security) throw new Error(`Security with ticker:${ticker} was not found`)
         return security
     }
 
+    @HandleError()
     async addSecurities(...securities: GetSecurityType<CommonDomain>[]): Promise<GetSecurityType<CommonDomain>[]> {
         store.securitiesStore.updateSecurities(...securities)
         return store.securitiesStore.securities
@@ -128,15 +140,22 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Followed Securities
 
+    @HandleError()
     async getFollowedSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         return store.securitiesStore.followedSecurities
     }
+
+    @HandleError()
     async followSecurity(securityTicker: string): Promise<GetSecurityType<CommonDomain> | undefined> {
         return store.securitiesStore.follow(securityTicker)
     }
+
+    @HandleError()
     async unfollowSecurity(securityTicker: string): Promise<GetSecurityType<CommonDomain> | undefined> {
         return store.securitiesStore.unfollow(securityTicker)
     }
+
+    @HandleError()
     async updateFollowedSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
         const securitiesToUpdate = store.securitiesStore.followedSecurities
@@ -152,6 +171,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Portfolio
 
+    @HandleError()
     async updatePortfolio(): Promise<GetPortfolioPositionType<CommonDomain>[]>{
         const { watcher } = this
         const relevantPortfolio = await watcher.getPortfolio()
@@ -163,10 +183,12 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     }
 
+    @HandleError()
     async getPortfolio(): Promise<GetPortfolioPositionType<CommonDomain>[]> {
         return store.portfolioStore.portfolio
     }
 
+    @HandleError()
     async clearPortfolio(): Promise<number> {
         const deleted = store.portfolioStore.portfolio.length
         store.portfolioStore.updatePositionsAll([])
@@ -175,6 +197,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Orders
 
+    @HandleError()
     async saveOrder(order: GetOrderType<CommonDomain>,
                     operation: OperationType,
                     runId: number | undefined = undefined): Promise<GetOrderType<CommonDomain>> {
@@ -192,6 +215,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return result
     }
 
+    @HandleError()
     async getOrders({ from, to, operation, securityTicker, runId }: GetOrdersOptions): Promise<GetOrderType<CommonDomain>[]> {
         // TODO: Rewrite to typed selector
         let queryBuilder = db.manager
@@ -210,6 +234,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Algorithms
 
+    @HandleError()
     async saveAlgorithms(): Promise<Algorithm[]>{
         const { tradeAlgos } = this
         const allAlgorithms = tradeAlgos.description
@@ -217,6 +242,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return await db.manager.find(Algorithm)
     }
 
+    @HandleError()
     async runAlgorithm(algorithmName: string, inputs: any, state: any = inputs): Promise<AlgorithmRun>{
         return db.manager.create(AlgorithmRun, {
             algorithmName, inputs, state,
@@ -224,6 +250,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         })
     }
 
+    @HandleError()
     async saveAlgorithmRunProgress(id: number, state: any): Promise<AlgorithmRun>{
         await db.manager.update(AlgorithmRun, { id }, { state })
         const updatedRun = await db.manager.findOneBy(AlgorithmRun, {id})
@@ -232,10 +259,12 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return updatedRun
     }
 
+    @HandleError()
     async loadAlgorithmRunProgress(id: number): Promise<AlgorithmRun | null>{
         return  db.manager.findOneBy(AlgorithmRun, {id})
     }
 
+    @HandleError()
     async stopAlgorithmRun(id: number): Promise<AlgorithmRun>{
         await db.manager.update(AlgorithmRun, { id }, { status: 'stopped' })
         const stoppedRun = await db.manager.findOneBy(AlgorithmRun, {id})
@@ -244,6 +273,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return stoppedRun
     }
 
+    @HandleError()
     async resumeAlgorithmRun(id: number): Promise<AlgorithmRun>{
         await db.manager.update(AlgorithmRun, { id }, { status: 'resumed' })
         const resumedRun = await db.manager.findOneBy(AlgorithmRun, {id})
@@ -252,6 +282,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return resumedRun
     }
 
+    @HandleError()
     async finishAlgorithmRun(id: number): Promise<AlgorithmRun>{
         await db.manager.update(AlgorithmRun, { id }, { status: 'finished' })
         const finishedRun = await db.manager.findOneBy(AlgorithmRun, {id})
@@ -260,6 +291,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return finishedRun
     }
 
+    @HandleError()
     async errorAlgorithmRun(id: number, error: Error): Promise<AlgorithmRun>{
         const run = await db.manager.findOneBy(AlgorithmRun, {id})
         const state = { stateBeforeError: run?.state, error }
@@ -273,6 +305,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         return runWithError
     }
 
+    @HandleError()
     async getAlgorithmRunsByAlgorithm(algorithmName: string): Promise<AlgorithmRun[]>{
         return  db.manager.find(AlgorithmRun, {
             where: { algorithmName },
@@ -280,6 +313,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         })
     }
 
+    @HandleError()
     async getUnfinishedAlgorithmRuns(): Promise<AlgorithmRun[]>{
         return db.manager.find(AlgorithmRun, {
             where: {
