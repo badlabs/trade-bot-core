@@ -34,11 +34,13 @@ export class SecuritiesStore {
     follow(securityTicker: string){
         if (!this.followList.includes(securityTicker))
             this.followList.push(securityTicker)
+        return deepCopy(this.items.find(s => s.ticker === securityTicker))
     }
     unfollow(securityTicker: string){
         const index = this.followList.indexOf(securityTicker)
         if (index !== -1)
             this.followList.splice(index, 1)
+        return deepCopy(this.items.find(s => s.ticker === securityTicker))
     }
 
     updateSecurities(...securities: Security[]){

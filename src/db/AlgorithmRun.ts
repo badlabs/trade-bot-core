@@ -1,28 +1,43 @@
 import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm"
 import { Algorithm } from "./Algorithm"
 import {Order} from "./Order";
+import {dateTransformer} from "./transformers";
+
+export type AlgorithmRunStatus = 'running' | 'stopped' | 'resumed' | 'finished' | 'error'
 
 @Entity()
-export class AlgorithmRun<InputType = unknown, StateType = InputType> {
+export class AlgorithmRun<InputType = any, StateType = InputType> {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
     algorithmName: string
 
-    @Column('simple-json')
+    @Column({
+        type: "simple-json",
+        default: '{}'
+    })
     inputs: InputType
 
     @Column('text')
-    status: 'running' | 'stopped' | 'resumed' | 'finished' | 'error'
+    status: AlgorithmRunStatus
 
-    @Column('simple-json')
+    @Column({
+        type: 'simple-json',
+        default: '{}'
+    })
     state: StateType
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        type: 'int',
+        transformer: dateTransformer
+    })
     updatedAt: Date
 
-    @CreateDateColumn()
+    @CreateDateColumn({
+        type: 'int',
+        transformer: dateTransformer
+    })
     createdAt: Date
 
     @ManyToOne(() => Algorithm, (algo) => algo.algorithmRuns)

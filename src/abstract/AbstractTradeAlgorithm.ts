@@ -38,7 +38,7 @@ export abstract class AbstractTradeAlgorithm<
   protected async fixContinue(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
     logger.log(`[algo:${id}] Continuing algorithm "${name}"`)
-    return await analyzer.continueAlgorithmRun(id)
+    return await analyzer.resumeAlgorithmRun(id)
   }
   protected async fixFinish(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this

@@ -1,5 +1,6 @@
 import { Entity, Column, ManyToOne, UpdateDateColumn } from "typeorm"
 import {AlgorithmRun} from "./AlgorithmRun";
+import {dateTransformer} from "./transformers";
 
 export type OrderStatus = 'not_processed' | 'to_be_processed' | 'placed' | 'units_allocated' |
     'units_redeemed' | 'rejected' | 'cancelled' | 'expired' | 'undefined'
@@ -34,7 +35,10 @@ export class Order {
     @Column('float')
     price: number
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        type: 'int',
+        transformer: dateTransformer
+    })
     updatedAt: Date
 
     @Column({ type: 'int', nullable: false})

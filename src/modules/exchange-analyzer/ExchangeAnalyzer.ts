@@ -1,18 +1,21 @@
 import {
     GetOrdersOptions,
     OperationType,
-    CommonDomain} from "../../types";
-import {GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
-    GetSecurityBalanceType, GetOrderType} from "../../types/extractors";
+    CommonDomain
+} from "../../types";
+import {
+    GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
+    GetOrderType, GetPortfolioPositionType
+} from "../../types/extractors";
 import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'src/abstract'
 import {ExchangeTrader, ExchangeWatcher} from 'src/modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'
 import {TradeBot} from 'src/TradeBot'
-import {PrismaClient} from '../../db'
-import {FollowedSecurity, Algorithm, AlgorithmRun} from '../../types/analyzer'
+import {db, Algorithm, AlgorithmRun, Order} from 'src/db'
+import {store} from 'src/store'
 import {scheduleJob} from 'node-schedule'
-
-const db = new PrismaClient()
+import {In, Not} from "typeorm";
+import {AlgorithmRunStatus} from "../../db/AlgorithmRun";
 
 export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     readonly tradebot: TradeBot<ExchangeClient>
@@ -46,19 +49,19 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
         })
     }
 
-    private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonDomain> | null> {
+    private async loadSecurityIfNotExist(ticker: string): Promise<GetSecurityType<CommonDomain> | undefined> {
         const { watcher } = this
-        const securityInCache = await db.security.findFirst({ where: { ticker } })
+        const securityInCache = store.securitiesStore.securities.find(s => s.ticker === ticker)
         if (!securityInCache) {
             await this.addSecurities(await watcher.getSecurity(ticker))
-            return db.security.findFirst({ where: { ticker } })
+            return store.securitiesStore.securities.find(s => s.ticker === ticker)
         }
         return securityInCache
     }
 
     private async loadSecuritiesIfNotExist(tickers: string[]): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
-        const securitiesInCache = await db.security.findMany({ where: { ticker: { in: tickers } } })
+        const securitiesInCache = store.securitiesStore.securities.filter(s => tickers.includes(s.ticker))
         const securitiesToAdd = await Promise.all(tickers
             .filter(t => !securitiesInCache.some(s => s.ticker === t))
             .map(ticker => watcher.getSecurity(ticker)))
@@ -70,17 +73,12 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     async updateCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrencies()
-        return await Promise.all(relevantCurrencies
-            .map(currency => db.currency.upsert({
-                where: { ticker: currency.ticker },
-                update: {},
-                create: currency
-            }))
-        )
+        store.currenciesStore.updateCurrenciesAll(relevantCurrencies)
+        return store.currenciesStore.currencies
     }
 
     async getCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
-        return db.currency.findMany({})
+        return store.currenciesStore.currencies
     }
 
     // Currencies Balance
@@ -88,242 +86,205 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     async updateCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
         const { watcher } = this
         const relevantCurrencies = await watcher.getCurrenciesBalance()
-        return await Promise.all(relevantCurrencies
-            .map(currency => db.currencyBalance.upsert({
-                where: { currency_ticker: currency.currency_ticker },
-                update: { balance: currency.balance },
-                create: currency
-            }))
-        )
+        store.portfolioStore.updatePositions(...relevantCurrencies)
+        return store.portfolioStore.currencies
     }
 
     async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
-        return db.currencyBalance.findMany({})
+        return store.portfolioStore.currencies
     }
 
     // Securities
 
     async updateSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
-        const securities: GetSecurityType<CommonDomain>[] = await db.security.findMany({  })
+        const securities: GetSecurityType<CommonDomain>[] = store.securitiesStore.securities
         const securitiesPrices = await Promise.all(
             securities.map((security): Promise<number> => watcher.getSecurityLastPrice(security.ticker))
         )
-        const updatePromises = securities
-            .map((security, index) => db.security.update({
-                    where: { ticker: security.ticker },
-                    data: { price: securitiesPrices[index] }
-                })
-            )
-        return await Promise.all(updatePromises)
+        store.securitiesStore.updateSecurities(...securities
+            .map((security, index) => ({
+                ...security,
+                price: securitiesPrices[index]
+            })
+        ))
+        return store.securitiesStore.securities
     }
 
     async getSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
-        return db.security.findMany({})
+        return store.securitiesStore.securities
     }
 
     async getSecurity(ticker: string): Promise<GetSecurityType<CommonDomain>> {
-        const security = await db.security.findUnique({ where: { ticker } })
+        const security = store.securitiesStore.securities.find(s => s.ticker === ticker)
         if (!security) throw new Error(`Security with ticker:${ticker} was not found`)
         return security
     }
 
     async addSecurities(...securities: GetSecurityType<CommonDomain>[]): Promise<GetSecurityType<CommonDomain>[]> {
-        const createOrUpdatePromises = securities
-            .map((security) => db.security.upsert({
-                    where: { ticker: security.ticker },
-                    update: { price: security.price },
-                    create: security
-                })
-            )
-        return await Promise.all(createOrUpdatePromises)
+        store.securitiesStore.updateSecurities(...securities)
+        return store.securitiesStore.securities
     }
 
     // Followed Securities
 
-    async getFollowedSecurities(): Promise<FollowedSecurity[]> {
-        return db.followedSecurity.findMany({})
+    async getFollowedSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
+        return store.securitiesStore.followedSecurities
     }
-    async followSecurity(securityTicker: string): Promise<FollowedSecurity> {
-        return db.followedSecurity.upsert({
-            where: { security_ticker: securityTicker },
-            update: {},
-            create: {
-                security_ticker: securityTicker,
-                followed_since: new Date()
-            }
-        })
+    async followSecurity(securityTicker: string): Promise<GetSecurityType<CommonDomain> | undefined> {
+        return store.securitiesStore.follow(securityTicker)
     }
-    async unfollowSecurity(securityTicker: string): Promise<FollowedSecurity> {
-        return db.followedSecurity.delete({
-            where: { security_ticker: securityTicker }
-        })
+    async unfollowSecurity(securityTicker: string): Promise<GetSecurityType<CommonDomain> | undefined> {
+        return store.securitiesStore.unfollow(securityTicker)
     }
     async updateFollowedSecurities(): Promise<GetSecurityType<CommonDomain>[]> {
         const { watcher } = this
-        const securitiesToUpdate = await db.followedSecurity.findMany({})
+        const securitiesToUpdate = store.securitiesStore.followedSecurities
         const securitiesPrices = await Promise.all(
-            securitiesToUpdate.map(security => watcher.getSecurityLastPrice(security.security_ticker))
+            securitiesToUpdate.map(security => watcher.getSecurityLastPrice(security.ticker))
         )
-        const updatePromises = securitiesToUpdate.map((security, index) => db.security.update({
-            where: { ticker: security.security_ticker },
-            data: { price: securitiesPrices[index] }
-        }))
-        return await Promise.all(updatePromises)
+        store.securitiesStore.updateSecurities(...securitiesToUpdate.map((s, index) => ({
+            ...s,
+            price: securitiesPrices[index]
+        })))
+        return store.securitiesStore.followedSecurities
     }
 
     // Portfolio
 
-    async updatePortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]>{
+    async updatePortfolio(): Promise<GetPortfolioPositionType<CommonDomain>[]>{
         const { watcher } = this
         const relevantPortfolio = await watcher.getPortfolio()
-        const securities = await Promise.all(relevantPortfolio.map(p => watcher.getSecurity(p.security_ticker)))
+        const securities = await Promise.all(relevantPortfolio.map(p => watcher.getSecurity(p.securityTicker)))
+        const currencies = await watcher.getCurrenciesBalance()
         await this.addSecurities(...securities)
-        await db.portfolioPosition.deleteMany({
-            where: {
-                security_ticker: { notIn: securities.map(s => s.ticker) }
-            }
-        })
-        return await Promise.all(relevantPortfolio.map(position => db.portfolioPosition.upsert(
-            {
-                where: { security_ticker: position.security_ticker },
-                update: { amount: position.amount },
-                create: position
-            })
-        ))
+        store.portfolioStore.updatePositionsAll([...relevantPortfolio, ...currencies])
+        return store.portfolioStore.portfolio
 
     }
 
-    async getPortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]> {
-        return db.portfolioPosition.findMany({})
+    async getPortfolio(): Promise<GetPortfolioPositionType<CommonDomain>[]> {
+        return store.portfolioStore.portfolio
     }
 
     async clearPortfolio(): Promise<number> {
-        const { count: deleted } = await db.portfolioPosition.deleteMany({})
+        const deleted = store.portfolioStore.portfolio.length
+        store.portfolioStore.updatePositionsAll([])
         return deleted
     }
 
     // Orders
 
-    async saveOrder(order: GetOrderType<CommonDomain>, operation_type: OperationType, run_id: number | null = null): Promise<GetOrderType<CommonDomain>> {
-        await this.loadSecurityIfNotExist(order.security_ticker)
-        const result = await db.order.create({ data: {...order, run_id, operation_type} })
-        return result as GetOrderType<CommonDomain>
+    async saveOrder(order: GetOrderType<CommonDomain>,
+                    operation: OperationType,
+                    runId: number | undefined = undefined): Promise<GetOrderType<CommonDomain>> {
+        await this.loadSecurityIfNotExist(order.securityTicker)
+        await db.manager.upsert(Order, {
+            ...order,
+            operation,
+            algorithmRunId: runId
+        }, {
+            conflictPaths: [ 'exchangeId' ]
+        })
+        const result =  await db.manager.findOneBy(Order, { exchangeId: order.exchangeId })
+        if (!result)
+            throw new Error(`Order was not saved successfully: ${order}`)
+        return result
     }
 
     async getOrders({ from, to, operation, securityTicker, runId }: GetOrdersOptions): Promise<GetOrderType<CommonDomain>[]> {
-        const result = await db.order.findMany({
-            orderBy: { created_at: 'desc' },
-            where: {
-                AND: [
-                    { created_at: { gte: from || new Date(0) } },
-                    { created_at: { lte: to || new Date() } }
-                ],
-                operation_type: operation,
-                security_ticker: securityTicker,
-                run_id: runId
-            }
-        })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return result as GetOrderType<CommonDomain>[]
+        // TODO: Rewrite to typed selector
+        let queryBuilder = db.manager
+            .getRepository(Order)
+            .createQueryBuilder('order')
+            .where('order.updatedAt > :from', { from: Number(from ?? 0) })
+            .andWhere('order.updatedAt < :to', { from: Number(to ?? new Date()) })
+        if (operation)
+            queryBuilder = queryBuilder.andWhere('order.operation = :operation', {operation})
+        if (securityTicker)
+            queryBuilder = queryBuilder.andWhere('order.securityTicker = :securityTicker', {securityTicker})
+        if (runId)
+            queryBuilder = queryBuilder.andWhere('order.algorithmRunId = :runId', {runId})
+        return await queryBuilder.getMany()
     }
 
     // Algorithms
 
     async saveAlgorithms(): Promise<Algorithm[]>{
         const { tradeAlgos } = this
-        const updatePromises = tradeAlgos.description.map(algo => db.algorithm.upsert({
-            where: { name: algo.name },
-            update: {
-                description: algo.description,
-                input_types: algo.input_types
-            },
-            create: algo
-        }))
-        return await Promise.all(updatePromises)
+        const allAlgorithms = tradeAlgos.description
+        await db.manager.upsert(Algorithm, allAlgorithms, ['name'])
+        return await db.manager.find(Algorithm)
     }
 
     async runAlgorithm(algorithmName: string, inputs: any, state: any = inputs): Promise<AlgorithmRun>{
-        const createdRun = await db.algorithmRun.create({
-            data: {
-                algorithm_name: algorithmName,
-                inputs: JSON.stringify(inputs),
-                state: JSON.stringify(state),
-                status: 'running'
-            }
+        return db.manager.create(AlgorithmRun, {
+            algorithmName, inputs, state,
+            status: 'running'
         })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return createdRun as AlgorithmRun
     }
 
     async saveAlgorithmRunProgress(id: number, state: any): Promise<AlgorithmRun>{
-        const updatedRun = await db.algorithmRun.update({
-            where: { id },
-            data: {
-                state: JSON.stringify(state)
-            }
-        })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return updatedRun as AlgorithmRun
+        await db.manager.update(AlgorithmRun, { id }, { state })
+        const updatedRun = await db.manager.findOneBy(AlgorithmRun, {id})
+        if (!updatedRun)
+            throw new Error(`AlgorithmRun wasn't updated successfully: ${ {id, state} }`)
+        return updatedRun
     }
 
     async loadAlgorithmRunProgress(id: number): Promise<AlgorithmRun | null>{
-        const foundRun = await db.algorithmRun.findUnique({ where: { id } })
-        return foundRun as AlgorithmRun | null
+        return  db.manager.findOneBy(AlgorithmRun, {id})
     }
 
     async stopAlgorithmRun(id: number): Promise<AlgorithmRun>{
-        const stoppedRun = await db.algorithmRun.update({
-            where: { id },
-            data: { status: 'stopped'}
-        })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return stoppedRun as AlgorithmRun
+        await db.manager.update(AlgorithmRun, { id }, { status: 'stopped' })
+        const stoppedRun = await db.manager.findOneBy(AlgorithmRun, {id})
+        if (!stoppedRun)
+            throw new Error(`AlgorithmRun wasn't stopped successfully: ${ {id} }`)
+        return stoppedRun
     }
 
-    async continueAlgorithmRun(id: number): Promise<AlgorithmRun>{
-        const continuedRun = await db.algorithmRun.update({
-            where: { id },
-            data: { status: 'continued'}
-        })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return continuedRun as AlgorithmRun
+    async resumeAlgorithmRun(id: number): Promise<AlgorithmRun>{
+        await db.manager.update(AlgorithmRun, { id }, { status: 'resumed' })
+        const resumedRun = await db.manager.findOneBy(AlgorithmRun, {id})
+        if (!resumedRun)
+            throw new Error(`AlgorithmRun wasn't resumed successfully: ${ {id} }`)
+        return resumedRun
     }
 
     async finishAlgorithmRun(id: number): Promise<AlgorithmRun>{
-        const finishedRun = await db.algorithmRun.update({
-            where: { id },
-            data: { status: 'finished'}
-        })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return finishedRun as AlgorithmRun
+        await db.manager.update(AlgorithmRun, { id }, { status: 'finished' })
+        const finishedRun = await db.manager.findOneBy(AlgorithmRun, {id})
+        if (!finishedRun)
+            throw new Error(`AlgorithmRun wasn't finished successfully: ${ {id} }`)
+        return finishedRun
     }
 
     async errorAlgorithmRun(id: number, error: Error): Promise<AlgorithmRun>{
-        const run = await db.algorithmRun.findUnique({where: {id} })
-        const state = { ...JSON.parse(run?.state || '{}'), error }
-        const runWithError = await db.algorithmRun.update({
-            where: { id },
-            data: { status: 'error', state: JSON.stringify(state)}
+        const run = await db.manager.findOneBy(AlgorithmRun, {id})
+        const state = { stateBeforeError: run?.state, error }
+        await db.manager.update(AlgorithmRun, { id }, {
+            status: 'error',
+            state
         })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return runWithError as AlgorithmRun
+        const runWithError = await db.manager.findOneBy(AlgorithmRun, {id})
+        if (!runWithError)
+            throw new Error(`Error in AlgorithmRun wasn't saved successfully: ${ {id} }`)
+        return runWithError
     }
 
     async getAlgorithmRunsByAlgorithm(algorithmName: string): Promise<AlgorithmRun[]>{
-        const runs = await db.algorithmRun.findMany({
-            orderBy: { id: 'desc' },
-            where: { algorithm_name: algorithmName }
+        return  db.manager.find(AlgorithmRun, {
+            where: { algorithmName },
+            order: { id: 'DESC' }
         })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return runs as AlgorithmRun[]
     }
 
     async getUnfinishedAlgorithmRuns(): Promise<AlgorithmRun[]>{
-        const runs = await db.algorithmRun.findMany({
-            where: { status: { notIn: [ 'finished', 'stopped', 'error' ] }  }
+        return db.manager.find(AlgorithmRun, {
+            where: {
+                status: Not(In<AlgorithmRunStatus>(['finished', 'stopped', 'error']))
+            }
         })
-        // TODO: Replace 'as' with 'satisfies' when TS 4.9 is released
-        return runs as AlgorithmRun[]
     }
 }
