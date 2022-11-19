@@ -33,7 +33,7 @@ export abstract class AbstractExchangeClient<
 
   protected abstract initAccount(): Promise<unknown>
 
-  abstract getPortfolio(): Promise<GetSecurityBalanceType<Domain>>
+  abstract getPortfolio(): Promise<GetSecurityBalanceType<Domain>[]>
 
   abstract getCurrenciesBalance(): Promise<GetCurrencyBalanceType<Domain>[]>
 }
