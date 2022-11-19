@@ -31,8 +31,11 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     ) {
         this.tradebot = tradebot
         this.tradeAlgos = new TradeAlgorithmsEngine<ExchangeClient>(this, initAlgorithmsCallback)
-        this.saveAlgorithms()
-        this.initUpdaters()
+    }
+
+    @HandleError()
+    async start(){
+        return Promise.all([this.saveAlgorithms(), this.initUpdaters()])
     }
 
     @HandleError()
@@ -76,8 +79,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     @HandleError()
     async updateCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
-        const { watcher } = this
-        const relevantCurrencies = await watcher.getCurrencies()
+        const relevantCurrencies = await this.watcher.getCurrencies()
         store.currenciesStore.updateCurrenciesAll(relevantCurrencies)
         return store.currenciesStore.currencies
     }

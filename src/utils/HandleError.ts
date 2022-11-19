@@ -4,12 +4,11 @@ export function HandleError(){
         if (typeof descriptor.value === 'function') {
             // The function that we are going to wrap
             const declaredFn = descriptor.value
-
             // Provide a new function for this property that wraps the original function
-            descriptor.value = () => {
+            descriptor.value = function (...args: any[]) {
                 // Call the method with `this` set the object with the method,
                 // in case that matters.
-                const result = declaredFn.apply(target)
+                const result = declaredFn.apply(this, args)
 
                 // Do the thing you want with the result
 
