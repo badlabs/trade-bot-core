@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, UpdateDateColumn } from "typeorm"
+import {Entity, Column, ManyToOne, UpdateDateColumn, PrimaryColumn} from "typeorm"
 import {AlgorithmRun} from "./AlgorithmRun";
 import {dateTransformer} from "./transformers";
 
@@ -10,12 +10,8 @@ export type OperationType = 'limit_buy' | 'limit_sell' |
 
 @Entity()
 export class Order {
-    @Column({
-        type: "text",
-        nullable: true,
-        unique: true
-    })
-    exchangeId?: string
+    @PrimaryColumn()
+    exchangeId: string
 
     @Column()
     securityTicker: string

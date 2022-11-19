@@ -17,6 +17,6 @@ export class Algorithm {
     inputTypes: InputTypes
 
     @OneToMany(() => AlgorithmRun, (run) => run.algorithm)
-    algorithmRuns?: AlgorithmRun[] = []
+    algorithmRuns?: AlgorithmRun[]
 
 }
