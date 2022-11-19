@@ -60,11 +60,13 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         return translator.currency(currency)
     }
 
-    onOrderSent(order: GetOrderType<ExchangeClient>, operation_type: OperationType, run_id: number | null = null): OrderStatus {
+    onOrderSent(order: GetOrderType<ExchangeClient>,
+                operation_type: OperationType,
+                runId: number | undefined = undefined): OrderStatus {
         const { translator, analyzer } = this
         const status = translator.orderStatus(order)
         translator.order(order)
-            .then(d_order => analyzer.saveOrder({...d_order, status_first: status}, operation_type, run_id))
+            .then(order => analyzer.saveOrder({...order, status: status}, operation_type, runId))
         return status
     }
 }
