@@ -1,4 +1,5 @@
-import { AlgorithmRun, Algorithm } from '../types/analyzer'
+import { AlgorithmRun, Algorithm } from 'src/db'
+import { InputTypes } from "src/db/Algorithm";
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
 
@@ -10,11 +11,11 @@ export abstract class AbstractTradeAlgorithm<
   protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
   protected stopData: Map<number, StopDataType> = new Map<number, StopDataType>()
   private get logger(): BotLogger { return this.analyzer.tradebot.logger }
-  get details(): Algorithm {
+  get details(): Omit<Algorithm, 'algorithmRuns'> {
     return {
       name: this.name,
       description: this.description,
-      input_types: JSON.stringify(this.inputs)
+      inputTypes: this.inputs
     }
   }
 
@@ -67,7 +68,7 @@ export abstract class AbstractTradeAlgorithm<
 
   abstract get name(): string
   abstract get description(): string
-  abstract get inputs(): any
+  abstract get inputs(): InputTypes
   abstract main(inputs: InputsType): Promise<AlgorithmRun>
   abstract continue(id: number): Promise<AlgorithmRun>
   abstract stop(id: number): Promise<AlgorithmRun>
