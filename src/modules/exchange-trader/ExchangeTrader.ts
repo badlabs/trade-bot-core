@@ -19,13 +19,16 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
         return scheduleJob(date, action)
     }
 
-    scheduleOrder(date: Date, order: CreateOrderOptions, run_id: number | null = null, ): Job {
+    scheduleOrder(date: Date,
+                  order: CreateOrderOptions,
+                  run_id: number | undefined = undefined): Job {
         return scheduleJob(date, async () => {
             await this.sendOrder(order, run_id)
         })
     }
 
-    async sendOrder({ ticker, lots, price, operation }: CreateOrderOptions, run_id: number | null = null): Promise<OrderStatus> {
+    async sendOrder({ ticker, lots, price, operation }: CreateOrderOptions,
+                    run_id: number | undefined = undefined): Promise<OrderStatus> {
         const { watcher } = this
         this.logger.log(`${run_id ? `[algo:${run_id}] `: ''}Sending order: ${JSON.stringify({operation, ticker, lots, price})}`)
         let order: GetOrderType<ExchangeClient>
