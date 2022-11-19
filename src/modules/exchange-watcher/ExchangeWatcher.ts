@@ -22,7 +22,7 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
     async getPortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]> {
         const { exchangeClient, translator } = this
         const portfolio = await exchangeClient.getPortfolio()
-        return translator.portfolio(portfolio)
+        return translator.securityBalance(portfolio)
     }
 
     async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {

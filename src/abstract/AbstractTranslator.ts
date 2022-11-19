@@ -21,11 +21,11 @@ export abstract class AbstractTranslator<ExchangeClient extends AbstractExchange
     abstract currencyBalance(currency: GetCurrencyBalanceType<ExchangeClient>):
         Promise<GetCurrencyBalanceType<CommonDomain>>
 
-    abstract portfolio(portfolio: GetSecurityBalanceType<ExchangeClient>):
-        Promise<GetSecurityBalanceType<CommonDomain>[]>
-
     abstract security(security: GetSecurityType<ExchangeClient>):
         Promise<GetSecurityType<CommonDomain>>
+
+    abstract securityBalance(portfolio: GetSecurityBalanceType<ExchangeClient>):
+        Promise<GetSecurityBalanceType<CommonDomain>[]>
 
     abstract order(order: GetOrderType<ExchangeClient>):
         Promise<GetOrderType<CommonDomain>>
