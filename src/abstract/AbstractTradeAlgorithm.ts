@@ -11,7 +11,7 @@ export abstract class AbstractTradeAlgorithm<
   protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
   protected stopData: Map<number, StopDataType> = new Map<number, StopDataType>()
   private get logger(): BotLogger { return this.analyzer.tradebot.logger }
-  get details(): Omit<Algorithm, 'algorithmRuns'> {
+  get details(): Algorithm {
     return {
       name: this.name,
       description: this.description,

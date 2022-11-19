@@ -1,7 +1,7 @@
 import { TradeBot } from 'src/TradeBot'
 import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'src/abstract'
 import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'src/modules'
-import { Algorithm, AlgorithmRun } from '../../../types/analyzer'
+import { Algorithm, AlgorithmRun } from 'src/db'
 
 export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient> {
     protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>
@@ -17,7 +17,7 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
     ) {
         this.analyzer = analyzer
         this.algorithms = initAlgorithmsCallback(analyzer)
-        this.continueAlgorithms()
+        this.resumeAlgorithms()
     }
 
     get description(): Algorithm[] {
@@ -31,12 +31,12 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
         return await algo.main(inputs)
     }
 
-    async continueAlgorithms(){
+    async resumeAlgorithms(){
         const { tradebot, analyzer, algorithms } = this
         tradebot.logger.log('Continue stopped algorithms runs...')
         const unfinishedRuns = await analyzer.getUnfinishedAlgorithmRuns()
         for (let run of unfinishedRuns){
-            await algorithms.find(algo => algo.name === run.algorithm_name)?.continue(run.id)
+            await algorithms.find(algo => algo.name === run.algorithmName)?.continue(run.id)
         }
     }
 
