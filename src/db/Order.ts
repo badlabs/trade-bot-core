@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne, UpdateDateColumn } from "typeorm"
 import {AlgorithmRun} from "./AlgorithmRun";
 
-type OrderStatus = 'not_processed' | 'to_be_processed' | 'placed' | 'units_allocated' |
+export type OrderStatus = 'not_processed' | 'to_be_processed' | 'placed' | 'units_allocated' |
     'units_redeemed' | 'rejected' | 'cancelled' | 'expired' | 'undefined'
 export type OperationType = 'limit_buy' | 'limit_sell' |
     'market_buy' | 'market_sell' |
