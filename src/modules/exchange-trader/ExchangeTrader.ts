@@ -1,8 +1,8 @@
-import {TradeBot} from 'src/TradeBot'
-import {ExchangeWatcher, BotLogger} from 'src/modules'
-import {AbstractExchangeClient} from 'src/abstract'
-import {CreateOrderOptions, OrderStatus} from 'src/types'
 import {Job, JobCallback, scheduleJob} from 'node-schedule'
+import {TradeBot} from '../../TradeBot'
+import {ExchangeWatcher, BotLogger} from '../../modules'
+import {AbstractExchangeClient} from '../../abstract'
+import {CreateOrderOptions, OrderStatus} from '../../types'
 import {GetOrderType} from "../../types/extractors";
 
 export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {

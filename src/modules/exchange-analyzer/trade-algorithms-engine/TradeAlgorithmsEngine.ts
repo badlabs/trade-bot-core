@@ -1,7 +1,7 @@
-import { TradeBot } from 'src/TradeBot'
-import {AbstractExchangeClient, AbstractTradeAlgorithm} from 'src/abstract'
-import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from 'src/modules'
-import { Algorithm, AlgorithmRun } from 'src/db'
+import { TradeBot } from '../../../TradeBot'
+import {AbstractExchangeClient, AbstractTradeAlgorithm} from '../../../abstract'
+import {ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher} from '../../../modules'
+import { Algorithm, AlgorithmRun } from '../../../db'
 
 export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient> {
     protected readonly analyzer: ExchangeAnalyzer<ExchangeClient>

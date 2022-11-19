@@ -1,5 +1,5 @@
-import { AlgorithmRun, Algorithm } from 'src/db'
-import { InputTypes } from "src/db/Algorithm";
+import { AlgorithmRun, Algorithm } from '../db'
+import { InputTypes } from "../db/Algorithm";
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
 

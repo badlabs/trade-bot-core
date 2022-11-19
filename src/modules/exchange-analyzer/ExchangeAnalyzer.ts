@@ -1,3 +1,5 @@
+import {scheduleJob} from 'node-schedule'
+import {In, Not} from "typeorm";
 import {
     GetOrdersOptions,
     OperationType,
@@ -7,14 +9,12 @@ import {
     GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
     GetOrderType, GetPortfolioPositionType
 } from "../../types/extractors";
-import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'src/abstract'
-import {ExchangeTrader, ExchangeWatcher} from 'src/modules'
+import {AbstractTradeAlgorithm, AbstractExchangeClient} from '../../abstract'
+import {ExchangeTrader, ExchangeWatcher} from '../../modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'
-import {TradeBot} from 'src/TradeBot'
-import {db, Algorithm, AlgorithmRun, Order} from 'src/db'
-import {store} from 'src/store'
-import {scheduleJob} from 'node-schedule'
-import {In, Not} from "typeorm";
+import {TradeBot} from '../../TradeBot'
+import {db, Algorithm, AlgorithmRun, Order} from '../../db'
+import {store} from '../../store'
 import {AlgorithmRunStatus} from "../../db/AlgorithmRun";
 
 export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {

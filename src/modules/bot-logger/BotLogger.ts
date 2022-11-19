@@ -1,6 +1,6 @@
 import fs from 'fs'
 import {createRollingFileLogger, Logger} from 'simple-node-logger'
-import { TradeBot } from 'src/TradeBot'
+import { TradeBot } from '../../TradeBot'
 import { BotApi } from '../bot-api'
 import { config } from '../../config'
 

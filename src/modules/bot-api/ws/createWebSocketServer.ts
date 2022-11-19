@@ -1,7 +1,7 @@
-import { TradeBot } from 'src/TradeBot'
 import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
+import { TradeBot } from '../../../TradeBot'
 
 export function createWebSocketServer({expressApp, tradeBot}: { expressApp: Express, tradeBot: TradeBot }) {
     const httpServer = http.createServer(expressApp)

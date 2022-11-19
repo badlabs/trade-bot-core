@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {CommonDomain, OrderStatus, OperationType} from 'src/types'
+import {CommonDomain, OrderStatus, OperationType} from '../types'
 import {
     GetCurrencyType,
     GetCurrencyBalanceType,

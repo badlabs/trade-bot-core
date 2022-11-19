@@ -1,7 +1,7 @@
-import { TradeBot } from 'src/TradeBot'
 import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
+import { TradeBot } from '../../TradeBot'
 import { createWebSocketServer } from './ws'
 import { expressApp } from './rest'
 import { config } from '../../config'

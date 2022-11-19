@@ -1,4 +1,4 @@
-import {OperationType} from "../../types";
+import {OperationType} from "../../db";
 
 export function stringToOperationType(str: string): OperationType {
     switch (str) {
