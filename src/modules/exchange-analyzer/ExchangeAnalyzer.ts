@@ -3,7 +3,7 @@ import {
     OperationType,
     CommonDomain} from "../../types";
 import {GetSecurityType, GetCurrencyType, GetCurrencyBalanceType,
-    GetPortfolioType, GetOrderType} from "../../types/extractors";
+    GetSecurityBalanceType, GetOrderType} from "../../types/extractors";
 import {AbstractTradeAlgorithm, AbstractExchangeClient} from 'src/abstract'
 import {ExchangeTrader, ExchangeWatcher} from 'src/modules'
 import {TradeAlgorithmsEngine} from './trade-algorithms-engine'
@@ -174,7 +174,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     // Portfolio
 
-    async updatePortfolio(): Promise<GetPortfolioType<CommonDomain>[]>{
+    async updatePortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]>{
         const { watcher } = this
         const relevantPortfolio = await watcher.getPortfolio()
         const securities = await Promise.all(relevantPortfolio.map(p => watcher.getSecurity(p.security_ticker)))
@@ -194,7 +194,7 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
 
     }
 
-    async getPortfolio(): Promise<GetPortfolioType<CommonDomain>[]> {
+    async getPortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]> {
         return db.portfolioPosition.findMany({})
     }
 

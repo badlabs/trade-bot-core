@@ -2,7 +2,7 @@ import {AbstractInfoModule} from "./AbstractInfoModule";
 import {AbstractTradeModule} from "./AbstractTradeModule";
 import {AbstractTranslator} from "./AbstractTranslator";
 import {DomainTemplate} from "../types";
-import {GetCurrencyBalanceType, GetPortfolioType} from "../types/extractors";
+import {GetCurrencyBalanceType, GetSecurityBalanceType} from "../types/extractors";
 
 export abstract class AbstractExchangeClient<
     Domain extends DomainTemplate = DomainTemplate,
@@ -33,7 +33,7 @@ export abstract class AbstractExchangeClient<
 
   protected abstract initAccount(): Promise<unknown>
 
-  abstract getPortfolio(): Promise<GetPortfolioType<Domain>>
+  abstract getPortfolio(): Promise<GetSecurityBalanceType<Domain>>
 
   abstract getCurrenciesBalance(): Promise<GetCurrencyBalanceType<Domain>[]>
 }

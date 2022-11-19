@@ -1,12 +1,12 @@
 export type DomainTemplate<
-    CurrencyType = any,
-    CurrencyBalanceType = any,
-    SecurityType = any,
-    OrderType = any,
-    PortfolioType = any> = {
+    CurrencyType = unknown,
+    CurrencyBalanceType = unknown,
+    SecurityType = unknown,
+    SecurityBalanceType = unknown,
+    OrderType = unknown> = {
     currency: CurrencyType
     currencyBalance: CurrencyBalanceType
     security: SecurityType
+    securityBalance: SecurityBalanceType
     order: OrderType
-    portfolio: PortfolioType
 }

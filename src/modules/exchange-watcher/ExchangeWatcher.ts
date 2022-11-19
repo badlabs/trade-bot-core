@@ -2,7 +2,7 @@ import {TradeBot} from 'src/TradeBot'
 import {ExchangeAnalyzer, ExchangeTrader} from 'src/modules'
 import {AbstractTranslator, AbstractExchangeClient} from 'src/abstract'
 import {OperationType, OrderStatus, CommonDomain} from 'src/types'
-import {GetPortfolioType, GetCurrencyType,
+import {GetSecurityBalanceType, GetCurrencyType,
     GetSecurityType, GetCurrencyBalanceType} from 'src/types/extractors'
 import {GetOrderType} from "../../types/extractors";
 
@@ -19,7 +19,7 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         this.tradebot = tradebot
     }
 
-    async getPortfolio(): Promise<GetPortfolioType<CommonDomain>[]> {
+    async getPortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]> {
         const { exchangeClient, translator } = this
         const portfolio = await exchangeClient.getPortfolio()
         return translator.portfolio(portfolio)
