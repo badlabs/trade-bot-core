@@ -28,4 +28,4 @@ jobs:
         with:
           tag: "v${{ steps.check.outputs.version }}"
           generateReleaseNotes: true
-          draft: true
+          draft: false
