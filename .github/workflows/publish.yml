@@ -3,10 +3,37 @@ name: Publish Package
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check if version has been updated
+        id: check
+        uses: EndBug/version-check@v1
+        with:
+          diff-search: true
+
+      - uses: rickstaa/action-create-tag@v1
+        if: steps.check.outputs.changed == 'true'
+        with:
+          tag: "v${{ steps.check.outputs.version }}"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "v${{ steps.check.outputs.version }}"
+          generateReleaseNotes: true
+          draft: false
+
   package:
     name: "Create npm package"
+    needs: [release]
     runs-on: ubuntu-latest
     if: github.repository_owner == 'badlabs'
     steps:
