@@ -9,5 +9,5 @@ export function runTradeBot<ExchangeClient extends AbstractExchangeClient = Abst
         initAlgorithmsCallback?:
             (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient>[]
     }){
-    new TradeBot<ExchangeClient>(options)
+    return new TradeBot<ExchangeClient>(options)
 }
