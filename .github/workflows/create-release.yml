@@ -1,0 +1,31 @@
+name: Create Release
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check if version has been updated
+        id: check
+        uses: EndBug/version-check@v1
+        with:
+          diff-search: true
+
+      - uses: rickstaa/action-create-tag@v1
+        if: steps.check.outputs.changed == 'true'
+        with:
+          tag: "v${{ steps.check.outputs.version }}"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "v${{ steps.check.outputs.version }}"
+          generateReleaseNotes: true
+          draft: true

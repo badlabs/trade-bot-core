@@ -1,0 +1,57 @@
+name: Publish Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  package:
+    name: "Create npm package"
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'badlabs'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm pack
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: "*.tgz"
+
+  publish-gh:
+    name: Publish to GitHub Packages
+    needs: [package]
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'badlabs'
+    steps:
+      - name: Upload
+        uses: actions/download-artifact@v2
+        with:
+          name: package
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com/
+          scope: "@badlabs"
+      - run: echo "registry=https://npm.pkg.github.com/@badlabs" >> .npmrc
+      - run: npm publish $(ls *.tgz)
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GH_PACKAGES_TOKEN}}
+
+  publish-npm:
+    name: Publish to NPM
+    needs: [package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          access: public
+          token: ${{ secrets.NPM_PUBLISH_TOKEN }}
