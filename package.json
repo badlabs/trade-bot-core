@@ -2,7 +2,7 @@
   "name": "@badlabs/trade-bot-core",
   "version": "0.0.1",
   "description": "Core library for trade bots",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "types": "lib",
   "scripts": {
     "build": "tsc"
