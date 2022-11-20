@@ -2,6 +2,7 @@ import { AlgorithmRun, Algorithm } from '../db'
 import { InputTypes } from "../db/Algorithm";
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
+import {HandleError} from "../utils";
 
 export abstract class AbstractTradeAlgorithm<
   ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient,
@@ -24,39 +25,52 @@ export abstract class AbstractTradeAlgorithm<
   }
 
 
+  @HandleError()
   protected async fixStart(inputs: InputsType, state: StateType): Promise<AlgorithmRun> {
     const { name, analyzer, logger } = this
     const algoRun: AlgorithmRun = await analyzer.runAlgorithm(name, inputs, state)
     logger.log(`[algo:${algoRun.id}] Starting algorithm "${name}". Inputs: ${JSON.stringify(inputs)}`)
     return algoRun
   }
+
+  @HandleError()
   protected async fixStop(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
     logger.log(`[algo:${id}] Stopping algorithm "${name}"`)
     this.stopData.delete(id)
     return await analyzer.stopAlgorithmRun(id)
   }
+
+  @HandleError()
   protected async fixContinue(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
     logger.log(`[algo:${id}] Continuing algorithm "${name}"`)
     return await analyzer.resumeAlgorithmRun(id)
   }
+
+  @HandleError()
   protected async fixFinish(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
     logger.log(`[algo:${id}] Finishing algorithm "${name}"`)
     return await analyzer.finishAlgorithmRun(id)
   }
+
+  @HandleError()
   protected async fixError(id: number, error: Error): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
     await this.stop(id)
     logger.log(`[algo:${id}] Error in algorithm "${name}": ${JSON.stringify(error)}`)
     return await analyzer.errorAlgorithmRun(id, error)
   }
+
+  @HandleError()
   protected async saveProgress(id: number, progress: StateType): Promise<AlgorithmRun> {
     const { name, analyzer, logger } = this
     logger.log(`[algo:${id}] Saving process of algorithm "${name}". State: ${JSON.stringify(progress)}`)
     return await analyzer.saveAlgorithmRunProgress(id, progress)
   }
+
+  @HandleError()
   protected async loadProgress(id: number): Promise<AlgorithmRun> {
     const { name, analyzer, logger } = this
     const algoRun: AlgorithmRun | null = await analyzer.loadAlgorithmRunProgress(id)

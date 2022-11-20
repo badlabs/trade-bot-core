@@ -5,6 +5,7 @@ import {OperationType, OrderStatus, CommonDomain} from '../../types'
 import {GetSecurityBalanceType, GetCurrencyType,
     GetSecurityType, GetCurrencyBalanceType} from '../../types/extractors'
 import {GetOrderType} from "../../types/extractors";
+import {HandleError} from "../../utils";
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
     private readonly tradebot: TradeBot<ExchangeClient>
@@ -19,6 +20,7 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         this.tradebot = tradebot
     }
 
+    @HandleError()
     async getPortfolio(): Promise<GetSecurityBalanceType<CommonDomain>[]> {
         const { exchangeClient, translator } = this
         const portfolio = await exchangeClient.getPortfolio()
@@ -26,18 +28,21 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         return Promise.all(promises)
     }
 
+    @HandleError()
     async getCurrenciesBalance(): Promise<GetCurrencyBalanceType<CommonDomain>[]> {
         const { exchangeClient, translator } = this
         const currencies = await exchangeClient.getCurrenciesBalance()
         return await Promise.all(currencies.map(c => translator.currencyBalance(c)))
     }
 
+    @HandleError()
     async getCurrencies(): Promise<GetCurrencyType<CommonDomain>[]> {
         const { exchangeClient, translator } = this
         const currencies = await exchangeClient.infoModule.getCurrencies()
         return await Promise.all(currencies.map(c => translator.currency(c)))
     }
 
+    @HandleError()
     async getSecurity(ticker: string): Promise<GetSecurityType<CommonDomain>>{
         const { exchangeClient, translator } = this
         const security = await exchangeClient.infoModule.getSecurity(ticker, false)
@@ -45,16 +50,19 @@ export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
         return translator.security(security)
     }
 
+    @HandleError()
     async getSecurityName(ticker: string): Promise<string> {
         const { exchangeClient } = this
         return await exchangeClient.infoModule.getSecurityName(ticker)
     }
 
+    @HandleError()
     async getSecurityLastPrice(ticker: string): Promise<number> {
         const { exchangeClient } = this
         return await exchangeClient.infoModule.getSecurityLastPrice(ticker)
     }
 
+    @HandleError()
     async getSecurityCurrency(ticker: string): Promise<GetCurrencyType<CommonDomain>> {
         const { exchangeClient, translator } = this
         const currency = await exchangeClient.infoModule.getSecurityCurrency(ticker)

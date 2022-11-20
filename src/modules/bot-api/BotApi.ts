@@ -5,6 +5,7 @@ import { TradeBot } from '../../TradeBot'
 import { createWebSocketServer } from './ws'
 import { expressApp } from './rest'
 import { config } from '../../config'
+import {HandleError} from "../../utils";
 
 export class BotApi {
   private readonly _tradeBot: TradeBot
@@ -17,6 +18,7 @@ export class BotApi {
     this.configureServers()
   }
 
+  @HandleError()
   private async configureServers(){
     this._restServer = expressApp
     this._restServer.set('tradeBot', this._tradeBot)

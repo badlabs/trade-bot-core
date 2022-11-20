@@ -16,7 +16,7 @@ import {TradeBot} from '../../TradeBot'
 import {db, Algorithm, AlgorithmRun, Order} from '../../db'
 import {store} from '../../store'
 import {AlgorithmRunStatus} from "../../db/AlgorithmRun";
-import {HandleError} from "../../utils/HandleError";
+import {HandleError} from "../../utils";
 
 export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     readonly tradebot: TradeBot<ExchangeClient>

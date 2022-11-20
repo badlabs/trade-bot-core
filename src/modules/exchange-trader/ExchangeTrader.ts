@@ -4,6 +4,7 @@ import {ExchangeWatcher, BotLogger} from '../../modules'
 import {AbstractExchangeClient} from '../../abstract'
 import {CreateOrderOptions, OrderStatus} from '../../types'
 import {GetOrderType} from "../../types/extractors";
+import {HandleError} from "../../utils";
 
 export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
     private readonly tradebot: TradeBot<ExchangeClient>
@@ -27,6 +28,7 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
         })
     }
 
+    @HandleError()
     async sendOrder({ ticker, lots, price, operation }: CreateOrderOptions,
                     run_id: number | undefined = undefined): Promise<OrderStatus> {
         const { watcher } = this
