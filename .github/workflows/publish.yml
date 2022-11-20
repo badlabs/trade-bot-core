@@ -25,6 +25,7 @@ jobs:
           tag: "v${{ steps.check.outputs.version }}"
 
       - name: Create Release
+        if: steps.check.outputs.changed == 'true'
         uses: ncipollo/release-action@v1
         with:
           tag: "v${{ steps.check.outputs.version }}"
@@ -33,6 +34,7 @@ jobs:
 
   package:
     name: "Create npm package"
+    if: jobs.release.steps.check.outputs.changed == 'true'
     needs: [release]
     runs-on: ubuntu-latest
     if: github.repository_owner == 'badlabs'
