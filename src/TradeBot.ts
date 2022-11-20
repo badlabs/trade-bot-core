@@ -9,6 +9,7 @@ import {
     ExchangeWatcher
 } from "./modules";
 import {AbstractExchangeClient, AbstractTradeAlgorithm} from './abstract'
+import {globalStore} from "./global/store";
 
 export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient> {
     private _exchangeClient: ExchangeClient
@@ -43,6 +44,7 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
             (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient>[]
     }){
         this._logger = new BotLogger(this)
+        globalStore.logger = this.logger
         this.logger.log('TradeBot Initialization...')
         await db.initialize()
         this._exchangeClient = exchangeClient

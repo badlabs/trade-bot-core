@@ -1,3 +1,5 @@
+import {globalStore} from "../global/store";
+
 export function HandleError(){
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         // Check of the decorated property is a function
@@ -14,7 +16,7 @@ export function HandleError(){
 
                 if (result instanceof Promise){
                     result.catch(e => {
-                        console.error(`Error occurred in '${propertyKey}': `, e)
+                        globalStore.logger?.log(`Error occurred in '${propertyKey}': \n${JSON.stringify(e, null, 2)}`)
                     })
                 }
 
