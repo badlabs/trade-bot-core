@@ -34,10 +34,9 @@ jobs:
 
   package:
     name: "Create npm package"
-    if: jobs.release.steps.check.outputs.changed == 'true'
+    if: (jobs.release.steps.check.outputs.changed == 'true') && (github.repository_owner == 'badlabs')
     needs: [release]
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'badlabs'
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16
