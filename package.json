@@ -1,26 +1,32 @@
 {
-  "name": "trade-bot-core",
+  "name": "@badlabs/trade-bot-core",
   "version": "0.0.1",
   "description": "Core library for trade bots",
   "main": "lib/main.js",
   "types": "lib",
   "scripts": {
-    "build": "tsc",
-    "db:update": "npx prisma migrate dev --name ''",
-    "db:browse": "npx prisma studio"
+    "build": "tsc"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/badlabs/trade-bot-core.git"
+  },
+  "homepage": "https://github.com/badlabs/trade-bot-core#readme",
+  "bugs": {
+    "url": "https://github.com/badlabs/trade-bot-core/issues"
+  },
+  "keywords": ["bot", "trading", "core", "typescript", "server", "api"],
   "author": {
     "name": "Nikolay Dorofeev",
     "email": "d.orich@yandex.com",
     "url": "https://d0rich.github.io/"
   },
-  "contributors": [
-    {
-      "name": "Nadezhda Khromova"
-    }
-  ],
   "license": "Apache-2.0",
+  "config": {
+    "host": "0.0.0.0",
+    "port": "4268",
+    "logs": "./logs"
+  },
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.4",
@@ -32,9 +38,6 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@tinkoff/invest-openapi-js-sdk": "^1.5.0",
-    "@types/ws": "^8.5.3",
-    "axios": "^0.24.0",
     "better-sqlite3": "^7.6.2",
     "cors": "^2.8.5",
     "express": "^4.17.2",
