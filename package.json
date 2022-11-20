@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/badlabs/tradebot-core/issues"
   },
-  "keywords": ["bot", "trading", "core", "typescript", "server", "api"],
+  "keywords": ["robotics", "backend", "trading", "core", "typescript", "server", "api"],
   "author": {
     "name": "Nikolay Dorofeev",
     "email": "d.orich@yandex.com",
