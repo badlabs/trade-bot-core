@@ -1,4 +1,4 @@
-export * from './TradeBot'
+export * from './control'
 export * from './abstract'
 export * from './modules'
 export * from './types'

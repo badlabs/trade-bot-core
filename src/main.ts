@@ -1,6 +1,6 @@
 import "reflect-metadata"
 
-export * from './TradeBot'
+export * from './control'
 export * from './abstract'
 export * from './types'
 export * from './utils'
