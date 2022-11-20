@@ -1,60 +1,141 @@
-# Quick Start
+# @badlabs/tradebot-core
 
-## Preparation
+## Getting started
 
-Install dependencies: 
-
-```sh
-npm install
-```
-
-Create `.env` file with next variables:
-
-```env
-TINKOFF_SANDBOX_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-BOT_TOKEN=qwerty123
-```
-
-Initialize local SQLite database:
+Install core: 
 
 ```sh
-npm run db-update
+npm install @badlabs/tradebot-core
 ```
 
-## Run
+### Describe your domain
 
-Run robot in _development_ mode:
+Domain includes types of entities in the integrated exchange. 
 
-```sh
-npm run dev
+Technically, you can provide `any` types for `DomainTemplate`. But it is not recommended, as these types will be helpful in process of creating other modules.
+
+```typescript
+import {DomainTemplate} from '@badlabs/tradebot-core'
+import {
+    CurrencyType,
+    CurrencyBalanceType,
+    SecurityType,
+    SecurityBalanceType,
+    OrderType
+} from '@exchange/sdk'
+
+// Order of arguments matters
+export type Domain = DomainTemplate<CurrencyType, CurrencyBalanceType, SecurityType, SecurityBalanceType, OrderType>
 ```
 
-or
+### Implement ExchangeClient
 
-run in _production_ mode:
+`ExchangeClient` is layer between exchange and tradebot internal logic. 
 
-```sh
-npm run start
+It also includes two submodules for splitting logic:
+- `InfoModule` - get different information from exchange;
+- `TradeModule` - send requests to place orders to exchange;
+- `Translator` - for translation exchange types to tradebot types.
+
+You can access `ExchangeClient` instance with `this.exchangeClient` from these modules.
+
+Note, that you can provide object containing API methods to exchange (`API` in example). It will be available in `ExchangeClient` instance as `api`.
+
+```typescript
+import {AbstractExchangeClient} from '@badlabs/tradebot-core'
+import API from '@exchange/sdk'
+
+import {Domain} from '../Domain'
+import {TradeModule} from './TradeModule'
+import {InfoModule} from './InfoModule'
+import {Translator} from "./Translator"
+
+export class ExchangeClient extends AbstractExchangeClient<Domain, API>{
+    constructor(token: string){
+        super({
+            infoModule: new InfoModule(),
+            tradeModule: new TradeModule(),
+            translator: new Translator()
+        }, new OpenAPI({
+            apiURL: 'https://api-invest.tinkoff.ru/openapi/sandbox',
+            socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws',
+            secretToken: token
+        }))
+    }
+
+    protected async initAccount(){
+        const { api } = this
+        // Something to prepare your client
+        this.isAccountInitialized = true
+    }
+
+    async getPortfolio() {/*...*/}
+
+    async getCurrenciesBalance() {/*...*/}
+}
 ```
 
-# Try it out
+Don't forget to implement `InfoModule` and `TradeModule`.
 
-## Check database
+```typescript
+import {AbstractInfoModule} from '@badlabs/tradebot-core'
 
-You can check robot local database by running
+import {ExchangeClient} from './ExchangeClient'
 
-```sh
-npm run db-browse
+export class InfoModule extends AbstractInfoModule<ExchangeClient>{/*...*/}
 ```
 
-## Check requests
+```typescript
+import {AbstractTradeModule} from '@badlabs/tradebot-core'
 
-We have [Postman workspace](https://www.postman.com/bad-labs/workspace/tradebots/overview) for testing robots.
+import {ExchangeClient} from './ExchangeClient'
 
-# Other
+export class TradeModule extends AbstractTradeModule<ExchangeClient>{/*...*/}
+```
 
-Generate class diagram:
+Also, you should implement `Translator` to make it possible for tradebot to understand types of your exchange. 
 
-```sh
-tplant --input lib/**/*.ts --output docs/class-diagram.puml
+Internal domain of tradebot is provided by `CommonDomain` type in core library.
+
+```typescript
+import {OperationType, OrderStatus, CommonDomain,
+    AbstractTranslator,
+    GetCurrencyBalanceType,
+    GetCurrencyType,
+    GetOrderType,
+    GetSecurityBalanceType,
+    GetSecurityType} from '@badlabs/tradebot-core'
+
+import {ExchangeClient} from './ExchangeClient'
+import {Domain} from "../Domain";
+export class Translator extends AbstractTranslator<ExchangeClient>{
+    async currency(currency: GetCurrencyType<Domain>): Promise<GetCurrencyType<CommonDomain>>{
+        //...
+    }
+    //...
+}
+```
+
+Note, that you can extract specific domains types from `Domain` or `ExchangeClient` with following generic types:
+- `GetCurrencyType<T>`
+- `GetCurrencyBalanceType<T>`
+- `GetSecurityType<T>`
+- `GetSecurityBalanceType<T>`
+- `GetOrderType<T>`
+
+### Start tradebot
+
+Finally, start tradebot with `runTradeBot` function:
+
+```typescript
+import {runTradeBot} from '@badlabs/tradebot-core'
+
+import {ExchangeClient} from './exchange-client'
+import {initAlgorithms} from './algorithms'
+
+runTradeBot({
+  exchangeClient: new ExchangeClient(/*your exchange client args*/),
+  botToken: process.env.BOT_TOKEN || '',
+  initAlgorithmsCallback: initAlgorithms
+})
 ```
