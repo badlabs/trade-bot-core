@@ -1,5 +1,5 @@
 {
-  "name": "@badlabs/trade-bot-core",
+  "name": "@badlabs/tradebot-core",
   "version": "0.0.1",
   "description": "Core library for trade bots",
   "main": "lib/index.js",
@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/badlabs/trade-bot-core.git"
+    "url": "https://github.com/badlabs/tradebot-core.git"
   },
-  "homepage": "https://github.com/badlabs/trade-bot-core#readme",
+  "homepage": "https://github.com/badlabs/tradebot-core#readme",
   "bugs": {
-    "url": "https://github.com/badlabs/trade-bot-core/issues"
+    "url": "https://github.com/badlabs/tradebot-core/issues"
   },
   "keywords": ["bot", "trading", "core", "typescript", "server", "api"],
   "author": {
