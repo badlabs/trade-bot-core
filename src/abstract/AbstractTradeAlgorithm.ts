@@ -29,14 +29,28 @@ export abstract class AbstractTradeAlgorithm<
   protected async fixStart(inputs: InputsType, state: StateType): Promise<AlgorithmRun> {
     const { name, analyzer, logger } = this
     const algoRun: AlgorithmRun = await analyzer.runAlgorithm(name, inputs, state)
-    logger.log(`[algo:${algoRun.id}] Starting algorithm "${name}". Inputs: ${JSON.stringify(inputs)}`)
+    logger.log({
+      type: 'info',
+      message: `Starting algorithm "${name}"`,
+      algorithm: {
+        name, inputs, state,
+        run_id: algoRun.id
+      }
+    })
     return algoRun
   }
 
   @HandleError()
   protected async fixStop(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
-    logger.log(`[algo:${id}] Stopping algorithm "${name}"`)
+    logger.log({
+      type: 'info',
+      message: `Stopping algorithm "${name}"`,
+      algorithm: {
+        name,
+        run_id: id
+      }
+    })
     this.stopData.delete(id)
     return await analyzer.stopAlgorithmRun(id)
   }
@@ -44,14 +58,28 @@ export abstract class AbstractTradeAlgorithm<
   @HandleError()
   protected async fixContinue(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
-    logger.log(`[algo:${id}] Continuing algorithm "${name}"`)
+    logger.log({
+      type: 'info',
+      message: `Resuming algorithm "${name}"`,
+      algorithm: {
+        name,
+        run_id: id
+      }
+    })
     return await analyzer.resumeAlgorithmRun(id)
   }
 
   @HandleError()
   protected async fixFinish(id: number): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
-    logger.log(`[algo:${id}] Finishing algorithm "${name}"`)
+    logger.log({
+      type: 'info',
+      message: `Finishing algorithm "${name}"`,
+      algorithm: {
+        name,
+        run_id: id
+      }
+    })
     return await analyzer.finishAlgorithmRun(id)
   }
 
@@ -59,14 +87,29 @@ export abstract class AbstractTradeAlgorithm<
   protected async fixError(id: number, error: Error): Promise<AlgorithmRun>{
     const { name, analyzer, logger } = this
     await this.stop(id)
-    logger.log(`[algo:${id}] Error in algorithm "${name}": ${JSON.stringify(error)}`)
-    return await analyzer.errorAlgorithmRun(id, error)
+    const run = await analyzer.errorAlgorithmRun(id, error)
+    logger.log({
+      type: 'error',
+      message: `Error in algorithm "${name}"`,
+      algorithm: {
+        name, state: run.state,
+        run_id: id
+      }
+    })
+    return run
   }
 
   @HandleError()
   protected async saveProgress(id: number, progress: StateType): Promise<AlgorithmRun> {
     const { name, analyzer, logger } = this
-    logger.log(`[algo:${id}] Saving process of algorithm "${name}". State: ${JSON.stringify(progress)}`)
+    logger.log({
+      type: 'error',
+      message: `Saving process of algorithm "${name}"`,
+      algorithm: {
+        name, state: progress,
+        run_id: id
+      }
+    })
     return await analyzer.saveAlgorithmRunProgress(id, progress)
   }
 
@@ -75,7 +118,14 @@ export abstract class AbstractTradeAlgorithm<
     const { name, analyzer, logger } = this
     const algoRun: AlgorithmRun | null = await analyzer.loadAlgorithmRunProgress(id)
     if (!algoRun) throw new Error(`[algo:${id}] Algorithm "${name}" was not found`)
-    logger.log(`[algo:${id}] Loading progress of algorithm "${name}". State: ${JSON.stringify(algoRun?.state)}`)
+    logger.log({
+      type: 'error',
+      message: `Loading progress of algorithm "${name}"`,
+      algorithm: {
+        name, state: algoRun?.state,
+        run_id: id
+      }
+    })
     return algoRun
   }
 

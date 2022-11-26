@@ -16,7 +16,11 @@ export function HandleError(){
 
                 if (result instanceof Promise){
                     result.catch(e => {
-                        globalStore.logger?.log(`Error occurred in '${propertyKey}': \n${JSON.stringify(e, null, 2)}`)
+                        globalStore.logger?.log({
+                            type: 'error',
+                            message: `Error occurred in '${propertyKey}`,
+                            attachment: e
+                        })
                     })
                 }
 

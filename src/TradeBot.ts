@@ -57,7 +57,10 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
     }){
         this._logger = new BotLogger(this)
         globalStore.logger = this.logger
-        this.logger.log('TradeBot Initialization...')
+        this.logger.log({
+            type: "info",
+            message: 'TradeBot Initialization...'
+        })
         await db.initialize()
         this._exchangeClient = exchangeClient
         this._analyzer = new ExchangeAnalyzer(this, initAlgorithmsCallback)
@@ -65,7 +68,10 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
         this._watcher = new ExchangeWatcher(this)
         this._api = new BotApi(this)
         this._auth = new BotAuth(botToken || config.auth.token)
-        this.logger.log('All modules are initialized...')
+        this.logger.log({
+            type: 'info',
+            message: 'All modules are initialized...'
+        })
         await this.analyzer.start()
         await this.analyzer.updateCurrencies()
     }

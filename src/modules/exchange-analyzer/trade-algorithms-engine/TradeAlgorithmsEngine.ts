@@ -33,7 +33,10 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
 
     async resumeAlgorithms(){
         const { tradebot, analyzer, algorithms } = this
-        tradebot.logger.log('Continue stopped algorithms runs...')
+        tradebot.logger.log({
+            type: 'info',
+            message: 'Resuming stopped algorithms runs...'
+        })
         const unfinishedRuns = await analyzer.getUnfinishedAlgorithmRuns()
         for (let run of unfinishedRuns){
             await algorithms.find(algo => algo.name === run.algorithmName)?.continue(run.id)

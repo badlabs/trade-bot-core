@@ -22,17 +22,29 @@ export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
 
     scheduleOrder(date: Date,
                   order: CreateOrderOptions,
+                  algorithm_name: string | undefined = undefined,
                   run_id: number | undefined = undefined): Job {
         return scheduleJob(date, async () => {
-            await this.sendOrder(order, run_id)
+            await this.sendOrder(order, algorithm_name, run_id)
         })
     }
 
     @HandleError()
     async sendOrder({ ticker, lots, price, operation }: CreateOrderOptions,
+                    algorithm_name: string | undefined = undefined,
                     run_id: number | undefined = undefined): Promise<OrderStatus> {
         const { watcher } = this
-        this.logger.log(`${run_id ? `[algo:${run_id}] `: ''}Sending order: ${JSON.stringify({operation, ticker, lots, price})}`)
+        this.logger.log({
+            type: 'info',
+            message: 'Sending order',
+            attachment: {
+                order: {operation, ticker, lots, price}
+            },
+            algorithm: algorithm_name ? {
+                name: algorithm_name,
+                run_id: run_id
+            } : undefined
+        })
         let order: GetOrderType<ExchangeClient>
         switch (operation){
             case 'limit_buy':
