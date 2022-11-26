@@ -5,8 +5,13 @@
   "main": "lib/index.js",
   "types": "lib",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:lib && npm run build:cli",
+    "build:lib": "tsc",
+    "build:cli": "tsc --project cli/tsconfig.json",
     "test:tinkoff": "ts-node test/tinkoff/index.ts --project test/tsconfig.json"
+  },
+  "bin": {
+    "tbot": "./lib/cli/main.js"
   },
   "repository": {
     "type": "git",
