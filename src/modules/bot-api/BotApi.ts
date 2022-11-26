@@ -3,7 +3,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import { TradeBot } from '../../TradeBot'
 import { createWebSocketServer } from './ws'
-import { expressApp } from './rest'
+import { initExpress } from './json-rpc'
 import { config } from '../../config'
 import {HandleError} from "../../utils";
 
@@ -20,8 +20,7 @@ export class BotApi {
 
   @HandleError()
   private async configureServers(){
-    this._restServer = expressApp
-    this._restServer.set('tradeBot', this._tradeBot)
+    this._restServer = initExpress(this._tradeBot)
     const { httpServer, webSocketServer } = createWebSocketServer({
       tradeBot: this._tradeBot,
       expressApp: this._restServer

@@ -50,6 +50,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "json-rpc-2.0": "^1.4.1",
+    "json-rpc-ts-wrapper": "^1.0.0",
     "node-schedule": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "simple-node-logger": "^21.8.12",
