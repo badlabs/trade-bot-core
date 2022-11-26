@@ -1,6 +1,6 @@
-import {TradeBot} from "../../../../TradeBot";
+import {TradeBot} from "../../../TradeBot";
 import {CompatibleService} from "json-rpc-ts-wrapper";
-import {GetOrdersOptions} from "../../../../types";
+import {GetOrdersOptions} from "../../../types";
 
 export function initServiceMethods(tradeBot: TradeBot){
 
