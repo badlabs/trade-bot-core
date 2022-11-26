@@ -33,7 +33,8 @@
 
     // Decorators
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "jsx": "react"
   },
   "exclude": [
     "node_modules/**/*"

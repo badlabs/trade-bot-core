@@ -11,7 +11,7 @@
     "test:tinkoff": "ts-node test/tinkoff/index.ts --project test/tsconfig.json"
   },
   "bin": {
-    "tbot": "./lib/cli/main.js"
+    "tbot": "./bin/main.js"
   },
   "repository": {
     "type": "git",
@@ -54,11 +54,14 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "@types/react": "^18.0.25",
     "better-sqlite3": "^7.6.2",
     "cors": "^2.8.5",
     "express": "^4.17.2",
+    "ink": "^3.2.0",
     "json-rpc-ts-wrapper": "^1.0.0",
     "node-schedule": "^2.1.0",
+    "react": "^17.0.2",
     "reflect-metadata": "^0.1.13",
     "simple-node-logger": "^21.8.12",
     "socket.io": "^4.5.0",
