@@ -1,4 +1,4 @@
-import {DomainTemplate} from "../../src";
+import {DomainTemplate} from "@badlabs/tradebot-core";
 import {
     Currency,
     CurrencyPosition,

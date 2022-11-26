@@ -135,3 +135,5 @@ prisma/migrations
 
 tmp
 lib
+/storage.db-shm
+/storage.db-wal

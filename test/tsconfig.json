@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "baseUrl": ".",
+    "paths": {
+      "@badlabs/tradebot-core": ["../lib"]
+    },
+
+    "esModuleInterop": true,
+    "moduleResolution": "Node"
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}

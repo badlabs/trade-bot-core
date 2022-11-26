@@ -1,5 +1,5 @@
 import {PlacedLimitOrder} from "@tinkoff/invest-openapi-js-sdk";
-import {GetOrderType} from "../../../src";
+import {GetOrderType} from "@badlabs/tradebot-core";
 import {Domain} from "../Domain";
 
 export function placedLimitOrderToOrder(order: PlacedLimitOrder, figi: string, price: number): GetOrderType<Domain> {
