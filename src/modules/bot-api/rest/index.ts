@@ -1,2 +1,2 @@
 export * from './expressApp'
-export * from './service'
+export * from './json-rpc'

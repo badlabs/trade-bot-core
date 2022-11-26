@@ -3,7 +3,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import { TradeBot } from '../../TradeBot'
 import { createWebSocketServer } from './ws'
-import { initExpress } from './json-rpc'
+import { initExpress } from './rest'
 import { config } from '../../config'
 import {HandleError} from "../../utils";
 

@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import {createService} from "json-rpc-ts-wrapper";
 import { apiRouter } from './routers'
-import {initServiceMethods} from "./service";
+import {initServiceMethods} from "./json-rpc";
 import {TradeBot} from "../../../TradeBot";
 
 export function initExpress(tradeBot: TradeBot){
