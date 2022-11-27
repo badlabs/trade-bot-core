@@ -2,6 +2,7 @@
 
 import React, {useState, useEffect} from 'react';
 import {render, Text} from 'ink';
+import Layout from "./Layout";
 
 const Counter = () => {
     const [counter, setCounter] = useState(0);
@@ -19,4 +20,7 @@ const Counter = () => {
     return <Text color="green">{counter} tests passed</Text>;
 };
 
-render(<Counter />);
+render(
+    <Layout>
+        <Counter />
+    </Layout>);
