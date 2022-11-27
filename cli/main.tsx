@@ -1,26 +1,16 @@
 #!/usr/bin/env node
 
-import React, {useState, useEffect} from 'react';
-import {render, Text} from 'ink';
+import React from 'react';
+import {render} from 'ink';
 import Layout from "./Layout";
-
-const Counter = () => {
-    const [counter, setCounter] = useState(0);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCounter(previousCounter => previousCounter + 1);
-        }, 100);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
-
-    return <Text color="green">{counter} tests passed</Text>;
-};
+import {Navigation} from "./Navigation";
+import {Provider} from "react-redux";
+import {store} from "./store";
 
 render(
-    <Layout>
-        <Counter />
-    </Layout>);
+    <Provider store={store}>
+        <Layout>
+            <Navigation />
+        </Layout>
+    </Provider>
+    );
