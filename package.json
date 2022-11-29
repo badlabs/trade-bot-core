@@ -8,6 +8,7 @@
     "build": "npm run build:lib && npm run build:cli",
     "build:lib": "tsc",
     "build:cli": "tsc --project cli/tsconfig.json",
+    "test:cli": "ts-node cli/main.tsx",
     "test:tinkoff": "ts-node test/tinkoff/index.ts --project test/tsconfig.json"
   },
   "bin": {
@@ -63,12 +64,14 @@
     "ink": "^3.2.0",
     "ink-big-text": "^1.2.0",
     "ink-gradient": "^2.0.0",
+    "ink-select-input": "^4.2.1",
     "json-rpc-ts-wrapper": "^1.0.0",
     "node-schedule": "^2.1.0",
     "react": "^17.0.2",
     "reflect-metadata": "^0.1.13",
     "simple-node-logger": "^21.8.12",
     "socket.io": "^4.5.0",
+    "socket.io-client": "^4.5.4",
     "sqlite3": "^5.1.2",
     "typeorm": "^0.3.10"
   }

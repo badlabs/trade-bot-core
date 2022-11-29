@@ -2,7 +2,7 @@
   "compilerOptions": {
     // project options
     "lib": [
-      "es2021"
+      "es2021", "dom"
     ],
     "outDir": "../bin",
     "removeComments": false,

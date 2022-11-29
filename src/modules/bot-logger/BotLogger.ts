@@ -46,7 +46,7 @@ export class BotLogger {
     else if (newLog.type === 'error') this.logger.error(newLog)
     else if (newLog.type === 'warning') this.logger.warn(newLog)
     console.log(newLog)
-    this.botApi?.webSocketServer.emit('log', newLog)
+    this.botApi?.webSocketServer.emit('log', JSON.stringify(newLog))
     this.updateLastLogs(newLog)
   }
 }

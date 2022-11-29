@@ -6,7 +6,7 @@ export const config = {
   },
   auth: {
     token: process.env.BOT_TOKEN || '',
-    required: true
+    required: false
   },
   api: {
     port: 4268,

@@ -2,8 +2,7 @@
   "compilerOptions": {
     // project options
     "lib": [
-      "es2021",
-      "dom"
+      "es2021"
     ],
     "outDir": "lib",
     "removeComments": false,
