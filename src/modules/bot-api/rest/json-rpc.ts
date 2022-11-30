@@ -69,5 +69,5 @@ export function initServiceMethods(tradeBot: TradeBot = new TradeBot({ mode: 'no
             return await tradeBot.analyzer.getOrders(params)
         }
 
-    } as CompatibleService
+    }
 }

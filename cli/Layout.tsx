@@ -15,7 +15,7 @@ export default class Layout extends React.Component<LayoutProps, LayoutState> {
             <Gradient name="teen">
                 <BigText font="simple3d" align="center" text="tradebot CLI"/>
             </Gradient>
-            <Box borderStyle="round" borderColor="cyan" alignItems="center" padding={1}>
+            <Box borderStyle="round" borderColor="cyan" justifyContent="center" flexDirection="column" padding={1}>
                 {this.props.children}
             </Box>
         </>

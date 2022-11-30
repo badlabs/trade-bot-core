@@ -4,6 +4,7 @@ import Layout from "./Layout";
 import {HomeScreen} from "./screens/HomeScreen";
 import {BotConnectScreen} from "./screens/BotConnectScreen";
 import LogsScreen from "./screens/LogsScreen";
+import ExecuteScreen from "./screens/ExecuteScreen";
 
 export default () => {
     const [botConfig, setBotConfig] = useState({
@@ -21,6 +22,9 @@ export default () => {
         switch (screen) {
             case 'logs':
                 CurrentScreen = <LogsScreen botConfig={botConfig} />
+                break
+            case 'exec':
+                CurrentScreen = <ExecuteScreen botConfig={botConfig} />
                 break
             default:
                 function handleSelect(item: { label: string, value: string }){

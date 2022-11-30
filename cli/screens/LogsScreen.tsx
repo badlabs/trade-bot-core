@@ -12,7 +12,7 @@ export default (props: {
     useEffect(() => {
         const connection = io(
             `http://${props.botConfig.host}:${props.botConfig.port}`,
-            { extraHeaders: { Authorization: `Bearer ${props.botConfig.token}`, origins: '*' }
+            { extraHeaders: { Authorization: `Bearer ${props.botConfig.token}`}
             })
         connection.on('connect', () => {
             setStatus('connected')
