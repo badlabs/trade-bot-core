@@ -12,13 +12,13 @@ export default (props: {
     useEffect(() => {
         const connection = io(
             `http://${props.botConfig.host}:${props.botConfig.port}`,
-            {
-                extraHeaders: { Authorization: `Bearer ${props.botConfig.token}`, origins: '*' }
+            { extraHeaders: { Authorization: `Bearer ${props.botConfig.token}`, origins: '*' }
             })
         connection.on('connect', () => {
             setStatus('connected')
         })
         connection.on('connect_error', (err) => {
+            console.error(err)
             setStatus(`error: ${JSON.stringify(err)}`)
             connection.close()
         })

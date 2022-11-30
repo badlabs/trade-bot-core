@@ -32,8 +32,8 @@ export class BotLogger {
     }
   }
 
-  getLastLogs(): string{
-    return this._lastLogs.join('\r\n')
+  getLastLogs() {
+    return this._lastLogs
   }
 
   log(body: Omit<Omit<SocketLogs, 'robot_id'>, 'timestamp'>){
