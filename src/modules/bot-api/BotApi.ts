@@ -1,15 +1,17 @@
 import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { TradeBot } from '../../TradeBot'
 import { createWebSocketServer } from './ws'
 import { initExpress } from './rest'
 import { config } from '../../config'
 import {HandleError} from "../../utils";
+import {initTRPCRouter, createContext} from "./trpc";
 
 export class BotApi {
   private readonly _tradeBot: TradeBot
-  private _restServer: Express
+  private express: Express
   private _webSocketServer: Server
   private _httpServer: http.Server
 
@@ -20,10 +22,14 @@ export class BotApi {
 
   @HandleError()
   private async configureServers(){
-    this._restServer = initExpress(this._tradeBot)
+    this.express = initExpress(this._tradeBot)
+    this.express.use('/trpc', createExpressMiddleware({
+      router: initTRPCRouter(this._tradeBot),
+      createContext
+    }))
     const { httpServer, webSocketServer } = createWebSocketServer({
       tradeBot: this._tradeBot,
-      expressApp: this._restServer
+      expressApp: this.express
     })
     this._httpServer = httpServer
     this._webSocketServer = webSocketServer

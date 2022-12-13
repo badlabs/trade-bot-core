@@ -1,4 +1,4 @@
 import {z} from "zod";
-import {getOrderOptions} from "../../modules/bot-api/trpc/schemas";
+import {getOrdersOptions} from "../../modules/bot-api/trpc/schemas";
 
-export type GetOrderOptions = z.infer<typeof getOrderOptions>
+export type GetOrdersOptions = z.infer<typeof getOrdersOptions>

@@ -9,6 +9,7 @@
     "target": "ES6",
     "module": "CommonJS",
     "declaration": true,
+    "skipLibCheck": true,
     // Module resolution
     "baseUrl": "./",
     "esModuleInterop": true,

@@ -5,17 +5,17 @@ import { TradeBot } from "../../../../TradeBot";
 export default (tradeBot: TradeBot) => {
     return router({
         get: publicProcedure
-            .input(z.null())
+            .input(z.undefined())
             .query(async () => {
                 return await tradeBot.analyzer.getPortfolio()
             }),
         update: publicProcedure
-            .input(z.null())
+            .input(z.undefined())
             .mutation(async () => {
                 return await tradeBot.analyzer.updatePortfolio()
             }),
         clear: publicProcedure
-            .input(z.null())
+            .input(z.undefined())
             .mutation(async () => {
                 return await tradeBot.analyzer.clearPortfolio()
             }),
