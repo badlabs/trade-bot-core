@@ -43,6 +43,7 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
         }
     }
 
+    // TODO: rename to resume
     async continueAlgorithm(name:string, id: number): Promise<AlgorithmRun>{
         const { algorithms } = this
         const algo = algorithms.find(a => a.name === name)

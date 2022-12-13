@@ -1,12 +1,12 @@
 import {Entity, Column, ManyToOne, UpdateDateColumn, PrimaryColumn} from "typeorm"
 import {AlgorithmRun} from "./AlgorithmRun";
 import {dateTransformer} from "./transformers";
+import {z} from "zod";
+import {operationType} from "../modules/bot-api/trpc/schemas";
 
 export type OrderStatus = 'not_processed' | 'to_be_processed' | 'placed' | 'units_allocated' |
     'units_redeemed' | 'rejected' | 'cancelled' | 'expired' | 'undefined'
-export type OperationType = 'limit_buy' | 'limit_sell' |
-    'market_buy' | 'market_sell' |
-    'buy_or_cancel' | 'sell_or_cancel' | 'undefined'
+export type OperationType = z.infer<typeof operationType>
 
 @Entity()
 export class Order {
