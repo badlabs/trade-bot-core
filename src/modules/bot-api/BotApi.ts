@@ -1,18 +1,18 @@
 import { Express } from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
-import ws from 'ws';
+import ws, {WebSocketServer} from 'ws';
 import { TradeBot } from '../../TradeBot'
 import { createWebSocketServer } from './ws'
 import { initExpress } from './rest'
 import { config } from '../../config'
 import {HandleError} from "../../utils";
-import {registerExpressRoutes} from "./trpc";
+import {registerExpressRoutes, registerWSSHandler} from "./trpc";
 
 export class BotApi {
   private readonly _tradeBot: TradeBot
   private express: Express
-  private _webSocketServer: Server
+  private _webSocketServer: WebSocketServer
   private _httpServer: http.Server
 
   constructor(tradeBot: TradeBot){
@@ -32,7 +32,13 @@ export class BotApi {
       expressApp: this.express
     })
     this._httpServer = httpServer
-    this._webSocketServer = webSocketServer
+    this._webSocketServer = new ws.Server({
+      server: this._httpServer
+    })
+    registerWSSHandler({
+      wss: this._webSocketServer,
+      tradeBot: this._tradeBot
+    })
     this._httpServer.listen(config.api.port, () => {
       console.info(`[i] TradeBot is online on: `)
       console.info(`  [i] REST API - http://${config.api.host}:${config.api.port}/`)
@@ -40,6 +46,6 @@ export class BotApi {
     })
   }
 
-  public get webSocketServer(): Server { return this._webSocketServer }
+  //public get webSocketServer(): Server { return this._webSocketServer }
   public get httpServer(): http.Server { return this._httpServer }
 }
