@@ -26,3 +26,5 @@ export const registerExpressRoutes = ({tradeBot, express}: {tradeBot: TradeBot, 
         createContext
     }))
 }
+
+export type RESTRouter = ReturnType<typeof initRESTRouter>

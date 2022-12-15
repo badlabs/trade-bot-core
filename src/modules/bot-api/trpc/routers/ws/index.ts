@@ -17,3 +17,5 @@ export const registerWSSHandler = ({wss, tradeBot}: { wss: WebSocketServer, trad
         createContext })
     return handler
 }
+
+export type WSRouter = ReturnType<typeof initWSRouter>
