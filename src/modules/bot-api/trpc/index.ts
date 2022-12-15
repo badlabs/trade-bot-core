@@ -1,3 +1,3 @@
-import initRouter from './routers'
+import initRouter from './routers/rest'
 export const initTRPCRouter = initRouter
-export {createContext} from './trpc'
+export {createContext} from './routers/rest/trpc'

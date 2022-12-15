@@ -1,6 +1,6 @@
-import { publicProcedure, router } from '../trpc'
-import { TradeBot } from "../../../../TradeBot";
-import {getOrdersOptions} from "../schemas/GetOrdersOptions";
+import { publicProcedure, router } from './trpc'
+import { TradeBot } from "../../../../../TradeBot";
+import {getOrdersOptions} from "../../schemas/GetOrdersOptions";
 
 export default (tradeBot: TradeBot) => {
     return router({

@@ -1,6 +1,6 @@
-import { publicProcedure, router } from '../trpc'
+import { publicProcedure, router } from './trpc'
 import { z } from 'zod'
-import { TradeBot } from "../../../../TradeBot";
+import { TradeBot } from "../../../../../TradeBot";
 
 export default (tradeBot: TradeBot) => {
     return router({
