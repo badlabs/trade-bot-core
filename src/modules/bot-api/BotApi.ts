@@ -2,7 +2,7 @@ import { Express } from 'express'
 import http from 'http'
 import ws, {WebSocketServer} from 'ws';
 import { TradeBot } from '../../TradeBot'
-import { initExpress } from './rest'
+import { initExpress } from './express'
 import { config } from '../../config'
 import {HandleError} from "../../utils";
 import {registerExpressRoutes, registerWSSHandler} from "./trpc";

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {BotConfig} from "../models";
-import { initServiceMethods } from "../../src/modules/bot-api/rest";
+import { initServiceMethods } from "../../src/modules/bot-api/express";
 import {createClient} from "json-rpc-ts-wrapper";
 import {JSONRPCClient} from 'json-rpc-2.0'
 import axios from 'axios'
