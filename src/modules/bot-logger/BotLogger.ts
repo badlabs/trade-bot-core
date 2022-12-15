@@ -1,5 +1,6 @@
 import fs from 'fs'
 import {createRollingFileLogger, Logger} from 'simple-node-logger'
+import {EventEmitter} from "events";
 import { TradeBot } from '../../TradeBot'
 import { BotApi } from '../bot-api'
 import { config } from '../../config'
@@ -10,6 +11,7 @@ export class BotLogger {
   private get botApi(): BotApi { return this.tradebot.api }
   private readonly logger: Logger
   private _lastLogs: SocketLogs[]
+  private readonly eventEmitter = new EventEmitter()
 
   private createLogsDirIfNotExist(){
     if (!fs.existsSync(config.logs.directory)) fs.mkdirSync(config.logs.directory)
@@ -46,7 +48,16 @@ export class BotLogger {
     else if (newLog.type === 'error') this.logger.error(newLog)
     else if (newLog.type === 'warning') this.logger.warn(newLog)
     console.log(newLog)
-    this.botApi?.webSocketServer.emit('log', JSON.stringify(newLog))
+    this.eventEmitter.emit('log', newLog)
+    //this.botApi?.webSocketServer.emit('log', JSON.stringify(newLog))
     this.updateLastLogs(newLog)
+  }
+
+  subscribe(callback: (logs: SocketLogs) => void){
+    this.eventEmitter.on('log', callback)
+  }
+
+  unsubscribe(callback: (logs: SocketLogs) => void){
+    this.eventEmitter.off('log', callback)
   }
 }
