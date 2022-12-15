@@ -1,2 +1,2 @@
-export * from './rest'
+export * from './http'
 export * from './ws'

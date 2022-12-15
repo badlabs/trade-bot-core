@@ -9,7 +9,7 @@ import initPortfolioRouter from './portfolio'
 import initOrderRouter from './order'
 
 
-const initRESTRouter = (tradeBot: TradeBot) => {
+const initHTTPRouter = (tradeBot: TradeBot) => {
     return router({
         test: publicProcedure.query(() => 'hello'),
         algorithm: initAlgorithmRouter(tradeBot),
@@ -22,9 +22,9 @@ const initRESTRouter = (tradeBot: TradeBot) => {
 
 export const registerExpressRoutes = ({tradeBot, express}: {tradeBot: TradeBot, express: Express}) => {
     express.use('/trpc', createExpressMiddleware({
-        router: initRESTRouter(tradeBot),
+        router: initHTTPRouter(tradeBot),
         createContext
     }))
 }
 
-export type RESTRouter = ReturnType<typeof initRESTRouter>
+export type RESTRouter = ReturnType<typeof initHTTPRouter>

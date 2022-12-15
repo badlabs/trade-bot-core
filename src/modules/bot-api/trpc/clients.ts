@@ -19,7 +19,7 @@ export const initWSClient = ({host, port}: ClientOptions) => {
     })
 }
 
-export const initRESTClient = ({host, port}: ClientOptions): CreateTRPCProxyClient<RESTRouter> => {
+export const initHTTPClient = ({host, port}: ClientOptions): CreateTRPCProxyClient<RESTRouter> => {
     return createTRPCProxyClient<RESTRouter>({
         links: [
             httpLink({
