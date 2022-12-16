@@ -74,9 +74,9 @@
     "react": "^17.0.2",
     "reflect-metadata": "^0.1.13",
     "simple-node-logger": "^21.8.12",
-    "socket.io-client": "^4.5.4",
     "sqlite3": "^5.1.2",
     "typeorm": "^0.3.10",
+    "websocket-polyfill": "^0.0.3",
     "ws": "^8.11.0",
     "zod": "^3.20.2"
   }

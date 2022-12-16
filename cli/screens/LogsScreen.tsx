@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react"
-import { io } from "socket.io-client"
 import {BotConfig} from "../models"
-import {SocketLogs} from "../../src"
+import {SocketLogs, initWSClient} from "../../src"
 import {Newline, Text} from "ink";
+import "websocket-polyfill";
 
 export default (props: {
     botConfig: BotConfig
@@ -10,34 +10,40 @@ export default (props: {
     const [logs, setLogs] = useState<SocketLogs[]>([])
     const [status, setStatus] = useState('disconnected')
     useEffect(() => {
-        const connection = io(
-            `http://${props.botConfig.host}:${props.botConfig.port}`,
-            { extraHeaders: { Authorization: `Bearer ${props.botConfig.token}`}
-            })
-        connection.on('connect', () => {
-            setStatus('connected')
+        const client = initWSClient({
+            host: props.botConfig.host,
+            port: props.botConfig.port
         })
-        connection.on('connect_error', (err) => {
-            console.error(err)
-            setStatus(`error: ${JSON.stringify(err)}`)
-            connection.close()
-        })
-        connection.on('log', (event: string) => {
-            logs.push(JSON.parse(event))
-            setLogs(logs)
+        const subscription = client.log.onEvent.subscribe(undefined, {
+            onData: (log) => {
+                logs.push(log)
+                setLogs([...logs])
+            },
+            onStarted: () => {
+                setStatus('started')
+            },
+            onStopped: () => {
+                setStatus('stopped')
+            },
+            onComplete: () => {
+                setStatus('completed')
+            },
+            onError: (err) => {
+                console.error(err)
+                setStatus(`error: ${JSON.stringify(err)}`)
+            }
         })
         return () => {
-            connection.close()
+            subscription.unsubscribe()
         }
-    })
+    }, [])
     return <>
         <Text>{status}</Text>
-        {logs.map(log => <>
+        {logs.map(log => <Text key={log.timestamp}>
                 <Text>{log.timestamp} </Text>
                 <Text color="cyan">[{log.type}] </Text>
                 { log.algorithm ? <Text color="yellow">({log.algorithm.name}:{log.algorithm.run_id}) </Text> : <Text/> }
                 <Text>{log.message}</Text>
-                <Newline />
-            </>)}
+            </Text>)}
     </>
 }

@@ -1,10 +1,12 @@
-import {WSRouter, RESTRouter} from './routers'
+import {WSRouter, HTTPRouter} from './routers'
 import {createTRPCProxyClient, createWSClient, httpLink, wsLink, CreateTRPCProxyClient} from '@trpc/client'
 
 type ClientOptions = {
     host: string
     port: number
 }
+
+type HTTPClientOptions = ClientOptions
 
 export const initWSClient = ({host, port}: ClientOptions) => {
     const wsClient = createWSClient({
@@ -19,8 +21,8 @@ export const initWSClient = ({host, port}: ClientOptions) => {
     })
 }
 
-export const initHTTPClient = ({host, port}: ClientOptions): CreateTRPCProxyClient<RESTRouter> => {
-    return createTRPCProxyClient<RESTRouter>({
+export const initHTTPClient = ({host, port}: HTTPClientOptions): CreateTRPCProxyClient<HTTPRouter> => {
+    return createTRPCProxyClient<HTTPRouter>({
         links: [
             httpLink({
                 url: `http://${host}:${port}/trpc`
@@ -28,3 +30,6 @@ export const initHTTPClient = ({host, port}: ClientOptions): CreateTRPCProxyClie
         ],
     })
 }
+
+export type TRPCRouterHTTP = HTTPRouter
+export type TRPCRouterWS = WSRouter

@@ -27,4 +27,4 @@ export const registerExpressRoutes = ({tradeBot, express}: {tradeBot: TradeBot, 
     }))
 }
 
-export type RESTRouter = ReturnType<typeof initHTTPRouter>
+export type HTTPRouter = ReturnType<typeof initHTTPRouter>
