@@ -43,14 +43,57 @@ export default (props: {
     })
     const [response, setResponse] = useState<any>()
     function handleSelect(item: {label: string, value: string}) {
-        if (item.value === 'getPortfolio')
-            client.portfolio.get.query().then(response => setResponse(response))
+        switch (item.value) {
+            case 'portfolio.get':
+                client.portfolio.get.query().then(res => setResponse(res))
+                break
+            case 'portfolio.update':
+                client.portfolio.update.mutate().then(res => setResponse(res))
+                break
+            case 'portfolio.clear':
+                client.portfolio.clear.mutate().then(res => setResponse(res))
+                break
+            case 'algorithm.getAll':
+                client.algorithm.getAll.query().then(res => setResponse(res))
+                break
+            case 'currency.getAll':
+                client.currency.getAll.query().then(res => setResponse(res))
+                break
+            case 'currency.updateAll':
+                client.currency.updateAll.mutate().then(res => setResponse(res))
+                break
+            case 'currency.getAllBalances':
+                client.currency.getAllBalances.query().then(res => setResponse(res))
+                break
+            case 'currency.updateAllBalances':
+                client.currency.getAllBalances.query().then(res => setResponse(res))
+                break
+            case 'security.getAll':
+                client.security.getAll.query().then(res => setResponse(res))
+                break
+            case 'security.updateAll':
+                client.security.updateAll.mutate().then(res => setResponse(res))
+                break
+            case 'security.getAllFollowed':
+                client.security.getAllFollowed.query().then(res => setResponse(res))
+                break
+        }
     }
     return <>
         <SelectInput
             onSelect={handleSelect}
             items={[
-                {label: 'getPortfolio()', value: 'getPortfolio'}
+                {label: 'portfolio.get()', value: 'portfolio.get'},
+                {label: 'portfolio.update()', value: 'portfolio.update'},
+                {label: 'portfolio.clear()', value: 'portfolio.clear'},
+                {label: 'algorithm.getAll()', value: 'algorithm.getAll'},
+                {label: 'currency.getAll()', value: 'currency.getAll'},
+                {label: 'currency.updateAll()', value: 'currency.updateAll'},
+                {label: 'currency.getAllBalances()', value: 'currency.getAllBalances'},
+                {label: 'currency.updateAllBalances()', value: 'currency.updateAllBalances'},
+                {label: 'security.getAll()', value: 'security.getAll'},
+                {label: 'security.updateAll()', value: 'security.updateAll'},
+                {label: 'security.getAllFollowed()', value: 'security.getAllFollowed'}
             ]} />
         <Box flexDirection="column" justifyContent="flex-start">
             {
