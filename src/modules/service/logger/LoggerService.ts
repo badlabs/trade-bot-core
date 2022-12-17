@@ -10,11 +10,25 @@ export class LoggerService {
   private readonly tradebot: TradeBot
   private get botApi(): ApiService { return this.tradebot.api }
   private readonly logger: Logger
-  private lastLogs: SocketLogs[]
+  private readonly lastLogs: SocketLogs[]
   private readonly eventEmitter = new EventEmitter()
 
   private createLogsDirIfNotExist(){
     if (!fs.existsSync(config.logs.directory)) fs.mkdirSync(config.logs.directory)
+  }
+
+  private logToFile(log: SocketLogs){
+    if (log.type === 'info') this.logger.info(log)
+    else if (log.type === 'error') this.logger.error(log)
+    else if (log.type === 'warning') this.logger.warn(log)
+  }
+
+  private logToConsole(log: SocketLogs){
+    console.log(log)
+  }
+
+  private logToSocket(log: SocketLogs){
+    this.eventEmitter.emit('log', log)
   }
 
   constructor(tradeBot: TradeBot){
@@ -44,12 +58,9 @@ export class LoggerService {
       timestamp: new Date().toISOString(),
       ...body
     }
-    if (newLog.type === 'info') this.logger.info(newLog)
-    else if (newLog.type === 'error') this.logger.error(newLog)
-    else if (newLog.type === 'warning') this.logger.warn(newLog)
-    console.log(newLog)
-    this.eventEmitter.emit('log', newLog)
-    //this.botApi?.webSocketServer.emit('log', JSON.stringify(newLog))
+    this.logToFile(newLog)
+    this.logToConsole(newLog)
+    this.logToSocket(newLog)
     this.updateLastLogs(newLog)
   }
 
