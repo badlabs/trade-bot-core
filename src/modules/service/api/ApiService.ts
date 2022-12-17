@@ -1,4 +1,5 @@
 import { Express } from 'express'
+import { networkInterfaces } from 'os'
 import http from 'http'
 import ws, {WebSocketServer} from 'ws'
 import colors from "colors/safe"
@@ -36,8 +37,27 @@ export class ApiService {
     })
     this.http.listen(config.api.port, () => {
       console.info(`${colors.blue('[i]')} TradeBot is online on: `)
-      console.info(`  ${colors.blue('[i]')} REST API - http://${config.api.host}:${config.api.port}/`)
-      console.info(`  ${colors.blue('[i]')} WebSocket - ws://${config.api.host}:${config.api.port}/`)
+      if (config.api.host === '0.0.0.0') {
+        const nets = networkInterfaces()
+        const ipAddresses: string[] = []
+        for (let net in nets) {
+          nets[net]?.forEach(n => {
+            if (n.family === 'IPv4')
+              ipAddresses.push(n.address)
+          })
+        }
+        console.info(`    ${colors.blue('[i]')} REST API:`)
+        for (let addr of ipAddresses) {
+          console.info(`        ${colors.grey('-')} http://${addr}:${config.api.port}/`)
+        }
+        console.info(`    ${colors.blue('[i]')} WebSocket:`)
+        for (let addr of ipAddresses) {
+          console.info(`        ${colors.grey('-')} ws://${addr}:${config.api.port}/`)
+        }
+      } else {
+        console.info(`    ${colors.blue('[i]')} REST API - http://${config.api.host}:${config.api.port}/`)
+        console.info(`    ${colors.blue('[i]')} WebSocket - ws://${config.api.host}:${config.api.port}/`)
+      }
     })
   }
 }
