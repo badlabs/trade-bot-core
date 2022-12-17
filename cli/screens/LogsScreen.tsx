@@ -14,7 +14,11 @@ export default (props: {
             host: props.botConfig.host,
             port: props.botConfig.port
         })
-        const subscription = client.log.onEvent.subscribe(undefined, {
+        const subscription = client.log.onEvent.subscribe({
+            auth: {
+                token: props.botConfig.token
+            }
+        }, {
             onData: (log) => {
                 logs.push(log)
                 setLogs([...logs])
@@ -29,8 +33,8 @@ export default (props: {
                 setStatus('completed')
             },
             onError: (err) => {
-                console.error(err)
                 setStatus(`error: ${JSON.stringify(err)}`)
+                subscription.unsubscribe()
             }
         })
         return () => {

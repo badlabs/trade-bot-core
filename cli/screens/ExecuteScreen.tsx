@@ -8,8 +8,8 @@ import {Box, Text, Newline} from "ink";
 import SelectInput from "ink-select-input";
 import {AnyRouter} from "@trpc/server";
 
-const createAxiosLink: <TRouter extends AnyRouter>(opts: {url: string}) => TRPCLink<TRouter> =
-    ({ url }) => () => {
+const createAxiosLink: <TRouter extends AnyRouter>(opts: {url: string, token?: string}) => TRPCLink<TRouter> =
+    ({ url, token }) => () => {
     // here we just got initialized in the app - this happens once per app
     // useful for storing cache for instance
     return ({ next, op }) => {
@@ -21,7 +21,10 @@ const createAxiosLink: <TRouter extends AnyRouter>(opts: {url: string}) => TRPCL
                 method: op.type === 'query' ? 'GET' : 'POST',
                 url: `${url}/${op.path}`,
                 params: op.type === 'query' ? op.input : {},
-                data: op.type === 'query' ? undefined : op.input
+                data: op.type === 'query' ? undefined : op.input,
+                headers: {
+                    Authorization: token ? `Bearer ${token}` : token
+                }
             }).then(res => {
                 observer.next(res.data)
                 observer.complete()
@@ -37,45 +40,51 @@ export default (props: {
     const client = createTRPCProxyClient<TRPCRouterHTTP>({
         links: [
             createAxiosLink({
-                url: `http://${props.botConfig.host}:${props.botConfig.port}/trpc`
+                url: `http://${props.botConfig.host}:${props.botConfig.port}/api/trpc`,
+                token: props.botConfig.token
             })
         ]
     })
     const [response, setResponse] = useState<any>()
     function handleSelect(item: {label: string, value: string}) {
+        const processPromise = (promise: Promise<any>) => {
+            promise
+                .then(res => setResponse(res))
+                .catch(err => setResponse(err))
+        }
         switch (item.value) {
             case 'portfolio.get':
-                client.portfolio.get.query().then(res => setResponse(res))
+                processPromise(client.portfolio.get.query())
                 break
             case 'portfolio.update':
-                client.portfolio.update.mutate().then(res => setResponse(res))
+                processPromise(client.portfolio.update.mutate())
                 break
             case 'portfolio.clear':
-                client.portfolio.clear.mutate().then(res => setResponse(res))
+                processPromise(client.portfolio.clear.mutate())
                 break
             case 'algorithms.list':
-                client.algorithms.list.query().then(res => setResponse(res))
+                processPromise(client.algorithms.list.query())
                 break
             case 'currencies.list':
-                client.currencies.list.query().then(res => setResponse(res))
+                processPromise(client.currencies.list.query())
                 break
             case 'currencies.update':
-                client.currencies.update.mutate().then(res => setResponse(res))
+                processPromise(client.currencies.update.mutate())
                 break
             case 'currencies.listBalances':
-                client.currencies.listBalances.query().then(res => setResponse(res))
+                processPromise(client.currencies.listBalances.query())
                 break
             case 'currencies.updateBalances':
-                client.currencies.updateBalances.mutate().then(res => setResponse(res))
+                processPromise(client.currencies.updateBalances.mutate())
                 break
             case 'securities.list':
-                client.securities.list.query().then(res => setResponse(res))
+                processPromise(client.securities.list.query())
                 break
             case 'securities.update':
-                client.securities.update.mutate().then(res => setResponse(res))
+                processPromise(client.securities.update.mutate())
                 break
             case 'securities.listFollowed':
-                client.securities.listFollowed.query().then(res => setResponse(res))
+                processPromise(client.securities.listFollowed.query())
                 break
         }
     }

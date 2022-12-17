@@ -6,7 +6,9 @@ type ClientOptions = {
     port: number
 }
 
-type HTTPClientOptions = ClientOptions
+type HTTPClientOptions = ClientOptions & {
+    token?: string
+}
 
 export const initWSClient = ({host, port}: ClientOptions) => {
     const wsClient = createWSClient({
@@ -21,11 +23,14 @@ export const initWSClient = ({host, port}: ClientOptions) => {
     })
 }
 
-export const initHTTPClient = ({host, port}: HTTPClientOptions): CreateTRPCProxyClient<HTTPRouter> => {
+export const initHTTPClient = ({host, port, token}: HTTPClientOptions): CreateTRPCProxyClient<HTTPRouter> => {
     return createTRPCProxyClient<HTTPRouter>({
         links: [
             httpLink({
-                url: `http://${host}:${port}/trpc`
+                url: `http://${host}:${port}/api/trpc`,
+                headers: {
+                    Authorization: token ? `Bearer ${token}` : undefined
+                }
             })
         ],
     })

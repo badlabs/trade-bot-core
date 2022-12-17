@@ -11,7 +11,7 @@ export default () => {
         id: 'Test',
         host: 'localhost',
         port: 4268,
-        token: '',
+        token: 'qwerty123',
     })
     const [screen, setScreen] = useState('')
 

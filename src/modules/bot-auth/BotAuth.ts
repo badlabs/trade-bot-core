@@ -8,7 +8,7 @@ export class BotAuth{
     this.botToken = botToken
   }
 
-  authByToken(token: string): boolean {
+  authByToken(token: string = ''): boolean {
     if (!config.auth.required) return true
     return this.botToken === token
   }
