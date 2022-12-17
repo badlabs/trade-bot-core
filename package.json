@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@tinkoff/invest-openapi-js-sdk": "^1.5.0",
+    "@types/colors": "^1.2.1",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.4",
@@ -54,6 +55,7 @@
     "@trpc/client": "^10.5.0",
     "@trpc/server": "^10.5.0",
     "better-sqlite3": "^7.6.2",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "node-schedule": "^2.1.0",

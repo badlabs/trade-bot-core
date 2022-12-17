@@ -1,6 +1,7 @@
 import fs from 'fs'
 import {createRollingFileLogger, Logger} from 'simple-node-logger'
 import {EventEmitter} from "events";
+import colors from 'colors/safe'
 import { TradeBot } from '../../../TradeBot'
 import { ApiService } from '../api'
 import { config } from '../../../config'
@@ -18,6 +19,7 @@ export class LoggerService {
   }
 
   private logToString(log: SocketLogs, {
+      useColors = false,
       showRobotId = true,
       showType = true,
       showTimestamp = true,
@@ -26,26 +28,47 @@ export class LoggerService {
       showAlgorithmState = true,
       showAttachment = true
   } = {}){
-    const robotId = showRobotId ? log.robot_id : ''
-    const type = showType ? log.type : ''
-    const timestamp = showTimestamp ? log.timestamp : ''
-    const algorithmName = showAlgorithmName ? log.algorithm?.name ?? '' : ''
-    const algorithmRunId = showAlgorithmRunId ? log.algorithm?.run_id ?? '' : ''
-    const algorithmState = showAlgorithmState ? log.algorithm?.state ? JSON.stringify(log.algorithm.state) : '' : ''
-    const attachment = showAttachment ? log.attachment ? JSON.stringify(log.attachment) : '' : ''
+    // Show or hide
+    let robotId = showRobotId ? log.robot_id : ''
+    let type = showType ? log.type : ''
+    let timestamp = showTimestamp ? log.timestamp : ''
+    let algorithmName = showAlgorithmName ? log.algorithm?.name ?? '' : ''
+    let algorithmRunId = showAlgorithmRunId ? log.algorithm?.run_id ?? '' : ''
+    let algorithmState = showAlgorithmState ? log.algorithm?.state ? JSON.stringify(log.algorithm.state) : '' : ''
+    let attachment = showAttachment ? log.attachment ? JSON.stringify(log.attachment) : '' : ''
 
-    const robotIdSection = robotId ? `<${robotId}>` : ''
-    const typeSection = type ? `[${type.toUpperCase()}]` : ''
-    const timestampSection = timestamp ? timestamp : ''
-    const algorithmRunSection = (algorithmName || algorithmRunId) ?
+    // Apply layout
+    robotId = robotId ? `<${robotId}>` : ''
+    type = type ? `[${type.toUpperCase()}]` : ''
+    let algorithmRun = (algorithmName || algorithmRunId) ?
       `<${algorithmName ?? 'algo'}${algorithmRunId ? ':' : ''}${algorithmRunId}>` : ''
-    const algorithmStateSection = algorithmState ?
-        `${algorithmRunSection ? 'Algorithm state' : 'State'}: ${algorithmState}` : ''
-    const attachmentSection = attachment ? `Attachment: ${attachment}` : ''
+    algorithmState = algorithmState ? `${algorithmRun ? 'Algorithm state' : 'State'}: ${algorithmState}` : ''
+    attachment = attachment ? `Attachment: ${attachment}` : ''
 
-    return `${timestampSection} ${robotIdSection} ${typeSection} ${log.message}` +
-        `${algorithmRunSection || algorithmStateSection ? ' | ' : ''} ${algorithmRunSection} ${algorithmStateSection}` +
-        `${attachmentSection ? ' | ' : ''} ${attachmentSection}`
+    // Apply colors
+    if (useColors) {
+      timestamp = timestamp ? colors.grey(timestamp) : ''
+      robotId = robotId ? colors.green(robotId) : ''
+      if (type)
+        switch (log.type) {
+          case 'info':
+            type = colors.blue(type)
+            break
+          case 'error':
+            type = colors.red(type)
+            break
+          case 'warning':
+            type = colors.yellow(type)
+            break
+        }
+      algorithmRun = algorithmRun ? colors.cyan(algorithmRun) : ''
+      algorithmState = algorithmState ? colors.bgBlue(algorithmRun) : ''
+      attachment = attachment ? colors.bgGreen(attachment) : ''
+    }
+
+    return `${timestamp} ${robotId} ${type} ${log.message}` +
+        `${algorithmRun || algorithmState ? ' | ' : ''} ${algorithmRun} ${algorithmState}` +
+        `${attachment ? ' | ' : ''} ${attachment}`
   }
 
   private logToFile(log: SocketLogs){
@@ -60,7 +83,9 @@ export class LoggerService {
   }
 
   private logToConsole(log: SocketLogs){
-    console.log(this.logToString(log))
+    console.log(this.logToString(log, {
+      useColors: true
+    }))
   }
 
   private logToSocket(log: SocketLogs){
