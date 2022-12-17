@@ -66,9 +66,10 @@ export class LoggerService {
       attachment = attachment ? colors.bgGreen(attachment) : ''
     }
 
-    return `${timestamp} ${robotId} ${type} ${log.message}` +
+    const result = `${timestamp} ${robotId} ${type} ${log.message}` +
         `${algorithmRun || algorithmState ? ' | ' : ''} ${algorithmRun} ${algorithmState}` +
         `${attachment ? ' | ' : ''} ${attachment}`
+    return result.trim()
   }
 
   private logToFile(log: SocketLogs){
