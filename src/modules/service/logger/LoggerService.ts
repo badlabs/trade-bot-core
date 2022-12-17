@@ -17,18 +17,54 @@ export class LoggerService {
     if (!fs.existsSync(config.logs.directory)) fs.mkdirSync(config.logs.directory)
   }
 
+  private logToString(log: SocketLogs, {
+      showRobotId = true,
+      showType = true,
+      showTimestamp = true,
+      showAlgorithmName = true,
+      showAlgorithmRunId = true,
+      showAlgorithmState = true,
+      showAttachment = true
+  } = {}){
+    const robotId = showRobotId ? log.robot_id : ''
+    const type = showType ? log.type : ''
+    const timestamp = showTimestamp ? log.timestamp : ''
+    const algorithmName = showAlgorithmName ? log.algorithm?.name ?? '' : ''
+    const algorithmRunId = showAlgorithmRunId ? log.algorithm?.run_id ?? '' : ''
+    const algorithmState = showAlgorithmState ? log.algorithm?.state ? JSON.stringify(log.algorithm.state) : '' : ''
+    const attachment = showAttachment ? log.attachment ? JSON.stringify(log.attachment) : '' : ''
+
+    const robotIdSection = robotId ? `<${robotId}>` : ''
+    const typeSection = type ? `[${type.toUpperCase()}]` : ''
+    const timestampSection = timestamp ? timestamp : ''
+    const algorithmRunSection = (algorithmName || algorithmRunId) ?
+      `<${algorithmName ?? 'algo'}${algorithmRunId ? ':' : ''}${algorithmRunId}>` : ''
+    const algorithmStateSection = algorithmState ?
+        `${algorithmRunSection ? 'Algorithm state' : 'State'}: ${algorithmState}` : ''
+    const attachmentSection = attachment ? `Attachment: ${attachment}` : ''
+
+    return `${timestampSection} ${robotIdSection} ${typeSection} ${log.message}` +
+        `${algorithmRunSection || algorithmStateSection ? ' | ' : ''} ${algorithmRunSection} ${algorithmStateSection}` +
+        `${attachmentSection ? ' | ' : ''} ${attachmentSection}`
+  }
+
   private logToFile(log: SocketLogs){
-    if (log.type === 'info') this.logger.info(log)
-    else if (log.type === 'error') this.logger.error(log)
-    else if (log.type === 'warning') this.logger.warn(log)
+    const output = this.logToString(log, {
+      showTimestamp: false,
+      showRobotId: false,
+      showType: false
+    })
+    if (log.type === 'info') this.logger.info(output)
+    else if (log.type === 'error') this.logger.error(output)
+    else if (log.type === 'warning') this.logger.warn(output)
   }
 
   private logToConsole(log: SocketLogs){
-    console.log(log)
+    console.log(this.logToString(log))
   }
 
   private logToSocket(log: SocketLogs){
-    this.eventEmitter.emit('log', log)
+    this.eventEmitter.emit('log', this.logToString(log))
   }
 
   constructor(tradeBot: TradeBot){
