@@ -11,7 +11,6 @@ import initOrderRouter from './order'
 
 const initHTTPRouter = (tradeBot: TradeBot) => {
     return router({
-        test: publicProcedure.query(() => 'hello'),
         algorithm: initAlgorithmRouter(tradeBot),
         security: initSecurityRouter(tradeBot),
         currency: initCurrencyRouter(tradeBot),

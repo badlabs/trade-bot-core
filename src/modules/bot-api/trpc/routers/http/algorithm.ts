@@ -5,7 +5,6 @@ import { TradeBot } from "../../../../../TradeBot";
 export default (tradeBot: TradeBot) => {
     return router({
         getAll: publicProcedure
-            .input(z.undefined())
             .query(() => {
                 return tradeBot.analyzer.tradeAlgos.description
             }),
