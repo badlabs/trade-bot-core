@@ -90,7 +90,7 @@ export class LoggerService {
   }
 
   private logToSocket(log: SocketLogs){
-    this.eventEmitter.emit('log', this.logToString(log))
+    this.eventEmitter.emit('log', log)
   }
 
   constructor(tradeBot: TradeBot){
