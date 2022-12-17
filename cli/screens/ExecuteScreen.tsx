@@ -53,29 +53,29 @@ export default (props: {
             case 'portfolio.clear':
                 client.portfolio.clear.mutate().then(res => setResponse(res))
                 break
-            case 'algorithm.getAll':
-                client.algorithm.getAll.query().then(res => setResponse(res))
+            case 'algorithms.list':
+                client.algorithms.list.query().then(res => setResponse(res))
                 break
-            case 'currency.getAll':
-                client.currency.getAll.query().then(res => setResponse(res))
+            case 'currencies.list':
+                client.currencies.list.query().then(res => setResponse(res))
                 break
-            case 'currency.updateAll':
-                client.currency.updateAll.mutate().then(res => setResponse(res))
+            case 'currencies.update':
+                client.currencies.update.mutate().then(res => setResponse(res))
                 break
-            case 'currency.getAllBalances':
-                client.currency.getAllBalances.query().then(res => setResponse(res))
+            case 'currencies.listBalances':
+                client.currencies.listBalances.query().then(res => setResponse(res))
                 break
-            case 'currency.updateAllBalances':
-                client.currency.getAllBalances.query().then(res => setResponse(res))
+            case 'currencies.updateBalances':
+                client.currencies.updateBalances.mutate().then(res => setResponse(res))
                 break
-            case 'security.getAll':
-                client.security.getAll.query().then(res => setResponse(res))
+            case 'securities.list':
+                client.securities.list.query().then(res => setResponse(res))
                 break
-            case 'security.updateAll':
-                client.security.updateAll.mutate().then(res => setResponse(res))
+            case 'securities.update':
+                client.securities.update.mutate().then(res => setResponse(res))
                 break
-            case 'security.getAllFollowed':
-                client.security.getAllFollowed.query().then(res => setResponse(res))
+            case 'securities.listFollowed':
+                client.securities.listFollowed.query().then(res => setResponse(res))
                 break
         }
     }
@@ -86,14 +86,14 @@ export default (props: {
                 {label: 'portfolio.get()', value: 'portfolio.get'},
                 {label: 'portfolio.update()', value: 'portfolio.update'},
                 {label: 'portfolio.clear()', value: 'portfolio.clear'},
-                {label: 'algorithm.getAll()', value: 'algorithm.getAll'},
-                {label: 'currency.getAll()', value: 'currency.getAll'},
-                {label: 'currency.updateAll()', value: 'currency.updateAll'},
-                {label: 'currency.getAllBalances()', value: 'currency.getAllBalances'},
-                {label: 'currency.updateAllBalances()', value: 'currency.updateAllBalances'},
-                {label: 'security.getAll()', value: 'security.getAll'},
-                {label: 'security.updateAll()', value: 'security.updateAll'},
-                {label: 'security.getAllFollowed()', value: 'security.getAllFollowed'}
+                {label: 'algorithms.list()', value: 'algorithms.list'},
+                {label: 'currencies.list()', value: 'currencies.list'},
+                {label: 'currencies.update()', value: 'currencies.update'},
+                {label: 'currencies.listBalances()', value: 'currencies.listBalances'},
+                {label: 'currencies.updateBalances()', value: 'currencies.updateBalances'},
+                {label: 'securities.list()', value: 'securities.list'},
+                {label: 'securities.update()', value: 'securities.update'},
+                {label: 'securities.listFollowed()', value: 'securities.listFollowed'}
             ]} />
         <Box flexDirection="column" justifyContent="flex-start">
             {

@@ -11,11 +11,11 @@ import initOrderRouter from './order'
 
 const initHTTPRouter = (tradeBot: TradeBot) => {
     return router({
-        algorithm: initAlgorithmRouter(tradeBot),
-        security: initSecurityRouter(tradeBot),
-        currency: initCurrencyRouter(tradeBot),
+        algorithms: initAlgorithmRouter(tradeBot),
+        securities: initSecurityRouter(tradeBot),
+        currencies: initCurrencyRouter(tradeBot),
         portfolio: initPortfolioRouter(tradeBot),
-        order: initOrderRouter(tradeBot)
+        orders: initOrderRouter(tradeBot)
     })
 }
 

@@ -4,48 +4,48 @@ import { TradeBot } from "../../../../../TradeBot";
 
 export default (tradeBot: TradeBot) => {
     return router({
-        getAll: publicProcedure
+        list: publicProcedure
             .query(() => {
                 return tradeBot.analyzer.tradeAlgos.description
             }),
-        getRuns: publicProcedure
+        listRuns: publicProcedure
             .input(
                 z.object({
-                    name: z.string()
+                    algorithmName: z.string()
                 })
             )
             .query(async ({ input }) => {
-                return await tradeBot.analyzer.getAlgorithmRunsByAlgorithm(input.name)
+                return await tradeBot.analyzer.getAlgorithmRunsByAlgorithm(input.algorithmName)
             }),
         run: publicProcedure
             .input(
                 z.object({
-                    name: z.string(),
+                    algorithmName: z.string(),
                     inputs: z.any()
                 })
             )
             .mutation(async ({ input }) => {
-                return await tradeBot.analyzer.tradeAlgos.runAlgorithm(input.name, input.inputs)
+                return await tradeBot.analyzer.tradeAlgos.runAlgorithm(input.algorithmName, input.inputs)
             }),
         stop: publicProcedure
             .input(
                 z.object({
-                    name: z.string(),
-                    id: z.number().int().min(0)
+                    algorithmName: z.string(),
+                    runId: z.number().int().min(0)
                 })
             )
             .mutation(async ({ input }) => {
-                return await tradeBot.analyzer.tradeAlgos.stopAlgorithm(input.name, input.id)
+                return await tradeBot.analyzer.tradeAlgos.stopAlgorithm(input.algorithmName, input.runId)
             }),
         resume: publicProcedure
             .input(
                 z.object({
-                    name: z.string(),
-                    id: z.number().int().min(0)
+                    algorithmName: z.string(),
+                    runId: z.number().int().min(0)
                 })
             )
             .mutation(async ({ input }) => {
-                return await tradeBot.analyzer.tradeAlgos.continueAlgorithm(input.name, input.id)
+                return await tradeBot.analyzer.tradeAlgos.continueAlgorithm(input.algorithmName, input.runId)
             })
     })
 }

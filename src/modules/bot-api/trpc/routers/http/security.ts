@@ -4,31 +4,39 @@ import { TradeBot } from "../../../../../TradeBot";
 
 export default (tradeBot: TradeBot) => {
     return router({
-        getAll: publicProcedure
+        list: publicProcedure
             .query(async () => {
                 return await tradeBot.analyzer.getSecurities()
             }),
-        updateAll: publicProcedure
+        update: publicProcedure
             .mutation(async () => {
                 return await tradeBot.analyzer.updateSecurities()
             }),
-        getAllFollowed: publicProcedure
+        listFollowed: publicProcedure
             .query(async () => {
                 return await tradeBot.analyzer.getFollowedSecurities()
             }),
-        updateAllFollowed: publicProcedure
+        updateFollowed: publicProcedure
             .mutation(async () => {
                 return await tradeBot.analyzer.updateFollowedSecurities()
             }),
         follow: publicProcedure
-            .input(z.string())
+            .input(
+                z.object({
+                    securityTicker: z.string()
+                })
+            )
             .mutation(async ({input}) => {
-                return await tradeBot.analyzer.followSecurity(input)
+                return await tradeBot.analyzer.followSecurity(input.securityTicker)
             }),
         unfollow: publicProcedure
-            .input(z.string())
+            .input(
+                z.object({
+                    securityTicker: z.string()
+                })
+            )
             .mutation(async ({input}) => {
-                return await tradeBot.analyzer.unfollowSecurity(input)
+                return await tradeBot.analyzer.unfollowSecurity(input.securityTicker)
             })
     })
 }

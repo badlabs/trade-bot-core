@@ -4,19 +4,19 @@ import { TradeBot } from "../../../../../TradeBot";
 
 export default (tradeBot: TradeBot) => {
     return router({
-        getAll: publicProcedure
+        list: publicProcedure
             .query(async () => {
                 return await tradeBot.analyzer.getCurrencies()
             }),
-        updateAll: publicProcedure
+        update: publicProcedure
             .mutation(async () => {
                 return await tradeBot.analyzer.updateCurrencies()
             }),
-        getAllBalances: publicProcedure
+        listBalances: publicProcedure
             .query(async () => {
                 return await tradeBot.analyzer.getCurrenciesBalance()
             }),
-        updateAllBalances: publicProcedure
+        updateBalances: publicProcedure
             .mutation(async () => {
                 return await tradeBot.analyzer.updateCurrenciesBalance()
             })
