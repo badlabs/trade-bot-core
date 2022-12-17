@@ -1,9 +1,9 @@
 import { config } from './config'
 import {db} from './db'
 import {
-    BotApi,
-    BotAuth,
-    BotLogger,
+    ApiService,
+    AuthService,
+    LoggerService,
     ExchangeAnalyzer,
     ExchangeTrader,
     ExchangeWatcher
@@ -30,9 +30,9 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
     private _analyzer: ExchangeAnalyzer<ExchangeClient>
     private _trader: ExchangeTrader<ExchangeClient>
     private _watcher: ExchangeWatcher<ExchangeClient>
-    private _api: BotApi
-    private _logger: BotLogger
-    private _auth: BotAuth
+    private _api: ApiService
+    private _logger: LoggerService
+    private _auth: AuthService
 
     get exchangeClient() { return this._exchangeClient }
     get analyzer() { return this._analyzer }
@@ -55,7 +55,7 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
         initAlgorithmsCallback?:
             (analyzer: ExchangeAnalyzer<ExchangeClient>) => AbstractTradeAlgorithm<ExchangeClient>[]
     }){
-        this._logger = new BotLogger(this)
+        this._logger = new LoggerService(this)
         globalStore.logger = this.logger
         this.logger.log({
             type: "info",
@@ -66,8 +66,8 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
         this._analyzer = new ExchangeAnalyzer(this, initAlgorithmsCallback)
         this._trader = new ExchangeTrader(this)
         this._watcher = new ExchangeWatcher(this)
-        this._api = new BotApi(this)
-        this._auth = new BotAuth(botToken || config.auth.token)
+        this._api = new ApiService(this)
+        this._auth = new AuthService(botToken || config.auth.token)
         this.logger.log({
             type: 'info',
             message: 'All modules are initialized...'

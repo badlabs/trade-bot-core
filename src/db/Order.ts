@@ -2,7 +2,7 @@ import {Entity, Column, ManyToOne, UpdateDateColumn, PrimaryColumn} from "typeor
 import {AlgorithmRun} from "./AlgorithmRun";
 import {dateTransformer} from "./transformers";
 import {z} from "zod";
-import {operationType} from "../modules/bot-api/trpc/schemas";
+import {operationType} from "../modules/service/api/trpc/schemas";
 
 export type OrderStatus = 'not_processed' | 'to_be_processed' | 'placed' | 'units_allocated' |
     'units_redeemed' | 'rejected' | 'cancelled' | 'expired' | 'undefined'

@@ -1,7 +1,7 @@
 import { AlgorithmRun, Algorithm } from '../db'
 import { InputTypes } from "../db/Algorithm";
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import { BotLogger, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
+import { LoggerService, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
 import {HandleError} from "../utils";
 
 export abstract class AbstractTradeAlgorithm<
@@ -11,7 +11,7 @@ export abstract class AbstractTradeAlgorithm<
   protected get watcher(): ExchangeWatcher<ExchangeClient> { return this.analyzer.watcher }
   protected get trader(): ExchangeTrader<ExchangeClient> { return this.analyzer.trader }
   protected stopData: Map<number, StopDataType> = new Map<number, StopDataType>()
-  private get logger(): BotLogger { return this.analyzer.tradebot.logger }
+  private get logger(): LoggerService { return this.analyzer.tradebot.logger }
   get details(): Algorithm {
     return {
       name: this.name,
