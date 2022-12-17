@@ -35,6 +35,7 @@ export class LoggerService {
     let algorithmName = showAlgorithmName ? log.algorithm?.name ?? '' : ''
     let algorithmRunId = showAlgorithmRunId ? log.algorithm?.run_id ?? '' : ''
     let algorithmState = showAlgorithmState ? log.algorithm?.state ? JSON.stringify(log.algorithm.state) : '' : ''
+    let algorithmInputs = showAlgorithmState ? log.algorithm?.inputs ? JSON.stringify(log.algorithm.inputs) : '' : ''
     let attachment = showAttachment ? log.attachment ? JSON.stringify(log.attachment) : '' : ''
 
     // Apply layout
@@ -43,6 +44,7 @@ export class LoggerService {
     let algorithmRun = (algorithmName || algorithmRunId) ?
       `<${algorithmName ?? 'algo'}${algorithmRunId ? ':' : ''}${algorithmRunId}>` : ''
     algorithmState = algorithmState ? `${algorithmRun ? 'Algorithm state' : 'State'}: ${algorithmState}` : ''
+    algorithmInputs = algorithmInputs ? `${algorithmRun ? 'Algorithm inputs' : 'Inputs'}: ${algorithmInputs}` : ''
     attachment = attachment ? `Attachment: ${attachment}` : ''
 
     // Apply colors
@@ -62,12 +64,13 @@ export class LoggerService {
             break
         }
       algorithmRun = algorithmRun ? colors.cyan(algorithmRun) : ''
-      algorithmState = algorithmState ? colors.bgBlue(algorithmRun) : ''
+      algorithmState = algorithmState ? colors.bgMagenta(algorithmRun) : ''
+      algorithmInputs = algorithmInputs ? colors.bgBlue(algorithmInputs) : ''
       attachment = attachment ? colors.bgGreen(attachment) : ''
     }
 
     const result = `${timestamp} ${robotId} ${type} ${log.message}` +
-        `${algorithmRun || algorithmState ? ' | ' : ''} ${algorithmRun} ${algorithmState}` +
+        `${algorithmRun || algorithmState ? ' | ' : ''} ${algorithmRun} ${algorithmState} ${algorithmInputs}` +
         `${attachment ? ' | ' : ''} ${attachment}`
     return result.trim()
   }
