@@ -10,7 +10,7 @@ export class LoggerService {
   private readonly tradebot: TradeBot
   private get botApi(): ApiService { return this.tradebot.api }
   private readonly logger: Logger
-  private _lastLogs: SocketLogs[]
+  private lastLogs: SocketLogs[]
   private readonly eventEmitter = new EventEmitter()
 
   private createLogsDirIfNotExist(){
@@ -24,18 +24,18 @@ export class LoggerService {
       logDirectory:config.logs.directory,
       fileNamePattern:'trade-bot-<DATE>.log'
     })
-    this._lastLogs = []
+    this.lastLogs = []
   }
 
   updateLastLogs(log: SocketLogs){
-    this._lastLogs.push(log)
-    if (this._lastLogs.length > 30){
-      this._lastLogs.shift()
+    this.lastLogs.push(log)
+    if (this.lastLogs.length > 30){
+      this.lastLogs.shift()
     }
   }
 
   getLastLogs() {
-    return this._lastLogs
+    return this.lastLogs
   }
 
   log(body: Omit<Omit<SocketLogs, 'robot_id'>, 'timestamp'>){
