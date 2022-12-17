@@ -20,7 +20,7 @@ export function initExpress(tradeBot: TradeBot){
                 params: req.query,
                 body: req.body
             }
-        })
+        }, { internal: true })
         next()
     })
 

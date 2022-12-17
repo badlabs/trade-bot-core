@@ -11,13 +11,13 @@ router.use((req: Request, res: Response, next: NextFunction) => {
     else {
         getTradeBotFromExpress(req).logger.log({
             type: 'warning',
-            message: `Unauthorized HTTP request: ${req.method} ${req.path}`,
+            message: `Unauthorized HTTP request: ${req.method} /api${req.path}`,
             attachment: {
                 remote: req.socket.remoteAddress,
                 params: req.query,
                 body: req.body
             }
-        })
+        }, { internal: true })
         res.status(401).send('Error: Not Authorized')
     }
 })

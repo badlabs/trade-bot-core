@@ -27,7 +27,7 @@ export const initLogRouter = (tradeBot: TradeBot) => {
                             attachment: {
                                 remote: ctx.req.socket.remoteAddress
                             }
-                        })
+                        }, { internal: true })
                         return () => {}
                     }
                     tradeBot.logger.log({
@@ -36,7 +36,7 @@ export const initLogRouter = (tradeBot: TradeBot) => {
                         attachment: {
                             remote: ctx.req.socket.remoteAddress
                         }
-                    })
+                    }, { internal: true })
                     const onLog = (log: SocketLogs) => {
                         emit.next(log)
                     }
@@ -49,7 +49,7 @@ export const initLogRouter = (tradeBot: TradeBot) => {
                             attachment: {
                                 remote: ctx.req.socket.remoteAddress
                             }
-                        })
+                        }, { internal: true })
                         tradeBot.logger.unsubscribe(onLog)
                     }
                 })

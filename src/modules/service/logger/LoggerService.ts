@@ -117,7 +117,9 @@ export class LoggerService {
     return this.lastLogs
   }
 
-  log(body: Omit<Omit<SocketLogs, 'robot_id'>, 'timestamp'>){
+  log(body: Omit<Omit<SocketLogs, 'robot_id'>, 'timestamp'>, {
+    internal = false
+  } = {}){
     const newLog: SocketLogs = {
       robot_id: 'test',
       timestamp: new Date().toISOString(),
@@ -125,7 +127,8 @@ export class LoggerService {
     }
     this.logToFile(newLog)
     this.logToConsole(newLog)
-    this.logToSocket(newLog)
+    if (!internal)
+      this.logToSocket(newLog)
     this.updateLastLogs(newLog)
   }
 
