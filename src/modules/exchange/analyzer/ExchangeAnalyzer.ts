@@ -41,24 +41,12 @@ export class ExchangeAnalyzer<ExchangeClient extends AbstractExchangeClient> {
     @HandleError()
     private async initUpdaters(){
         scheduleJob('updateBalance', '*/1 * * * *', () => {
-            this.tradebot.logger.log({
-                type: 'info',
-                message: 'Updating balance...'
-            })
             this.updateCurrenciesBalance()
         })
         scheduleJob('updatePortfolio', '*/1 * * * *', () => {
-            this.tradebot.logger.log({
-                type: 'info',
-                message: 'Updating portfolio...'
-            })
             this.updatePortfolio()
         })
         scheduleJob('updateFollowedSecurities', '*/1 * * * *', () => {
-            this.tradebot.logger.log({
-                type: 'info',
-                message: 'Updating followed securities...'
-            })
             this.updateFollowedSecurities()
         })
     }

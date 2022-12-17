@@ -103,7 +103,7 @@ export abstract class AbstractTradeAlgorithm<
   protected async saveProgress(id: number, progress: StateType): Promise<AlgorithmRun> {
     const { name, analyzer, logger } = this
     logger.log({
-      type: 'error',
+      type: 'info',
       message: `Saving process of algorithm "${name}"`,
       algorithm: {
         name, state: progress,
@@ -119,7 +119,7 @@ export abstract class AbstractTradeAlgorithm<
     const algoRun: AlgorithmRun | null = await analyzer.loadAlgorithmRunProgress(id)
     if (!algoRun) throw new Error(`[algo:${id}] Algorithm "${name}" was not found`)
     logger.log({
-      type: 'error',
+      type: 'info',
       message: `Loading progress of algorithm "${name}"`,
       algorithm: {
         name, state: algoRun?.state,

@@ -33,14 +33,24 @@ export class TradeAlgorithmsEngine<ExchangeClient extends AbstractExchangeClient
 
     async resumeAlgorithms(){
         const { tradebot, analyzer, algorithms } = this
-        tradebot.logger.log({
-            type: 'info',
-            message: 'Resuming stopped algorithms runs...'
-        })
         const unfinishedRuns = await analyzer.getUnfinishedAlgorithmRuns()
         for (let run of unfinishedRuns){
-            await algorithms.find(algo => algo.name === run.algorithmName)?.continue(run.id)
+            const resumedRun = await algorithms.find(algo => algo.name === run.algorithmName)?.continue(run.id)
+            if (resumedRun)
+                tradebot.logger.log({
+                    type: 'info',
+                    message: 'Algorithm is resumed',
+                    algorithm: {
+                        name: resumedRun.algorithmName,
+                        run_id: resumedRun.id,
+                        state: resumedRun.state
+                    }
+                })
         }
+        tradebot.logger.log({
+            type: 'info',
+            message: 'All algorithms are resumed'
+        })
     }
 
     // TODO: rename to resume

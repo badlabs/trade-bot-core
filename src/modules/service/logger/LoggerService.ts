@@ -103,7 +103,7 @@ export class LoggerService {
     this.lastLogs = []
   }
 
-  updateLastLogs(log: SocketLogs){
+  private updateLastLogs(log: SocketLogs){
     this.lastLogs.push(log)
     if (this.lastLogs.length > 30){
       this.lastLogs.shift()

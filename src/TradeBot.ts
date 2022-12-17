@@ -70,7 +70,7 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
         this._auth = new AuthService(botToken || config.auth.token)
         this.logger.log({
             type: 'info',
-            message: 'All modules are initialized...'
+            message: 'All modules are initialized'
         })
         await this.analyzer.start()
         await this.analyzer.updateCurrencies()
