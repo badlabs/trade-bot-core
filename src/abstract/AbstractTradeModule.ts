@@ -1,7 +1,13 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {CreateOrderOptions} from '../types'
+import {OperationType} from '../db'
 import {GetOrderType} from "../types/extractors";
 
+export type CreateOrderOptions = {
+  operation: OperationType
+  ticker: string
+  lots: number
+  price: number
+}
 
 export abstract class AbstractTradeModule<ExchangeClient extends AbstractExchangeClient> {
   protected exchangeClient: ExchangeClient

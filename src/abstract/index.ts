@@ -1,4 +1,4 @@
-export * from './AbstractTradeModule'
+export { AbstractTradeModule } from './AbstractTradeModule'
 export * from './AbstractInfoModule'
 export * from './AbstractExchangeClient'
 export * from './AbstractTradeAlgorithm'

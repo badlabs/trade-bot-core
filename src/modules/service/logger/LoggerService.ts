@@ -3,13 +3,11 @@ import {createRollingFileLogger, Logger} from 'simple-node-logger'
 import {EventEmitter} from "events";
 import colors from 'colors/safe'
 import { TradeBot } from '../../../TradeBot'
-import { ApiService } from '../api'
 import { useConfig } from '../../../config'
-import {SocketLogs} from "../../../types";
+import { SocketLogs } from "./SocketLogs";
 
 export class LoggerService {
   private readonly tradebot: TradeBot
-  private get botApi(): ApiService { return this.tradebot.api }
   private readonly logger: Logger
   private readonly lastLogs: SocketLogs[]
   private readonly eventEmitter = new EventEmitter()

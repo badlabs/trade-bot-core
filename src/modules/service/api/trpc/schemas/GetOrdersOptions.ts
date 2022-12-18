@@ -8,3 +8,5 @@ export const getOrdersOptions = z.object({
     operation: operationType.optional(),
     runId: z.number().int().min(0).optional()
 })
+
+export type GetOrdersOptions = z.infer<typeof getOrdersOptions>
