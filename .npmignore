@@ -7,3 +7,7 @@ logs
 .dockerignore
 Dockerfile
 .github
+
+*.db
+*.db-shm
+*.db-wal

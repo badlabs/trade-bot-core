@@ -1,4 +1,10 @@
 ### Node template
+# Typescript artifacts
+
+*.d.ts
+*.js
+*.js.map
+
 # Logs
 logs
 *.log

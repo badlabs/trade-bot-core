@@ -4,7 +4,7 @@
     "lib": [
       "es2021"
     ],
-    "outDir": "lib",
+    "outDir": "./",
     "removeComments": false,
     "target": "ES6",
     "module": "CommonJS",
