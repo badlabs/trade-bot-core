@@ -6,6 +6,7 @@
   "types": "./",
   "scripts": {
     "lint": "eslint ./src/*",
+    "prettier": "eslint ./src/* --fix",
     "build": "tsc",
     "clean": "tsc --build --clean && delete-empty ./",
     "build:test": "tsc --project tsconfig.test.json",
@@ -54,6 +55,8 @@
     "dotenv": "^10.0.0",
     "eslint": "^8.30.0",
     "nodemon": "^2.0.15",
+    "prettier": "2.8.1",
+    "prettier-eslint": "^15.0.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
     "tslib": "^2.3.1",
