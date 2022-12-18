@@ -1,15 +1,15 @@
-import { config } from '../../../config'
+import { useConfig } from '../../../config'
 import {IHttpHeadersCarrier} from '../../../types/rest'
 
 export class AuthService {
   private readonly botToken: string
 
-  constructor(botToken: string){
-    this.botToken = botToken
+  constructor(botToken: string | null = null){
+    this.botToken = botToken ? botToken : useConfig().auth.token
   }
 
   authByToken(token: string = ''): boolean {
-    if (!config.auth.required) return true
+    if (!useConfig().auth.required) return true
     return this.botToken === token
   }
 

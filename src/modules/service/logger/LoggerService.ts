@@ -4,7 +4,7 @@ import {EventEmitter} from "events";
 import colors from 'colors/safe'
 import { TradeBot } from '../../../TradeBot'
 import { ApiService } from '../api'
-import { config } from '../../../config'
+import { useConfig } from '../../../config'
 import {SocketLogs} from "../../../types";
 
 export class LoggerService {
@@ -15,6 +15,7 @@ export class LoggerService {
   private readonly eventEmitter = new EventEmitter()
 
   private createLogsDirIfNotExist(){
+    const config = useConfig()
     if (!fs.existsSync(config.logs.directory)) fs.mkdirSync(config.logs.directory)
   }
 
@@ -100,8 +101,8 @@ export class LoggerService {
     this.createLogsDirIfNotExist()
     this.tradebot = tradeBot
     this.logger = createRollingFileLogger({
-      logDirectory:config.logs.directory,
-      fileNamePattern:'trade-bot-<DATE>.log'
+      logDirectory: useConfig().logs.directory,
+      fileNamePattern: 'trade-bot-<DATE>.log'
     })
     this.lastLogs = []
   }

@@ -1,9 +1,24 @@
 import 'dotenv/config'
+import merge from 'deepmerge'
+import {DeepPartial} from "typeorm";
 
-export const config = {
-  exchange: {
-    exchangeToken: process.env.TINKOFF_SANDBOX_API_KEY || '',
-  },
+export type ConfigOpts<TExchange = any> = {
+  exchange: TExchange
+  auth: {
+    token: string
+    required: boolean
+  }
+  api: {
+    port: number | string
+    host: string
+  }
+  logs: {
+    directory: string
+  }
+}
+
+const defaultConfig: ConfigOpts = {
+  exchange: {},
   auth: {
     token: process.env.BOT_TOKEN || '',
     required: true
@@ -15,4 +30,14 @@ export const config = {
   logs: {
     directory: './logs'
   }
+}
+
+export const useConfig = <TExchange = any>(config: DeepPartial<ConfigOpts<TExchange>> | null = null) => {
+  if (config) {
+    const keys = Object.keys(config) as (keyof ConfigOpts)[]
+    for (let prop of keys){
+      defaultConfig[prop] = merge(defaultConfig[prop], config[prop] as any)
+    }
+  }
+  return defaultConfig
 }

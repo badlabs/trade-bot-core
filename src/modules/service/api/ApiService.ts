@@ -5,7 +5,7 @@ import ws, {WebSocketServer} from 'ws'
 import colors from "colors/safe"
 import { TradeBot } from '../../../TradeBot'
 import { initExpress } from './express'
-import { config } from '../../../config'
+import { useConfig } from '../../../config'
 import {HandleError} from "../../../utils";
 import {registerExpressRoutes, registerWSSHandler} from "./trpc"
 
@@ -22,6 +22,7 @@ export class ApiService {
 
   @HandleError()
   private async configureServers(){
+    const config = useConfig()
     this.express = initExpress(this.tradeBot)
     registerExpressRoutes({
       tradeBot: this.tradeBot,

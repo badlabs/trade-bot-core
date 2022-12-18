@@ -1,4 +1,3 @@
-import { config } from './config'
 import {db} from './db'
 import {
     ApiService,
@@ -67,7 +66,7 @@ export class TradeBot<ExchangeClient extends AbstractExchangeClient = AbstractEx
         this._trader = new ExchangeTrader(this)
         this._watcher = new ExchangeWatcher(this)
         this._api = new ApiService(this)
-        this._auth = new AuthService(botToken || config.auth.token)
+        this._auth = new AuthService(botToken)
         this.logger.log({
             type: 'info',
             message: 'All modules are initialized'

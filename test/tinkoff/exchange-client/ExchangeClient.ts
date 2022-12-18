@@ -4,9 +4,10 @@ import { TradeModule } from './TradeModule'
 import { InfoModule } from './InfoModule'
 import {Translator} from "./Translator"
 import {Domain} from "../Domain";
+import {useConfig} from "../../../lib/config";
 
 export class ExchangeClient extends AbstractExchangeClient<Domain, OpenAPI>{
-  constructor(token: string){
+  constructor(token: string | null = null){
     super({
       infoModule: new InfoModule(),
       tradeModule: new TradeModule(),
@@ -14,7 +15,7 @@ export class ExchangeClient extends AbstractExchangeClient<Domain, OpenAPI>{
     }, new OpenAPI({
       apiURL: 'https://api-invest.tinkoff.ru/openapi/sandbox',
       socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws',
-      secretToken: token
+      secretToken: token ?? useConfig().exchange.exchangeToken
     }))
   }
 
