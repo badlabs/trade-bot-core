@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { apiRouter } from './routers'
 import {TradeBot} from "../../../../TradeBot";
-import {getTradeBotFromExpress} from "../../../../utils/rest";
+import {getTradeBotFromExpress} from "../../../../utils/express";
 
 export function initExpress(tradeBot: TradeBot){
     const app = express()

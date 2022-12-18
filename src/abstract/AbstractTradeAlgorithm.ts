@@ -2,7 +2,7 @@ import { AlgorithmRun, Algorithm } from '../db'
 import { InputTypes } from "../db/Algorithm";
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import { LoggerService, ExchangeAnalyzer, ExchangeTrader, ExchangeWatcher } from '../modules'
-import {HandleError} from "../utils";
+import {HandleError} from "../decorators";
 
 export abstract class AbstractTradeAlgorithm<
   ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient,

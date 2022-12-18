@@ -1,8 +1,8 @@
 import {AbstractInfoModule} from "./AbstractInfoModule";
 import {AbstractTradeModule} from "./AbstractTradeModule";
 import {AbstractTranslator} from "./AbstractTranslator";
-import {DomainTemplate} from "../types";
-import {GetCurrencyBalanceType, GetSecurityBalanceType} from "../types/extractors";
+import {DomainTemplate} from "../domain";
+import {GetCurrencyBalanceType, GetSecurityBalanceType} from "../domain/extractors";
 
 export abstract class AbstractExchangeClient<
     Domain extends DomainTemplate = DomainTemplate,

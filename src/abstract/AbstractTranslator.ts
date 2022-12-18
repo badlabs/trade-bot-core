@@ -1,11 +1,12 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
-import {CommonDomain, OrderStatus, OperationType} from '../types'
+import {OrderStatus, OperationType} from '../db'
+import {CommonDomain} from '../domain'
 import {
     GetCurrencyType,
     GetCurrencyBalanceType,
     GetSecurityBalanceType,
     GetSecurityType,
-    GetOrderType} from "../types/extractors";
+    GetOrderType} from "../domain/extractors";
 
 
 export abstract class AbstractTranslator<ExchangeClient extends AbstractExchangeClient = AbstractExchangeClient>{

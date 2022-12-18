@@ -1,6 +1,6 @@
 import {AbstractExchangeClient} from './AbstractExchangeClient'
 import {OperationType} from '../db'
-import {GetOrderType} from "../types/extractors";
+import {GetOrderType} from "../domain/extractors";
 
 export type CreateOrderOptions = {
   operation: OperationType

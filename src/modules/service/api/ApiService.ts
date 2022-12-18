@@ -6,7 +6,7 @@ import colors from "colors/safe"
 import { TradeBot } from '../../../TradeBot'
 import { initExpress } from './express'
 import { useConfig } from '../../../config'
-import {HandleError} from "../../../utils";
+import {HandleError} from '../../../decorators'
 import {registerExpressRoutes, registerWSSHandler} from "./trpc"
 
 export class ApiService {

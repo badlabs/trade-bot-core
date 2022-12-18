@@ -1,5 +1,5 @@
 import { useConfig } from '../../../config'
-import {IHttpHeadersCarrier} from '../../../types/rest'
+import {IHttpHeadersCarrier} from './IHttpHeadersCarrier'
 
 export class AuthService {
   private readonly botToken: string

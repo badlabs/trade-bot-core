@@ -1,5 +1,5 @@
 import {AbstractExchangeClient} from "./AbstractExchangeClient";
-import {GetCurrencyType, GetSecurityType} from "../types/extractors";
+import {GetCurrencyType, GetSecurityType} from "../domain/extractors";
 
 export abstract class AbstractInfoModule<ExchangeClient extends AbstractExchangeClient> {
   protected exchangeClient: ExchangeClient

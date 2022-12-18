@@ -1,11 +1,12 @@
 import {TradeBot} from '../../../TradeBot'
 import {ExchangeAnalyzer, ExchangeTrader} from '../../index'
 import {AbstractTranslator, AbstractExchangeClient} from '../../../abstract'
-import {OperationType, OrderStatus, CommonDomain} from '../../../types'
+import {OperationType, OrderStatus} from '../../../db'
+import {CommonDomain} from "../../../domain";
 import {GetSecurityBalanceType, GetCurrencyType,
-    GetSecurityType, GetCurrencyBalanceType} from '../../../types/extractors'
-import {GetOrderType} from "../../../types/extractors";
-import {HandleError} from "../../../utils";
+    GetSecurityType, GetCurrencyBalanceType} from '../../../domain/extractors'
+import {GetOrderType} from "../../../domain/extractors";
+import {HandleError} from "../../../decorators";
 
 export class ExchangeWatcher<ExchangeClient extends AbstractExchangeClient>{
     private readonly tradebot: TradeBot<ExchangeClient>

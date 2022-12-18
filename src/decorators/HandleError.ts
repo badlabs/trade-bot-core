@@ -1,4 +1,4 @@
-import {globalStore} from "../../global/store";
+import {globalStore} from "../global/store";
 
 export function HandleError(){
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {

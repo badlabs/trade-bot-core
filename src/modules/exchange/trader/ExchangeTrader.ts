@@ -3,8 +3,8 @@ import {TradeBot} from '../../../TradeBot'
 import {ExchangeWatcher, LoggerService} from '../../index'
 import {AbstractExchangeClient} from '../../../abstract'
 import {CreateOrderOptions, OrderStatus} from '../../../types'
-import {GetOrderType} from "../../../types/extractors";
-import {HandleError} from "../../../utils";
+import {GetOrderType} from "../../../domain/extractors";
+import {HandleError} from "../../../decorators";
 
 export class ExchangeTrader<ExchangeClient extends AbstractExchangeClient> {
     private readonly tradebot: TradeBot<ExchangeClient>

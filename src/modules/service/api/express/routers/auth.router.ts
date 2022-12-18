@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { getTradeBotFromExpress } from '../../../../../utils/rest'
+import { getTradeBotFromExpress } from '../../../../../utils/express'
 
 const router = Router();
 
