@@ -11,3 +11,6 @@ Dockerfile
 *.db
 *.db-shm
 *.db-wal
+.eslintrc.js
+.prettierignore
+.prettierrc.json
